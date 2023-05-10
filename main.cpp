@@ -59,7 +59,7 @@ IDxcBlob* CompileShader(
 	IDxcUtils* dxcUtils,
 	IDxcCompiler3* dxcCompiler,
 	IDxcIncludeHandler* includeHandler
-	);
+);
 //ウィンドウプロシージャ
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	//メッセージに応じてゲーム固有の処理を行う
@@ -107,8 +107,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		WS_OVERLAPPEDWINDOW,//よく見るウィンドウスタイル
 		CW_USEDEFAULT,//表示X座標
 		CW_USEDEFAULT,//表示Y座標
-		wrc.right-wrc.left,//ウィンドウ横幅
-		wrc.bottom-wrc.top,//ウィンドウ縦幅
+		wrc.right - wrc.left,//ウィンドウ横幅
+		wrc.bottom - wrc.top,//ウィンドウ縦幅
 		nullptr,//親ウィンドウハンドル
 		nullptr,//メニューハンドル
 		wc.hInstance,//インスタンスハンドル
@@ -267,16 +267,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	//2つ目を作る
 	device->CreateRenderTargetView(swapChainResources[1], &rtvDesc, rtvHandles[1]);
-	
-	
-	
-	
+
+
+
+
 	//初期値０でFenceを作る
 	ID3D12Fence* fence = nullptr;
 	uint64_t fenceValue = 0;
 	hr = device->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 	assert(SUCCEEDED(hr));
-	
+
 	//dxcCompilerを初期化
 	IDxcUtils* dxcUtils = nullptr;
 	IDxcCompiler3* dxcCompiler = nullptr;
@@ -305,7 +305,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 	//バイナリを元に生成
 	ID3D12RootSignature* rootSignature = nullptr;
-	hr = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), 
+	hr = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(),
 		signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	assert(SUCCEEDED(hr));
 
@@ -322,7 +322,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
 	//すべての色要素を書き込む
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = 
+	blendDesc.RenderTarget[0].RenderTargetWriteMask =
 		D3D12_COLOR_WRITE_ENABLE_ALL;
 
 	//RasterizerStateの設定
@@ -341,10 +341,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	IDxcBlob* pixelShaderBlob = CompileShader(L"Object3d.PS.hlsl",
 		L"ps_6_0", dxcUtils, dxcCompiler, includeHandler);
 	assert(pixelShaderBlob != nullptr);
-	
-	
-	
-	
+
+
+
+
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 	graphicsPipelineStateDesc.pRootSignature = rootSignature;//RootSignature
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;//Inputlayout
@@ -433,7 +433,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	assert(fenceEvent != nullptr);
 	MSG msg{};
 	//ウィンドウの×ボタンが押されるまでループ
-	while (msg.message!=WM_QUIT)
+	while (msg.message != WM_QUIT)
 	{
 		//windowにメッセージが来てたら最優先で処理させる
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -444,7 +444,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//ゲームの処理
 			//これから書き込むバックバッファのインデックスを取得
 			UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
-			
+
 			//TransitionBarrierの設定
 			D3D12_RESOURCE_BARRIER barrier{};
 			//今回のバリアはTransition
@@ -535,7 +535,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-	
+
 	rtvDescriptorHeap->Release();
 	swapChainResources[0]->Release();
 	swapChainResources[1]->Release();
@@ -604,11 +604,11 @@ IDxcBlob* CompileShader(
 	);
 	//コンパイルエラーではなくdxcが起動できないなど致命的な状況
 	assert(SUCCEEDED(hr));
-	
+
 	//警告・エラーが出たらログに出して止める
 	IDxcBlobUtf8* shaderError = nullptr;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
-	if(shaderError != nullptr&&shaderError->GetStringLength()!=0){
+	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
 		Log(shaderError->GetStringPointer());
 		//警告・エラーダメ絶対
 		assert(false);
