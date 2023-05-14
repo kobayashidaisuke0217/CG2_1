@@ -272,20 +272,20 @@ void DirectX::Finalize() {
 	useAdapter_->Release();
 	dxgiFactory_->Release();
 }
-	WinApp* winApp_;
- IDXGIAdapter4* useAdapter_;
-	IDXGIFactory7* dxgiFactory_;
-	ID3D12Device* device_;
-	ID3D12CommandQueue* commandQueue_;
-	ID3D12CommandAllocator* commandAllocator_;
-	ID3D12GraphicsCommandList* commandList_;
-	IDXGISwapChain4* swapChain_;
-	ID3D12DescriptorHeap* rtvDescriptorHeap_;
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
-	ID3D12Resource* backBuffers_[2];//(swapChainResources???)
-	UINT64 fenceVal_;
-	int32_t backBufferWidth_;
-	int32_t backBufferHeight_;
-	inline D3D12_RESOURCE_BARRIER barrier_{};
-	ID3D12Fence* fence_;
-	HANDLE fenceEvent_;
+	WinApp*DirectX:: winApp_;
+ IDXGIAdapter4* DirectX::useAdapter_;
+ IDXGIFactory7* DirectX::dxgiFactory_;
+	ID3D12Device* DirectX::device_;
+	ID3D12CommandQueue* DirectX::commandQueue_;
+	ID3D12CommandAllocator* DirectX::commandAllocator_;
+	ID3D12GraphicsCommandList* DirectX::commandList_;
+	IDXGISwapChain4* DirectX::swapChain_;
+	ID3D12DescriptorHeap* DirectX::rtvDescriptorHeap_;
+	D3D12_CPU_DESCRIPTOR_HANDLE DirectX::rtvHandles_[2];
+	ID3D12Resource* DirectX::backBuffers_[2];//(swapChainResources???)
+	UINT64 DirectX::fenceVal_;
+	int32_t DirectX::backBufferWidth_;
+	int32_t DirectX::backBufferHeight_;
+	// D3D12_RESOURCE_BARRIER DirectX::barrier_{};
+	ID3D12Fence* DirectX::fence_;
+	HANDLE DirectX::fenceEvent_;

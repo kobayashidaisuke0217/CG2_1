@@ -3,8 +3,8 @@
 #include <cstdlib>
 #include <d3d12.h>
 #include <dxgi1_6.h>
-#include"combert.h"
 #include "WinApp.h"
+#include"combert.h"
 
 class DirectX
 {
@@ -20,8 +20,8 @@ public:
 	static void Finalize();
 	ID3D12Device* GetDevice() { return device_; }
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
-	int32_t GetBackBufferWidth() const;
-	int32_t GetBackBufferHeight() const;
+	//int32_t GetBackBufferWidth() const;
+	//int32_t GetBackBufferHeight() const;
 	//size_t GetBackBufferCount() const { return backBuffers_.size(); }
 private:
 static	WinApp* winApp_;

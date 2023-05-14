@@ -1,4 +1,3 @@
-
 #include "MyEngine.h"
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -8,12 +7,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	{
 		MyEngine::BeginFrame();
 
-		MyEngine::DrawTriangle(10, 10, 30, 30, 15, 15);
+	//	MyEngine::DrawTriangle(10, 10, 30, 30, 15, 15);
 		MyEngine::EndFrame();
 	}
 	MyEngine::Finalize();
-	//出力ウィンドウへの文字出力
-	OutputDebugStringA("Hello,DirectX!\n");
+
 	return 0;
 }
 

@@ -9,7 +9,7 @@ class MyEngine
 public:
 
 	static void Initialize(const wchar_t* title,int32_t width,int32_t height );
-	static	void DrawTriangle(float ax, float ay, float bx, float by, float cx, float cy);
+	//static	void DrawTriangle(static float ax, static float ay, static float bx, static float by, static float cx, static float cy);
 	static void BeginFrame();
 	static void EndFrame();
 	static void Finalize();

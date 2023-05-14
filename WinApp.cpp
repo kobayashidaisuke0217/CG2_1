@@ -46,3 +46,7 @@ bool WinApp::Procesmessage() {
 	}
 	return false;
 }
+
+
+	HWND WinApp::hwnd_;
+	UINT WinApp::windowStyle_;
