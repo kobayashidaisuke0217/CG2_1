@@ -1,22 +1,22 @@
 #pragma once
-#include "DirectX.h"
+#include "DirectXCommon.h"
 #include <dxgidebug.h>
 #include <dxcapi.h>
-#pragma comment(lib,"dxcompiler.lib")
 #include"Vector4.h"
+#pragma comment(lib,"dxcompiler.lib")
 class MyEngine
 {
 public:
 
 	static void Initialize(const wchar_t* title,int32_t width,int32_t height );
-	//static	void DrawTriangle(static float ax, static float ay, static float bx, static float by, static float cx, static float cy);
+	static	void DrawTriangle( float ax,  float ay, float bx,  float by,  float cx,  float cy);
 	static void BeginFrame();
 	static void EndFrame();
 	static void Finalize();
 
 private:
 
-	static	DirectX* direct_;
+	static	DirectXCommon* direct_;
 	static	IDxcUtils* dxcUtils_;
 	static	IDxcCompiler3* dxcCompiler_;
 	static	IDxcIncludeHandler* includeHandler_;

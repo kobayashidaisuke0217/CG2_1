@@ -1,4 +1,4 @@
-#include "DirectX.h"
+#include "DirectXCommon.h"
 #include <algorithm>
 #include <cassert>
 #include <thread>
@@ -8,14 +8,14 @@
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
-//#pragma comment(lib, "Winmm.lib")
+#pragma comment(lib, "Winmm.lib")
 void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());
 }
 
 
 
-void DirectX::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight)
+void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight)
 {
 	assert(win);
 	assert(4 <= backBufferWidth && backBufferWidth <= 4096);
@@ -24,7 +24,8 @@ void DirectX::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBuffe
 	winApp_ = win;
 	backBufferWidth_ = backBufferWidth;
 	backBufferHeight_ = backBufferHeight;
-
+	ShowWindow(winApp_->GetHwnd(), SW_SHOW);
+	winApp_->CreateGameWindow();
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
 
@@ -36,12 +37,12 @@ void DirectX::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBuffe
 
 	// レンダーターゲット生成
 	CreateFinalRenderTargets();
-	
+
 	// フェンス生成
 	CreateFence();
 }
 //デバイスの作成
-void DirectX::InitializeDXGIDevice() {
+void DirectXCommon::InitializeDXGIDevice() {
 	dxgiFactory_ = nullptr;
 	//HRESULTはWindows系のエラーコードであり
 	// 関数が成功したかどうかをSUCCEDEDマクロで判定できる
@@ -50,7 +51,7 @@ void DirectX::InitializeDXGIDevice() {
 	// どうにもできない場合が多いのでassertにしておく
 	assert(SUCCEEDED(hr));
 	//使用するアダプタ用の変数。さいしょにnullptrを入れておく
-	 useAdapter_ = nullptr;
+	useAdapter_ = nullptr;
 	//いい順にアダプタを頼む
 	for (UINT i = 0; dxgiFactory_->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE,
 		IID_PPV_ARGS(&useAdapter_)) != DXGI_ERROR_NOT_FOUND; ++i) {
@@ -117,9 +118,9 @@ void DirectX::InitializeDXGIDevice() {
 #endif
 }
 //コマンド関連の初期化
-void DirectX::InitializeCommand() {
+void DirectXCommon::InitializeCommand() {
 	//コマンドキューを生成する
-	 commandQueue_ = nullptr;
+	commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	HRESULT hr = device_->CreateCommandQueue(&commandQueueDesc,
 		IID_PPV_ARGS(&commandQueue_));
@@ -127,21 +128,21 @@ void DirectX::InitializeCommand() {
 	assert(SUCCEEDED(hr));
 
 	//コマンドアロケータを生成する
-	 commandAllocator_ = nullptr;
+	commandAllocator_ = nullptr;
 	hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
 		IID_PPV_ARGS(&commandAllocator_));
 	//コマンドアロケータの生成がうまくいかなかったので起動できない
 	assert(SUCCEEDED(hr));
 	//コマンドリストを生成する
-	 commandList_ = nullptr;
+	commandList_ = nullptr;
 	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr,
 		IID_PPV_ARGS(&commandList_));
 	//コマンドリストの生成がうまくいかなかったので起動できない
 	assert(SUCCEEDED(hr));
 }
 //スワップチェーンを生成
-void DirectX::CreateSwapChain() {
-    swapChain_ = nullptr;
+void DirectXCommon::CreateSwapChain() {
+	swapChain_ = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	swapChainDesc.Width = WinApp::kClientWidth;//画面の幅
 	swapChainDesc.Height = WinApp::kClientHeight;//画面の高さ
@@ -151,11 +152,11 @@ void DirectX::CreateSwapChain() {
 	swapChainDesc.BufferCount = 2;//ダブルバッファ
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら中身を破棄
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	HRESULT	hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd() , &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	HRESULT	hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr));
 
 	//ディスクリプタヒープの生成
-	 rtvDescriptorHeap_ = nullptr;
+	rtvDescriptorHeap_ = nullptr;
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptionHeapDesc{};
 	rtvDescriptionHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
 	rtvDescriptionHeapDesc.NumDescriptors = 2;//ダブルバッファ用に二つ。多くても別にかまわない
@@ -172,7 +173,7 @@ void DirectX::CreateSwapChain() {
 }
 
 // レンダーターゲット生成
-void DirectX::CreateFinalRenderTargets() {
+void DirectXCommon::CreateFinalRenderTargets() {
 
 	//RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
@@ -180,7 +181,7 @@ void DirectX::CreateFinalRenderTargets() {
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2Dテクスチャとして書き込む
 	//ディスクリプタの先頭を取得する
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	
+
 	//まず一つ目を作る。一つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle;
 	device_->CreateRenderTargetView(backBuffers_[0], &rtvDesc, rtvHandles_[0]);
@@ -191,22 +192,22 @@ void DirectX::CreateFinalRenderTargets() {
 
 }
 // フェンス生成
-void DirectX::CreateFence(){
+void DirectXCommon::CreateFence() {
 	//初期値０でFenceを作る
 	fence_ = nullptr;
- fenceVal_ = 0;
-HRESULT	hr = device_->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	fenceVal_ = 0;
+	HRESULT	hr = device_->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
 	assert(SUCCEEDED(hr));
 	//fenceのSignalを待つためのイベントを作成する
- fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
-	
+
 
 }
-void DirectX::PreDraw()
+void DirectXCommon::PreDraw()
 {
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-	
+
 	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	barrier_.Transition.pResource = backBuffers_[backBufferIndex];
@@ -214,16 +215,16 @@ void DirectX::PreDraw()
 	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	commandList_->ResourceBarrier(1, &barrier_);
 
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex],false,nullptr);
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
 	//指定した色で画面全体をクリアする
 	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
 
 }
 
-void DirectX::PostDraw() {
+void DirectXCommon::PostDraw() {
 	HRESULT hr;
-	barrier_.Transition.StateBefore= D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	//TransitonBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier_);
@@ -258,7 +259,7 @@ void DirectX::PostDraw() {
 		assert(SUCCEEDED(hr));
 	}
 }
-void DirectX::Finalize() {
+void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
 	fence_->Release();
 
@@ -273,20 +274,20 @@ void DirectX::Finalize() {
 	useAdapter_->Release();
 	dxgiFactory_->Release();
 }
-	WinApp*DirectX:: winApp_;
- IDXGIAdapter4* DirectX::useAdapter_;
- IDXGIFactory7* DirectX::dxgiFactory_;
-	ID3D12Device* DirectX::device_;
-	ID3D12CommandQueue* DirectX::commandQueue_;
-	ID3D12CommandAllocator* DirectX::commandAllocator_;
-	ID3D12GraphicsCommandList* DirectX::commandList_;
-	IDXGISwapChain4* DirectX::swapChain_;
-	ID3D12DescriptorHeap* DirectX::rtvDescriptorHeap_;
-	D3D12_CPU_DESCRIPTOR_HANDLE DirectX::rtvHandles_[2];
-	ID3D12Resource* DirectX::backBuffers_[2];//(swapChainResources???)
-	UINT64 DirectX::fenceVal_;
-	int32_t DirectX::backBufferWidth_;
-	int32_t DirectX::backBufferHeight_;
-	// D3D12_RESOURCE_BARRIER DirectX::barrier_{};
-	ID3D12Fence* DirectX::fence_;
-	HANDLE DirectX::fenceEvent_;
+WinApp* DirectXCommon::winApp_;
+IDXGIAdapter4* DirectXCommon::useAdapter_;
+IDXGIFactory7* DirectXCommon::dxgiFactory_;
+ID3D12Device* DirectXCommon::device_;
+ID3D12CommandQueue* DirectXCommon::commandQueue_;
+ID3D12CommandAllocator* DirectXCommon::commandAllocator_;
+ID3D12GraphicsCommandList* DirectXCommon::commandList_;
+IDXGISwapChain4* DirectXCommon::swapChain_;
+ID3D12DescriptorHeap* DirectXCommon::rtvDescriptorHeap_;
+D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::rtvHandles_[2];
+ID3D12Resource* DirectXCommon::backBuffers_[2];//(swapChainResources???)
+UINT64 DirectXCommon::fenceVal_;
+int32_t DirectXCommon::backBufferWidth_;
+int32_t DirectXCommon::backBufferHeight_;
+// D3D12_RESOURCE_BARRIER DirectX::barrier_{};
+ID3D12Fence* DirectXCommon::fence_;
+HANDLE DirectXCommon::fenceEvent_;

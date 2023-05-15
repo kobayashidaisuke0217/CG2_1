@@ -1,8 +1,6 @@
 #include "MyEngine.h"
 #include <assert.h>
-void Log(const std::string& message) {
-	OutputDebugStringA(message.c_str());
-}
+
 
 
 IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
@@ -221,30 +219,30 @@ void MyEngine::Initialize(const wchar_t* title, int32_t width, int32_t height) {
 
 	SettingScissor();
 }
-//void MyEngine::DrawTriangle(float ax,float ay,float bx,float by,float cx,float cy)
-//{
-//	//頂点リソースにデータを書き込む
-//	Vector4* vertexData = nullptr;
-//	//書き込むためのアドレスを取得
-//	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-//	//左下
-//	vertexData[0] = { ax,ay,0,1.0f };
-//	//上
-//	vertexData[1] = { bx,by,0.0f,1.0f };
-//	//右下
-//	vertexData[2] = { cx,cy,0.0f,1.0f };
-//
-//direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
-//direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
-//	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
-//direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
-//direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
-//direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
-//	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
-//direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
-//direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
-//}
+void MyEngine::DrawTriangle(float ax,float ay,float bx,float by,float cx,float cy)
+{
+	//頂点リソースにデータを書き込む
+	Vector4* vertexData = nullptr;
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	//左下
+	vertexData[0] = { ax,ay,0,1.0f };
+	//上
+	vertexData[1] = { bx,by,0.0f,1.0f };
+	//右下
+	vertexData[2] = { cx,cy,0.0f,1.0f };
+
+direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
+direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
+	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
+direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
+direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
+direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
+	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
+direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+}
 void MyEngine::BeginFrame() {
 	direct_->PreDraw();
 }
@@ -279,7 +277,7 @@ void MyEngine::Finalize()
 	}
 }
 
-	DirectX*MyEngine:: direct_;
+DirectXCommon*MyEngine:: direct_;
 	IDxcUtils* MyEngine::dxcUtils_;
 	IDxcCompiler3* MyEngine::dxcCompiler_;
 	IDxcIncludeHandler* MyEngine::includeHandler_;

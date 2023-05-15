@@ -2,7 +2,7 @@
 #include <string>
 #include <format>
 #include <Windows.h>
-std::wstring ConvertString(const std::string& str)
+inline std::wstring ConvertString(const std::string& str)
 {
 	if (str.empty())
 	{
@@ -19,7 +19,7 @@ std::wstring ConvertString(const std::string& str)
 	return result;
 }
 
-std::string ConvertString(const std::wstring& str)
+inline std::string ConvertString(const std::wstring& str)
 {
 	if (str.empty())
 	{
