@@ -25,17 +25,17 @@ void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t bac
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
 
-	//// コマンド関連初期化
-	//InitializeCommand();
+	// コマンド関連初期化
+	InitializeCommand();
 
-	//// スワップチェーンの生成
-	//CreateSwapChain();
+	// スワップチェーンの生成
+	CreateSwapChain();
 
-	//// レンダーターゲット生成
-	//CreateFinalRenderTargets();
+	// レンダーターゲット生成
+	CreateFinalRenderTargets();
 
-	//// フェンス生成
-	//CreateFence();
+	// フェンス生成
+	CreateFence();
 }
 //デバイスの作成
 void DirectXCommon::InitializeDXGIDevice() {
@@ -114,159 +114,159 @@ void DirectXCommon::InitializeDXGIDevice() {
 #endif
 }
 ////コマンド関連の初期化
-//void DirectXCommon::InitializeCommand() {
-//	//コマンドキューを生成する
-//	commandQueue_ = nullptr;
-//	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-//	HRESULT hr = device_->CreateCommandQueue(&commandQueueDesc,
-//		IID_PPV_ARGS(&commandQueue_));
-//	//コマンドキューの生成がうまくいかなかったので起動できない
-//	assert(SUCCEEDED(hr));
-//
-//	//コマンドアロケータを生成する
-//	commandAllocator_ = nullptr;
-//	hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-//		IID_PPV_ARGS(&commandAllocator_));
-//	//コマンドアロケータの生成がうまくいかなかったので起動できない
-//	assert(SUCCEEDED(hr));
-//	//コマンドリストを生成する
-//	commandList_ = nullptr;
-//	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr,
-//		IID_PPV_ARGS(&commandList_));
-//	//コマンドリストの生成がうまくいかなかったので起動できない
-//	assert(SUCCEEDED(hr));
-//}
-////スワップチェーンを生成
-//void DirectXCommon::CreateSwapChain() {
-//	swapChain_ = nullptr;
-//	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-//	swapChainDesc.Width = WinApp::kClientWidth;//画面の幅
-//	swapChainDesc.Height = WinApp::kClientHeight;//画面の高さ
-//	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
-//	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
-//	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
-//	swapChainDesc.BufferCount = 2;//ダブルバッファ
-//	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら中身を破棄
-//	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-//	HRESULT	hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
-//	assert(SUCCEEDED(hr));
-//
-//	//ディスクリプタヒープの生成
-//	rtvDescriptorHeap_ = nullptr;
-//	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptionHeapDesc{};
-//	rtvDescriptionHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
-//	rtvDescriptionHeapDesc.NumDescriptors = 2;//ダブルバッファ用に二つ。多くても別にかまわない
-//	hr = device_->CreateDescriptorHeap(&rtvDescriptionHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
-//	assert(SUCCEEDED(hr));
-//	//SwapChainからResourceを引っ張ってくる
-//	backBuffers_[0] = { nullptr };
-//	backBuffers_[1] = { nullptr };
-//	hr = swapChain_->GetBuffer(0, IID_PPV_ARGS(&backBuffers_[0]));
-//	//うまく取得できなければ起動できない
-//	assert(SUCCEEDED(hr));
-//	hr = swapChain_->GetBuffer(1, IID_PPV_ARGS(&backBuffers_[1]));
-//	assert(SUCCEEDED(hr));
-//}
-//
-//// レンダーターゲット生成
-//void DirectXCommon::CreateFinalRenderTargets() {
-//
-//	//RTVの設定
-//	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-//	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
-//	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2Dテクスチャとして書き込む
-//	//ディスクリプタの先頭を取得する
-//	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-//
-//	//まず一つ目を作る。一つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
-//	rtvHandles_[0] = rtvStartHandle;
-//	device_->CreateRenderTargetView(backBuffers_[0], &rtvDesc, rtvHandles_[0]);
-//	//2つ目のディスクリプタハンドルを得る（自力で）
-//	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-//	//2つ目を作る
-//	device_->CreateRenderTargetView(backBuffers_[1], &rtvDesc, rtvHandles_[1]);
-//
-//}
-//// フェンス生成
-//void DirectXCommon::CreateFence() {
-//	//初期値０でFenceを作る
-//	fence_ = nullptr;
-//	fenceVal_ = 0;
-//	HRESULT	hr = device_->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
-//	assert(SUCCEEDED(hr));
-//	//fenceのSignalを待つためのイベントを作成する
-//	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-//	assert(fenceEvent_ != nullptr);
-//
-//
-//}
-//void DirectXCommon::PreDraw()
-//{
-//	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-//
-//	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-//	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-//	barrier_.Transition.pResource = backBuffers_[backBufferIndex];
-//	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-//	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-//	commandList_->ResourceBarrier(1, &barrier_);
-//
-//	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
-//	//指定した色で画面全体をクリアする
-//	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
-//	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
-//
-//}
-//
-//void DirectXCommon::PostDraw() {
-//	HRESULT hr;
-//	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-//	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-//	//TransitonBarrierを張る
-//	commandList_->ResourceBarrier(1, &barrier_);
-//
-//
-//	//コマンドリストの内容を確定させる。すべてのコマンドを積んでからCloseすること
-//	hr = commandList_->Close();
-//	assert(SUCCEEDED(hr));
-//
-//	//GPUにコマンドリストを準備する
-//	ID3D12CommandList* commandLists[] = { commandList_ };
-//	commandQueue_->ExecuteCommandLists(1, commandLists);
-//	//GPUとOSに画面の交換を行うように通知する
-//	swapChain_->Present(1, 0);
-//
-//	//Fenceの値を更新
-//	fenceVal_++;
-//	//GPUがここまでたどり着いたときに、Fenceの値を指定し値に代入するようにSignalを送る
-//	commandQueue_->Signal(fence_, fenceVal_);
-//
-//	//Fenceの値が指定したSignal値にたどりつうてるじゃ確認する
-////GetCompletevaluseの初期値はFence作成時に渡した初期値
-//	if (fence_->GetCompletedValue() < fenceVal_) {
-//		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
-//		fence_->SetEventOnCompletion(fenceVal_, fenceEvent_);
-//		//イベント待つ
-//		WaitForSingleObject(fenceEvent_, INFINITE);
-//		//次のフレーム用のコマンドリストを準備
-//		hr = commandAllocator_->Reset();
-//		assert(SUCCEEDED(hr));
-//		hr = commandList_->Reset(commandAllocator_, nullptr);
-//		assert(SUCCEEDED(hr));
-//	}
-//}
-//
-void DirectXCommon::Finalize() {
-	//CloseHandle(fenceEvent_);
-	//fence_->Release();
+void DirectXCommon::InitializeCommand() {
+	//コマンドキューを生成する
+	commandQueue_ = nullptr;
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
+	HRESULT hr = device_->CreateCommandQueue(&commandQueueDesc,
+		IID_PPV_ARGS(&commandQueue_));
+	//コマンドキューの生成がうまくいかなかったので起動できない
+	assert(SUCCEEDED(hr));
 
-	//rtvDescriptorHeap_->Release();
-	//backBuffers_[0]->Release();
-	//backBuffers_[1]->Release();
-	//swapChain_->Release();
-	//commandList_->Release();
-	//commandAllocator_->Release();
-	//commandQueue_->Release();
+	//コマンドアロケータを生成する
+	commandAllocator_ = nullptr;
+	hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+		IID_PPV_ARGS(&commandAllocator_));
+	//コマンドアロケータの生成がうまくいかなかったので起動できない
+	assert(SUCCEEDED(hr));
+	//コマンドリストを生成する
+	commandList_ = nullptr;
+	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr,
+		IID_PPV_ARGS(&commandList_));
+	//コマンドリストの生成がうまくいかなかったので起動できない
+	assert(SUCCEEDED(hr));
+}
+//スワップチェーンを生成
+void DirectXCommon::CreateSwapChain() {
+	swapChain_ = nullptr;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	swapChainDesc.Width = WinApp::kClientWidth;//画面の幅
+	swapChainDesc.Height = WinApp::kClientHeight;//画面の高さ
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
+	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
+	swapChainDesc.BufferCount = 2;//ダブルバッファ
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら中身を破棄
+	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
+	HRESULT	hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	assert(SUCCEEDED(hr));
+
+	//ディスクリプタヒープの生成
+	rtvDescriptorHeap_ = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptionHeapDesc{};
+	rtvDescriptionHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
+	rtvDescriptionHeapDesc.NumDescriptors = 2;//ダブルバッファ用に二つ。多くても別にかまわない
+	hr = device_->CreateDescriptorHeap(&rtvDescriptionHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
+	assert(SUCCEEDED(hr));
+	//SwapChainからResourceを引っ張ってくる
+	backBuffers_[0] = { nullptr };
+	backBuffers_[1] = { nullptr };
+	hr = swapChain_->GetBuffer(0, IID_PPV_ARGS(&backBuffers_[0]));
+	//うまく取得できなければ起動できない
+	assert(SUCCEEDED(hr));
+	hr = swapChain_->GetBuffer(1, IID_PPV_ARGS(&backBuffers_[1]));
+	assert(SUCCEEDED(hr));
+}
+
+// レンダーターゲット生成
+void DirectXCommon::CreateFinalRenderTargets() {
+
+	//RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2Dテクスチャとして書き込む
+	//ディスクリプタの先頭を取得する
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+
+	//まず一つ目を作る。一つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
+	rtvHandles_[0] = rtvStartHandle;
+	device_->CreateRenderTargetView(backBuffers_[0], &rtvDesc, rtvHandles_[0]);
+	//2つ目のディスクリプタハンドルを得る（自力で）
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//2つ目を作る
+	device_->CreateRenderTargetView(backBuffers_[1], &rtvDesc, rtvHandles_[1]);
+
+}
+// フェンス生成
+void DirectXCommon::CreateFence() {
+	//初期値０でFenceを作る
+	fence_ = nullptr;
+	fenceVal_ = 0;
+	HRESULT	hr = device_->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	assert(SUCCEEDED(hr));
+	//fenceのSignalを待つためのイベントを作成する
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent_ != nullptr);
+
+
+}
+void DirectXCommon::PreDraw()
+{
+	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+
+	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier_.Transition.pResource = backBuffers_[backBufferIndex];
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	commandList_->ResourceBarrier(1, &barrier_);
+
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
+
+}
+
+void DirectXCommon::PostDraw() {
+	HRESULT hr;
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//TransitonBarrierを張る
+	commandList_->ResourceBarrier(1, &barrier_);
+
+
+	//コマンドリストの内容を確定させる。すべてのコマンドを積んでからCloseすること
+	hr = commandList_->Close();
+	assert(SUCCEEDED(hr));
+
+	//GPUにコマンドリストを準備する
+	ID3D12CommandList* commandLists[] = { commandList_ };
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+	//GPUとOSに画面の交換を行うように通知する
+	swapChain_->Present(1, 0);
+
+	//Fenceの値を更新
+	fenceVal_++;
+	//GPUがここまでたどり着いたときに、Fenceの値を指定し値に代入するようにSignalを送る
+	commandQueue_->Signal(fence_, fenceVal_);
+
+	//Fenceの値が指定したSignal値にたどりつうてるじゃ確認する
+//GetCompletevaluseの初期値はFence作成時に渡した初期値
+	if (fence_->GetCompletedValue() < fenceVal_) {
+		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
+		fence_->SetEventOnCompletion(fenceVal_, fenceEvent_);
+		//イベント待つ
+		WaitForSingleObject(fenceEvent_, INFINITE);
+		//次のフレーム用のコマンドリストを準備
+		hr = commandAllocator_->Reset();
+		assert(SUCCEEDED(hr));
+		hr = commandList_->Reset(commandAllocator_, nullptr);
+		assert(SUCCEEDED(hr));
+	}
+}
+
+void DirectXCommon::Finalize() {
+	CloseHandle(fenceEvent_);
+	fence_->Release();
+
+	rtvDescriptorHeap_->Release();
+	backBuffers_[0]->Release();
+	backBuffers_[1]->Release();
+	swapChain_->Release();
+	commandList_->Release();
+	commandAllocator_->Release();
+	commandQueue_->Release();
 	device_->Release();
 	useAdapter_->Release();
 	dxgiFactory_->Release();
