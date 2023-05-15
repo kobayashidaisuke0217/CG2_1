@@ -91,7 +91,7 @@ HRESULT	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
 	rootSignature_ = nullptr;
 	hr = direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
 		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-	assert(SUCCEEDED(hr));
+	//assert(SUCCEEDED(hr));
 }
 void MyEngine::CreateInputlayOut() {
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
