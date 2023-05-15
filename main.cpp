@@ -3,8 +3,7 @@
 //#include <string>
 //#include "WinApp.h"
 //#include"DirectXCommon.h"
-#include "MyEngine.h"
-
+#include "base/MyEngine.h"
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
