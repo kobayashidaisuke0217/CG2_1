@@ -7,8 +7,7 @@ class WinApp
 {
 public:
 
-	static const int32_t kClientWidth = 1280;
-	static const int32_t kClientHeight = 720;
+	
 
 	static inline HWND GetHwnd() { return hwnd_; }
 	HINSTANCE GetHInstance()const { return wc_.hInstance; }
@@ -21,6 +20,8 @@ public:
 
 	);
 private:
+	static const int32_t kClientWidth = 1280;
+	static const int32_t kClientHeight = 720;
 	static	inline WNDCLASS wc_{};
 	static	inline 	RECT wrc_ = { 0,0,kClientHeight,kClientHeight };
 	static	HWND hwnd_;
