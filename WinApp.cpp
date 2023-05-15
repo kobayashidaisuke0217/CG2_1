@@ -47,10 +47,15 @@ void WinApp::CreateGameWindow(const wchar_t* title, int32_t clientWidth, int32_t
 
 bool WinApp::Procesmessage() {
 	MSG msg{};
-	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
+
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		if (msg.message == WM_QUIT) // 終了メッセージが来たらループを抜ける
+		{
+			return true;
+		}
 	return false;
 }
 
