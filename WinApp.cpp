@@ -51,9 +51,6 @@ bool WinApp::Procesmessage() {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	else {
-
-	}
 	return false;
 }
 
