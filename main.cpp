@@ -2,8 +2,8 @@
 //#include <cstdint>
 //#include <string>
 //#include "WinApp.h"
-#include"DirectXCommon.h"
-
+//#include"DirectXCommon.h"
+#include"MyEngine.h"
 
 
 //Windowsアプリでのエントリーポイント(main関数)
@@ -18,6 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (win_->Procesmessage()) {
 			break;
 		}
+
 		
 	}
 	direct->Finalize();

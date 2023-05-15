@@ -13,7 +13,7 @@ public:
 	static inline HWND GetHwnd() { return hwnd_; }
 	HINSTANCE GetHInstance()const { return wc_.hInstance; }
 	static	bool Procesmessage();
-	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 public:
 	static	void CreateGameWindow(
 		const wchar_t* title ,

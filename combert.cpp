@@ -32,3 +32,6 @@ std::wstring ConvertString(const std::string& str)
 	WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), result.data(), sizeNeeded, NULL, NULL);
 	return result;
 }
+ void Log(const std::string& message) {
+	 OutputDebugStringA(message.c_str());
+ }

@@ -9,10 +9,6 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "Winmm.lib")
-void Log(const std::string& message) {
-	OutputDebugStringA(message.c_str());
-}
-
 
 
 void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight)
@@ -254,6 +250,16 @@ void DirectXCommon::PostDraw() {
 		hr = commandList_->Reset(commandAllocator_, nullptr);
 		assert(SUCCEEDED(hr));
 	}
+}
+
+void DirectXCommon::ClearRenderTarget()
+{
+	//描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
+
 }
 
 void DirectXCommon::Finalize() {
