@@ -91,6 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="combert.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyEngine.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +113,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="combert.h" />
     <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
