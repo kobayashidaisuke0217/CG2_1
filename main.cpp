@@ -2,7 +2,7 @@
 //#include <cstdint>
 //#include <string>
 //#include "WinApp.h"
-#include"DirectXCommon.h"
+#include"base/DirectXCommon.h"
 
 
 

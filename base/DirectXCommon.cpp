@@ -140,8 +140,8 @@ void DirectXCommon::InitializeCommand() {
 void DirectXCommon::CreateSwapChain() {
 	swapChain_ = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = WinApp::kClientWidth;//画面の幅
-	swapChainDesc.Height = WinApp::kClientHeight;//画面の高さ
+	swapChainDesc.Width = WinApp::GetWidth();//画面の幅
+	swapChainDesc.Height = WinApp::GetHeight();//画面の高さ
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
 	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
