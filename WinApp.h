@@ -1,7 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <cstdint>
-
+#include <d3d12.h>
+#pragma comment(lib,"d3d12.lib")
 class WinApp
 {
 public:
@@ -15,8 +16,8 @@ public:
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 public:
 	static	void CreateGameWindow(
-		const wchar_t* title = L"DirectXGame",
-		int32_t clientWidth = kClientWidth, int32_t clientheight = kClientHeight
+		const wchar_t* title ,
+		int32_t clientWidth , int32_t clientheight 
 
 	);
 private:
