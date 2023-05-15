@@ -256,6 +256,8 @@ void DirectXCommon::PostDraw() {
 	}
 }
 
+
+
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
 	fence_->Release();
