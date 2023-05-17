@@ -63,14 +63,14 @@ void MyEngine::InitializeDxcCompiler()
 {
 	dxcUtils_ = nullptr;
 	dxcCompiler_ = nullptr;
-	HRESULT	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
-	assert(SUCCEEDED(hr));
-	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
-	assert(SUCCEEDED(hr));
+	direct_->SetHr( DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_)));
+	assert(SUCCEEDED(direct_->GetHr()));
+	direct_->SetHr( DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_)));
+	assert(SUCCEEDED(direct_->GetHr()));
 	//現時点でincludeはしないが、includeに対応するための設定を行っていく
 	includeHandler_ = nullptr;
-	hr = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
-	assert(SUCCEEDED(hr));
+	direct_->SetHr( dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_));
+	assert(SUCCEEDED(direct_->GetHr()));
 
 }
 void MyEngine::CreateRootSignature() {
@@ -82,16 +82,16 @@ void MyEngine::CreateRootSignature() {
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
 	errorBlob_ = nullptr;
-	HRESULT	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
-		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-	if (FAILED(hr)) {
+	direct_->SetHr(  D3D12SerializeRootSignature(&descriptionRootSignature,
+		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_));
+	if (FAILED(direct_->GetHr())) {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
 		assert(false);
 	}
 	//バイナリを元に生成
 	rootSignature_ = nullptr;
-	hr = direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
-		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
+	direct_->SetHr( direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
+		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_)));
 	//assert(SUCCEEDED(hr));
 }
 void MyEngine::CreateInputlayOut() {
@@ -130,6 +130,9 @@ void MyEngine::SettingRasterizerState() {
 void MyEngine::InitializePSO() {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 	graphicsPipelineStateDesc.pRootSignature = rootSignature_;//RootSignature
+
+
+
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;//Inputlayout
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),
 		vertexShaderBlob_->GetBufferSize() };//vertexShader
@@ -170,10 +173,10 @@ void MyEngine::SettingVertex() {
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	//実際に頂点リソースを作る
 	vertexResource_ = nullptr;
-	HRESULT	hr = direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
+	 direct_->SetHr( direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertexResource_));
-	assert(SUCCEEDED(hr));
+		IID_PPV_ARGS(&vertexResource_)));
+	assert(SUCCEEDED(direct_->GetHr()));
 
 
 	//リソースの先頭のアドレスから使う
@@ -204,6 +207,8 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	
 	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
 	InitializeDxcCompiler();
+
+
 
 	CreateRootSignature();
 

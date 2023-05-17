@@ -244,23 +244,25 @@ void DirectXCommon::PostDraw() {
 		fence_->SetEventOnCompletion(fenceVal_, fenceEvent_);
 		//イベント待つ
 		WaitForSingleObject(fenceEvent_, INFINITE);
+	}
 		//次のフレーム用のコマンドリストを準備
 		hr_ = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr_));
 		hr_ = commandList_->Reset(commandAllocator_, nullptr);
 		assert(SUCCEEDED(hr_));
-	}
+	
 }
 
-//void DirectXCommon::ClearRenderTarget()
-//{
-//	//描画先のRTVを設定する
-//	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
-//	//指定した色で画面全体をクリアする
-//	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
-//	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
-//
-//}
+void DirectXCommon::ClearRenderTarget()
+{
+	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+	//描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearcolor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearcolor, 0, nullptr);
+
+}
 
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
