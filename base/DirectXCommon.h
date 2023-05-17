@@ -40,6 +40,7 @@ private:
 	//初期値０でFenceを作る
 	static	ID3D12Fence* fence_;
 	static	HANDLE fenceEvent_;
+	static HRESULT hr_;
 private:
 	
 
