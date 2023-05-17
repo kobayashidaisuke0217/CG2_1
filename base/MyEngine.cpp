@@ -128,11 +128,9 @@ void MyEngine::SettingRasterizerState() {
 	assert(pixelShaderBlob_ != nullptr);
 }
 void MyEngine::InitializePSO() {
+
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 	graphicsPipelineStateDesc.pRootSignature = rootSignature_;//RootSignature
-
-
-
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;//Inputlayout
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),
 		vertexShaderBlob_->GetBufferSize() };//vertexShader
@@ -204,11 +202,9 @@ void MyEngine::SettingScissor() {
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
-	
 	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
+    
 	InitializeDxcCompiler();
-
-
 
 	CreateRootSignature();
 
