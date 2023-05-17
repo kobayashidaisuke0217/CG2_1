@@ -10,9 +10,9 @@ IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* p
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n", filePath, profile)));
 	//hlslファイルを読む
 	IDxcBlobEncoding* shaderSource = nullptr;
-	HRESULT hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
+	direct_->SetHr(dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource));
 	//嫁なかったら決める
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(direct_->GetHr()));
 	//読み込んだファイルの内容を設定する
 	DxcBuffer shaderSourceBuffer;
 	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
@@ -28,15 +28,15 @@ IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* p
 	};
 	//実際にShaderをコンパイルする
 	IDxcResult* shaderResult = nullptr;
-	hr = dxcCompiler->Compile(
+	direct_->SetHr(dxcCompiler->Compile(
 		&shaderSourceBuffer,//読み込んだファイル
 		arguments,//コンパイルオプション
 		_countof(arguments),//コンパイルオプションの数
 		includeHandler, // includeが含まれた諸々
 		IID_PPV_ARGS(&shaderResult)//コンパイル結果
-	);
+	));
 	//コンパイルエラーではなくdxcが起動できないなど致命的な状況
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(direct_->GetHr()));
 
 	//警告・エラーが出たらログに出して止める
 	IDxcBlobUtf8* shaderError = nullptr;
@@ -48,8 +48,8 @@ IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* p
 	}
 	//コンパイル結果から実行用のバイナリ部分を取得
 	IDxcBlob* shaderBlob = nullptr;
-	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-	assert(SUCCEEDED(hr));
+	direct_->SetHr( shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr));
+	assert(SUCCEEDED(direct_->GetHr()));
 	//成功したログを出す
 	Log(ConvertString(std::format(L"Compile Succeeded, path:{},profile:{}\n", filePath, profile)));
 	//もう使わないリソースを開放
@@ -148,9 +148,9 @@ void MyEngine::InitializePSO() {
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	//実際に生成
 	graphicsPipelineState_ = nullptr;
-	HRESULT hr = direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState_));
-	assert(SUCCEEDED(hr));
+	direct_->SetHr( direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+		IID_PPV_ARGS(&graphicsPipelineState_)));
+	assert(SUCCEEDED(direct_->GetHr()));
 }
 void MyEngine::SettingVertex() {
 	//頂点リソース用のヒープの設定
@@ -199,9 +199,10 @@ void MyEngine::SettingScissor() {
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
-void MyEngine::Initialize(const wchar_t* title, int32_t width, int32_t height) {
+void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
-	WinApp::CreateGameWindow(title, width, height);
+	
+	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
 	InitializeDxcCompiler();
 
 	CreateRootSignature();
@@ -265,7 +266,7 @@ void MyEngine::Finalize()
 	direct_->Finalize();
 
 #ifdef _DEBUG
-	//debugController_->Release();
+//	debugController_->Release();
 #endif
 	CloseWindow(WinApp::GetHwnd());
 	//リソースリークチェック
@@ -277,7 +278,7 @@ void MyEngine::Finalize()
 		debug->Release();
 	}
 }
-
+WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;
 IDxcUtils* MyEngine::dxcUtils_;
 IDxcCompiler3* MyEngine::dxcCompiler_;

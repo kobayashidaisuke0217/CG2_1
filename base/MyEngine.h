@@ -8,14 +8,14 @@ class MyEngine
 {
 public:
 
-	static void Initialize(const wchar_t* title, int32_t width, int32_t height);
+	static void Initialize(WinApp* win, int32_t width, int32_t height);
 	static	void DrawTriangle(float ax, float ay, float bx, float by, float cx, float cy);
 	static void BeginFrame();
 	static void EndFrame();
 	static void Finalize();
 
 private:
-
+	static WinApp* win_;
 	static	DirectXCommon* direct_;
 	static	IDxcUtils* dxcUtils_;
 	static	IDxcCompiler3* dxcCompiler_;

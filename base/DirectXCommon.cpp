@@ -38,10 +38,10 @@ void DirectXCommon::InitializeDXGIDevice() {
 	dxgiFactory_ = nullptr;
 	//HRESULTはWindows系のエラーコードであり
 	// 関数が成功したかどうかをSUCCEDEDマクロで判定できる
-	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
+	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
 	//初期化の根本的な部分でエラーが出た場合はプログラムが間違っているか、
 	// どうにもできない場合が多いのでassertにしておく
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 	//使用するアダプタ用の変数。さいしょにnullptrを入れておく
 	useAdapter_ = nullptr;
 	//いい順にアダプタを頼む
@@ -49,8 +49,8 @@ void DirectXCommon::InitializeDXGIDevice() {
 		IID_PPV_ARGS(&useAdapter_)) != DXGI_ERROR_NOT_FOUND; ++i) {
 		//アダプターの情報を取得する
 		DXGI_ADAPTER_DESC3 adapterDesc{};
-		hr = useAdapter_->GetDesc3(&adapterDesc);
-		assert(SUCCEEDED(hr));//取得できないのは一大事
+		hr_ = useAdapter_->GetDesc3(&adapterDesc);
+		assert(SUCCEEDED(hr_));//取得できないのは一大事
 		//ソフトウェアアダプタでなければ採用!
 
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
@@ -71,9 +71,9 @@ void DirectXCommon::InitializeDXGIDevice() {
 	//高い順に生成できるか試していく
 	for (size_t i = 0; i < _countof(featurelevels); ++i) {
 		//採用したアダプターでデバイスを生成
-		hr = D3D12CreateDevice(useAdapter_, featurelevels[i], IID_PPV_ARGS(&device_));
+		hr_ = D3D12CreateDevice(useAdapter_, featurelevels[i], IID_PPV_ARGS(&device_));
 		//指定した機能レベルでデバイスが生成できたかを確認
-		if (SUCCEEDED(hr)) {
+		if (SUCCEEDED(hr_)) {
 			//生成できたのでログ出力を行ってループを抜ける
 			Log(std::format("Featurelevel : {}\n", featureLevelStrings[i]));
 			break;
@@ -114,23 +114,23 @@ void DirectXCommon::InitializeCommand() {
 	//コマンドキューを生成する
 	commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-	HRESULT hr = device_->CreateCommandQueue(&commandQueueDesc,
+	hr_ = device_->CreateCommandQueue(&commandQueueDesc,
 		IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成がうまくいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 	//コマンドアロケータを生成する
 	commandAllocator_ = nullptr;
-	hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
 		IID_PPV_ARGS(&commandAllocator_));
 	//コマンドアロケータの生成がうまくいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 	//コマンドリストを生成する
 	commandList_ = nullptr;
-	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr,
+	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr,
 		IID_PPV_ARGS(&commandList_));
 	//コマンドリストの生成がうまくいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 }
 //スワップチェーンを生成
 void DirectXCommon::CreateSwapChain() {
@@ -215,7 +215,7 @@ void DirectXCommon::PreDraw()
 }
 
 void DirectXCommon::PostDraw() {
-	HRESULT hr;
+	 hr_;
 	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	//TransitonBarrierを張る
@@ -223,8 +223,8 @@ void DirectXCommon::PostDraw() {
 
 
 	//コマンドリストの内容を確定させる。すべてのコマンドを積んでからCloseすること
-	hr = commandList_->Close();
-	assert(SUCCEEDED(hr));
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
 
 	//GPUにコマンドリストを準備する
 	ID3D12CommandList* commandLists[] = { commandList_ };
@@ -245,10 +245,10 @@ void DirectXCommon::PostDraw() {
 		//イベント待つ
 		WaitForSingleObject(fenceEvent_, INFINITE);
 		//次のフレーム用のコマンドリストを準備
-		hr = commandAllocator_->Reset();
-		assert(SUCCEEDED(hr));
-		hr = commandList_->Reset(commandAllocator_, nullptr);
-		assert(SUCCEEDED(hr));
+		hr_ = commandAllocator_->Reset();
+		assert(SUCCEEDED(hr_));
+		hr_ = commandList_->Reset(commandAllocator_, nullptr);
+		assert(SUCCEEDED(hr_));
 	}
 }
 
@@ -294,3 +294,4 @@ int32_t DirectXCommon::backBufferHeight_;
 // D3D12_RESOURCE_BARRIER DirectX::barrier_{};
 ID3D12Fence* DirectXCommon::fence_;
 HANDLE DirectXCommon::fenceEvent_;
+HRESULT DirectXCommon::hr_;
