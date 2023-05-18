@@ -11,9 +11,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	MyEngine* Engine = nullptr;
 	Engine->Initialize(win_, 1280, 720);
 	
+	Vector4 data[3];
+	data[0] = { -0.4f,-0.4f,0.0f,1.0f };
+	data[1] = { 0.0f,0.0f,0.0f,1.0f };
+	data[2] = { 0.4f,0.0f,0.0f,1.0f };
+	Vector4 data2[3];
+	data2[0] = { 0.2f,0.2f,0.0f,1.0f };
+	data2[1] = { 0.0f,0.5f,0.0f,1.0f };
+	data2[2] = { 0.7f,0.2f,0.0f,1.0f };
+   
 	
-	
-	//win_->CreateGameWindow(L"CG2",1280,720);
 	while (true) {
 
 		MyEngine::BeginFrame();
@@ -21,7 +28,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (win_->Procesmessage()) {
 			break;
 		}
-		
+		//MyEngine::DrawTriangle(data[0],data[1],data[2]);
+
+		MyEngine::DrawTriangle(data2[0], data2[1], data2[2]);
+		MyEngine::DrawTriangle(data[0], data[1], data[2]);
 		MyEngine::EndFrame();
 	}
 	

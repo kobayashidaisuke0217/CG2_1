@@ -9,7 +9,7 @@ class MyEngine
 public:
 
 	static void Initialize(WinApp* win, int32_t width, int32_t height);
-	static	void DrawTriangle(float ax, float ay, float bx, float by, float cx, float cy);
+	static	void DrawTriangle(Vector4& a,Vector4& b,Vector4& c);
 	static void BeginFrame();
 	static void EndFrame();
 	static void Finalize();
@@ -30,9 +30,12 @@ private:
 	static inline D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	static	ID3D12PipelineState* graphicsPipelineState_;
 	static ID3D12Resource* vertexResource_;
-	static inline D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
+	
 	static inline  D3D12_VIEWPORT viewport_{};
 	static inline D3D12_RECT scissorRect_{};
+	static  D3D12_INPUT_ELEMENT_DESC inputElementDescs_[1];
+	//頂点リソースにデータを書き込む
+	static Vector4* vertexData_;
 	static	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
 		const std::wstring& filePath,

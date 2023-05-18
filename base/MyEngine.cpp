@@ -92,17 +92,17 @@ void MyEngine::CreateRootSignature() {
 	rootSignature_ = nullptr;
 	direct_->SetHr( direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
 		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_)));
-	//assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(direct_->GetHr()));
 }
 void MyEngine::CreateInputlayOut() {
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	//inputElementDescsをメンバ変数にすると治った
+	inputElementDescs_[0].SemanticName = "POSITION";
+	inputElementDescs_[0].SemanticIndex = 0;
+	inputElementDescs_[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	inputElementDescs_[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
-	inputLayoutDesc_.pInputElementDescs = inputElementDescs;
-	inputLayoutDesc_.NumElements = _countof(inputElementDescs);
+	inputLayoutDesc_.pInputElementDescs = inputElementDescs_;
+	inputLayoutDesc_.NumElements = _countof(inputElementDescs_);
 }
 void MyEngine::SettingBlendState() {
 
@@ -149,9 +149,9 @@ void MyEngine::InitializePSO() {
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	//実際に生成
 	graphicsPipelineState_ = nullptr;
-	direct_->SetHr( direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState_)));
-	assert(SUCCEEDED(direct_->GetHr()));
+	HRESULT hr= direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+		IID_PPV_ARGS(&graphicsPipelineState_));
+	assert(SUCCEEDED(hr));
 }
 void MyEngine::SettingVertex() {
 	//頂点リソース用のヒープの設定
@@ -175,14 +175,6 @@ void MyEngine::SettingVertex() {
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&vertexResource_)));
 	assert(SUCCEEDED(direct_->GetHr()));
-
-
-	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
-	//1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
 }
 void MyEngine::SettingViePort() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -205,11 +197,13 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
     
 	InitializeDxcCompiler();
+	
 
 	CreateRootSignature();
-
+	//こいつが悪い
 	CreateInputlayOut();
-
+	
+	
 	SettingBlendState();
 
 	SettingRasterizerState();
@@ -222,25 +216,38 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	SettingScissor();
 }
-void MyEngine::DrawTriangle(float ax, float ay, float bx, float by, float cx, float cy)
+void MyEngine::DrawTriangle(Vector4& a, Vector4& b, Vector4& c)
 {
+	SettingVertex();
+
+	SettingViePort();
+
+	SettingScissor();
+ D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	//リソースの先頭のアドレスから使う
+	vertexBufferView.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点3つ分のサイズ
+	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
+	//1頂点当たりのサイズ
+	vertexBufferView.StrideInBytes = sizeof(Vector4);
 	//頂点リソースにデータを書き込む
-	Vector4* vertexData = nullptr;
+	vertexData_ = nullptr;
 	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
 	//左下
-	vertexData[0] = { ax,ay,0,1.0f };
+	vertexData_[0] = a;
 	//上
-	vertexData[1] = { bx,by,0.0f,1.0f };
+	vertexData_[1] = b;
 	//右下
-	vertexData[2] = { cx,cy,0.0f,1.0f };
+	vertexData_[2] =c;
 
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
 	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
-	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
+	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
 	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
@@ -267,17 +274,17 @@ void MyEngine::Finalize()
 	direct_->Finalize();
 
 #ifdef _DEBUG
-//	debugController_->Release();
+	WinApp::Finalize();
 #endif
 	CloseWindow(WinApp::GetHwnd());
-	//リソースリークチェック
-	IDXGIDebug1* debug;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug->Release();
-	}
+	////リソースリークチェック
+	//IDXGIDebug1* debug;
+	//if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+	//	debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+	//	debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+	//	debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+	//	debug->Release();
+	//}
 }
 WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;
@@ -293,3 +300,5 @@ IDxcBlob* MyEngine::pixelShaderBlob_;
 
 ID3D12PipelineState* MyEngine::graphicsPipelineState_;
 ID3D12Resource* MyEngine::vertexResource_;
+ D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
+ Vector4* MyEngine:: vertexData_;
