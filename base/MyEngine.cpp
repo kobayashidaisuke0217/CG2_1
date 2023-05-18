@@ -294,3 +294,5 @@ ID3D12PipelineState* MyEngine::graphicsPipelineState_;
 ID3D12Resource* MyEngine::vertexResource_;
  D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
  Vector4* MyEngine:: vertexData_;
+ int MyEngine::drawCount_ = 0;
+ int MyEngine::drawMaxCount = 30;

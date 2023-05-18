@@ -14,6 +14,8 @@ public:
 	static void Finalize();
 
 private:
+	static int drawCount_;
+	static int drawMaxCount;
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
 	static	IDxcUtils* dxcUtils_;
