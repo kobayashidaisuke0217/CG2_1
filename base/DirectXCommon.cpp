@@ -288,7 +288,7 @@ void DirectXCommon::Finalize() {
 	useAdapter_->Release();
 	dxgiFactory_->Release();
 #ifdef DEBUG
-	winApp_->GetdebugController();
+	winApp_->GetdebugController()->Release();
 #endif // DEBUG
 	
 	CloseWindow(winApp_->GetHwnd());
