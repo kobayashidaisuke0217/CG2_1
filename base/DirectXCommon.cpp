@@ -278,6 +278,11 @@ void DirectXCommon::Finalize() {
 	device_->Release();
 	useAdapter_->Release();
 	dxgiFactory_->Release();
+#ifdef DEBUG
+	winApp_->Finalize();
+#endif // DEBUG
+	CloseWindow(winApp_->GetHwnd());
+	
 }
 WinApp* DirectXCommon::winApp_;
 IDXGIAdapter4* DirectXCommon::useAdapter_;

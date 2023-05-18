@@ -273,15 +273,13 @@ void MyEngine::Finalize()
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
 
-#ifdef _DEBUG
-	WinApp::Finalize();
-#endif
-	CloseWindow(WinApp::GetHwnd());
-	////リソースリークチェック
-	//IDXGIDebug1* debug;
-	//if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-	//	debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-	//	debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+
+	/*CloseWindow(WinApp::GetHwnd());*/
+	//リソースリークチェック
+	/*IDXGIDebug1* debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);*/
+//		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
 	//	debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
 	//	debug->Release();
 	//}
