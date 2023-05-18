@@ -6,6 +6,7 @@
 class WinApp
 {
 public:
+	static ID3D12Debug1* GetdebugController() { return debugController_; }
 
 	static const int32_t kClientWidth = 1280;
 	static const int32_t kClientHeight = 720;

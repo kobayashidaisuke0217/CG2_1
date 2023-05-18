@@ -210,11 +210,11 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	InitializePSO();
 
-	SettingVertex();
+	//SettingVertex();
 
-	SettingViePort();
+	/*SettingViePort();
 
-	SettingScissor();
+	SettingScissor();*/
 }
 void MyEngine::DrawTriangle(Vector4& a, Vector4& b, Vector4& c)
 {
@@ -262,6 +262,7 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
+	
 	vertexResource_->Release();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
@@ -272,17 +273,10 @@ void MyEngine::Finalize()
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
-
+	
 
 	/*CloseWindow(WinApp::GetHwnd());*/
-	//リソースリークチェック
-	IDXGIDebug1* debug;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug->Release();
-	}
+	
 }
 WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;

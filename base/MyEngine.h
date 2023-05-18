@@ -1,6 +1,5 @@
 #pragma once
 #include "DirectXCommon.h"
-#include <dxgidebug.h>
 #include <dxcapi.h>
 #include"Vector4.h"
 #pragma comment(lib,"dxcompiler.lib")
