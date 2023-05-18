@@ -33,12 +33,12 @@ void WinApp::CreateGameWindow(const wchar_t* title, int32_t clientWidth, int32_t
 		nullptr//オプション
 	);
 #ifdef _DEBUG
-		ID3D12Debug1 * debugController = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		 debugController_ = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
 		//デバッグレイヤーを有効化する
-		debugController->EnableDebugLayer();
+		debugController_->EnableDebugLayer();
 		//さらにGPU側でもチェックを行うようにする
-		debugController->SetEnableGPUBasedValidation(true);
+		debugController_->SetEnableGPUBasedValidation(true);
 	}
 #endif  
 	ShowWindow(hwnd_, SW_SHOW);
@@ -62,3 +62,4 @@ bool WinApp::Procesmessage() {
 
 HWND WinApp::hwnd_;
 UINT WinApp::windowStyle_;
+ID3D12Debug1* WinApp::debugController_;

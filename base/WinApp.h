@@ -19,6 +19,7 @@ public:
 		int32_t clientWidth , int32_t clientheight 
 
 	);
+	static ID3D12Debug1* GetdebugController() { return debugController_; }
 private:
 	static const int32_t kClientWidth = 1280;
 	static const int32_t kClientHeight = 720;
@@ -26,4 +27,5 @@ private:
 	static	inline 	RECT wrc_ = { 0,0,kClientHeight,kClientHeight };
 	static	HWND hwnd_;
 	static	UINT windowStyle_;
+	static ID3D12Debug1* debugController_;
 };

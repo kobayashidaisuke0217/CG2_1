@@ -4,6 +4,7 @@
 #include <thread>
 #include <timeapi.h>
 #include <vector>
+#include <dxgidebug.h>
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -286,6 +287,19 @@ void DirectXCommon::Finalize() {
 	device_->Release();
 	useAdapter_->Release();
 	dxgiFactory_->Release();
+#ifdef DEBUG
+	winApp_->GetdebugController();
+#endif // DEBUG
+	
+	CloseWindow(winApp_->GetHwnd());
+	//リソースリークチェック
+	IDXGIDebug1* debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
+	}
 }
 WinApp* DirectXCommon::winApp_;
 IDXGIAdapter4* DirectXCommon::useAdapter_;
