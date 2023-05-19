@@ -1,8 +1,3 @@
-//#include <Windows.h>
-//#include <cstdint>
-//#include <string>
-//#include "WinApp.h"
-//#include"base/DirectXCommon.h"
 #include "base/MyEngine.h"
 
 //Windowsアプリでのエントリーポイント(main関数)
@@ -22,12 +17,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
    
 	
 	while (true) {
-
-		MyEngine::BeginFrame();
 		// メッセージ処理
 		if (win_->Procesmessage()) {
 			break;
 		}
+		MyEngine::BeginFrame();
 	
 
 		MyEngine::DrawTriangle(data2[0], data2[1], data2[2]);

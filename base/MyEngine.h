@@ -12,10 +12,9 @@ public:
 	static void BeginFrame();
 	static void EndFrame();
 	static void Finalize();
-
 private:
-	static int drawCount_;
-	static int drawMaxCount;
+	static  int drawCount ;
+	static const int drawMaxCount = 2;
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
 	static	IDxcUtils* dxcUtils_;
@@ -30,7 +29,7 @@ private:
 	static	IDxcBlob* pixelShaderBlob_;
 	static inline D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	static	ID3D12PipelineState* graphicsPipelineState_;
-	static ID3D12Resource* vertexResource_;
+	static ID3D12Resource* vertexResource_[drawMaxCount];
 	
 	static inline  D3D12_VIEWPORT viewport_{};
 	static inline D3D12_RECT scissorRect_{};

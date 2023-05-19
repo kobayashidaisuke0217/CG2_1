@@ -154,6 +154,7 @@ void MyEngine::InitializePSO() {
 	assert(SUCCEEDED(hr));
 }
 void MyEngine::SettingVertex() {
+	
 	//頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
 	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
@@ -170,10 +171,9 @@ void MyEngine::SettingVertex() {
 	//バッファの場合はこれにする決まり
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	//実際に頂点リソースを作る
-	vertexResource_ = nullptr;
 	 direct_->SetHr( direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertexResource_)));
+		IID_PPV_ARGS(&vertexResource_[drawCount])));
 	assert(SUCCEEDED(direct_->GetHr()));
 }
 void MyEngine::SettingViePort() {
@@ -210,63 +210,79 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	InitializePSO();
 
-	//SettingVertex();
+	
 
-	/*SettingViePort();
-
-	SettingScissor();*/
 }
 void MyEngine::DrawTriangle(Vector4& a, Vector4& b, Vector4& c)
 {
+
 	SettingVertex();
 
 	SettingViePort();
 
 	SettingScissor();
- D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//リソースの先頭のアドレスから使う
-	vertexBufferView.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
-	//1頂点当たりのサイズ
-	vertexBufferView.StrideInBytes = sizeof(Vector4);
-	//頂点リソースにデータを書き込む
-	vertexData_ = nullptr;
-	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	assert(drawCount < drawMaxCount);
+		
+	
+		D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+		//リソースの先頭のアドレスから使う
+		vertexBufferView.BufferLocation = vertexResource_[drawCount]->GetGPUVirtualAddress();
+		//使用するリソースのサイズは頂点3つ分のサイズ
+		vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
+		//1頂点当たりのサイズ
+		vertexBufferView.StrideInBytes = sizeof(Vector4);
+		//頂点リソースにデータを書き込む
+		vertexData_ = nullptr;
+		//書き込むためのアドレスを取得
+		vertexResource_[drawCount]->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
-	//左下
-	vertexData_[0] = a;
-	//上
-	vertexData_[1] = b;
-	//右下
-	vertexData_[2] =c;
+		//左下
+		vertexData_[0] = a;
+		//上
+		vertexData_[1] = b;
+		//右下
+		vertexData_[2] = c;
 
-	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
-	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
-	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
-	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
-	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
-	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
-	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
-	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
-	direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
+
+		
+
+		direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
+		direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
+		//RootSignatureを設定。PS0に設定しているけど別途設定が必要
+		direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
+		direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
+		direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
+		//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+		direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
+		direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+
+		drawCount++;
+
+	}
+
 void MyEngine::BeginFrame() {
 	direct_->PreDraw();
+	
 }
 void MyEngine::EndFrame() {
 	direct_->PostDraw();
+	drawCount = 0;
 }
 
 void MyEngine::Finalize()
 {
+	if (drawCount == 0) {
+
+		for (int i = 0; i < drawMaxCount; i++) {
+			vertexResource_[i]->Release();
+		}
+	}
 	
-	vertexResource_->Release();
+
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
-	if (errorBlob_) {
+if (errorBlob_) {
 		errorBlob_->Release();
 	}
 	rootSignature_->Release();
@@ -278,6 +294,9 @@ void MyEngine::Finalize()
 	/*CloseWindow(WinApp::GetHwnd());*/
 	
 }
+
+ int MyEngine::drawCount;
+const int MyEngine::drawMaxCount;
 WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;
 IDxcUtils* MyEngine::dxcUtils_;
@@ -291,8 +310,6 @@ IDxcBlob* MyEngine::vertexShaderBlob_;
 IDxcBlob* MyEngine::pixelShaderBlob_;
 
 ID3D12PipelineState* MyEngine::graphicsPipelineState_;
-ID3D12Resource* MyEngine::vertexResource_;
+ID3D12Resource* MyEngine::vertexResource_[];
  D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
  Vector4* MyEngine:: vertexData_;
- int MyEngine::drawCount_ = 0;
- int MyEngine::drawMaxCount = 30;
