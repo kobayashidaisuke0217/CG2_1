@@ -205,7 +205,7 @@ void MyEngine::SettingScissor() {
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
-void MyEngine::PosInitialize()
+void MyEngine::variableInitialize()
 {
 		data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
 		data2[0] = { -0.15f,0.1f,0.0f,1.0f };
@@ -260,7 +260,6 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	
 
 	CreateRootSignature();
-	//こいつが悪い
 	CreateInputlayOut();
 	
 	
@@ -306,7 +305,6 @@ if (errorBlob_) {
 	direct_->Finalize();
 	
 
-	/*CloseWindow(WinApp::GetHwnd());*/
 	
 }
 void MyEngine::Update()
@@ -320,22 +318,6 @@ void MyEngine::Draw()
 	}
 	
 }
-//
+
 WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;
-//IDxcUtils* MyEngine::dxcUtils_;
-//IDxcCompiler3* MyEngine::dxcCompiler_;
-//IDxcIncludeHandler* MyEngine::includeHandler_;
-//ID3DBlob* MyEngine::signatureBlob_;
-//ID3DBlob* MyEngine::errorBlob_;
-//ID3D12RootSignature* MyEngine::rootSignature_;
-//
-//IDxcBlob* MyEngine::vertexShaderBlob_;
-//IDxcBlob* MyEngine::pixelShaderBlob_;
-//
-//ID3D12PipelineState* MyEngine::graphicsPipelineState_;
-////ID3D12Resource* MyEngine::vertexResource_;
-// D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
-// /*Vector4* MyEngine:: vertexData_;
-//
-// D3D12_VERTEX_BUFFER_VIEW  MyEngine::vertexBufferView_{};*/

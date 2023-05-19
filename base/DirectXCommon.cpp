@@ -302,11 +302,10 @@ ID3D12GraphicsCommandList* DirectXCommon::commandList_;
 IDXGISwapChain4* DirectXCommon::swapChain_;
 ID3D12DescriptorHeap* DirectXCommon::rtvDescriptorHeap_;
 D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::rtvHandles_[2];
-ID3D12Resource* DirectXCommon::backBuffers_[2];//(swapChainResources???)
+ID3D12Resource* DirectXCommon::backBuffers_[2];
 UINT64 DirectXCommon::fenceVal_;
 int32_t DirectXCommon::backBufferWidth_;
 int32_t DirectXCommon::backBufferHeight_;
-// D3D12_RESOURCE_BARRIER DirectX::barrier_{};
 ID3D12Fence* DirectXCommon::fence_;
 HANDLE DirectXCommon::fenceEvent_;
 HRESULT DirectXCommon::hr_;

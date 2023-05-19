@@ -2,14 +2,13 @@
 #include "DirectXCommon.h"
 #include <dxcapi.h>
 #include"Vector4.h"
-#include <DrawTriangle.h>
+#include "DrawTriangle.h"
 #pragma comment(lib,"dxcompiler.lib")
 class MyEngine
 {
 public:
-	void PosInitialize();
+	void variableInitialize();
 	 void Initialize(WinApp* win, int32_t width, int32_t height);
-	//void DrawTriangle(Vector4& a,Vector4& b,Vector4& c);
 	 void BeginFrame();
 	 void EndFrame();
 	 void Finalize();

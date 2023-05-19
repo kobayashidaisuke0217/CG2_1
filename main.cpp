@@ -1,5 +1,5 @@
 #include "base/MyEngine.h"
-#include"DrawTriangle.h"
+#include"base/DrawTriangle.h"
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win_ = nullptr;
@@ -7,7 +7,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Engine->Initialize(win_, 1280, 720);
 	
    
-	Engine->PosInitialize();
+	Engine->variableInitialize();
 	while (true) {
 		// メッセージ処理
 		if (win_->Procesmessage()) {
