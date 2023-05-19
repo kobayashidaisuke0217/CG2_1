@@ -173,12 +173,12 @@ void MyEngine::SettingVertex() {
 	//バッファの場合はこれにする決まり
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	HRESULT hr;
+
 	//実際に頂点リソースを作る
-	 hr= direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
+	 hr = direct_->GetDevice()-> CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&vertexResource_));
 	assert(SUCCEEDED(hr));
-	
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
@@ -205,8 +205,55 @@ void MyEngine::SettingScissor() {
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
-void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
+void MyEngine::PosInitialize()
+{
+		data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
+		data2[0] = { -0.15f,0.1f,0.0f,1.0f };
+		data3[0] = { -0.1f,-0.1f,0.0f,1.0f };
 
+		data1[1] = { -0.2f,-0.3f,0.0f,1.0f };
+		data2[1] = { -0.15f,-0.1f,0.0f,1.0f };
+		data3[1] = { -0.1f,-0.3f,0.0f,1.0f };
+
+		data1[2] = { -0.2f,-0.5f,0.0f,1.0f };
+		data2[2] = { -0.15f,-0.3f,0.0f,1.0f };
+		data3[2] = { -0.1f,-0.5f,0.0f,1.0f };
+
+		data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
+		data2[3] = { -0.15f,-0.5f,0.0f,1.0f };
+		data3[3] = { -0.1f,-0.7f,0.0f,1.0f };
+
+		data1[4] = { -0.2f,-0.9f,0.0f,1.0f };
+		data2[4] = { -0.15f,-0.7f,0.0f,1.0f };
+		data3[4] = { -0.1f,-0.9f,0.0f,1.0f };
+
+		data1[5] = { -0.2f,0.7f,0.0f,1.0f };
+		data2[5] = { -0.15f,0.9f,0.0f,1.0f };
+		data3[5] = { -0.1f,0.7f,0.0f,1.0f };
+
+		data1[6] = { -0.2f,0.5f,0.0f,1.0f };
+		data2[6] = { -0.15f,0.7f,0.0f,1.0f };
+		data3[6] = { -0.1f,0.5f,0.0f,1.0f };
+
+		data1[7] = { -0.2f,0.3f,0.0f,1.0f };
+		data2[7] = { -0.15f,0.5f,0.0f,1.0f };
+		data3[7] = { -0.1f,0.3f,0.0f,1.0f };
+
+		data1[8] = { -0.2f,0.1f,0.0f,1.0f };
+		data2[8] = { -0.15f,0.3f,0.0f,1.0f };
+		data3[8] = { -0.1f,0.1f,0.0f,1.0f };
+
+		data1[9] = { -0.5f,-0.5f,0.0f,1.0f };
+		data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
+		data3[9] = { -0.3f,-0.5f,0.0f,1.0f };
+	
+	for (int i = 0; i < 10; i++) {
+		triangle[i] = new DrawTriangle();
+		triangle[i]->Initialize(direct_);
+	}
+	
+}
+void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
     
 	InitializeDxcCompiler();
@@ -223,39 +270,20 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	InitializePSO();
 
-	SettingVertex();
-
 	SettingViePort();
 
 	SettingScissor();
 
 }
-void MyEngine::DrawTriangle(Vector4& a, Vector4& b, Vector4& c)
-{
-		//左下
-		vertexData_[0] = a;
-		//上
-		vertexData_[1] = b;
-		//右下
-		vertexData_[2] = c;
-		direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
-		direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
-		//RootSignatureを設定。PS0に設定しているけど別途設定が必要
-		direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
-		direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
-		direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
-		//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
-		direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
-		direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
-		
-
-	}
 
 void MyEngine::BeginFrame() {
 	direct_->PreDraw();
-	
+	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
+	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
+	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
+	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
+	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
 }
 void MyEngine::EndFrame() {
 	direct_->PostDraw();
@@ -264,7 +292,9 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
-	vertexResource_->Release();
+	for (int i = 0; i < 10; i++) {
+		triangle[i]->Finalize();
+	}
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 if (errorBlob_) {
@@ -279,22 +309,33 @@ if (errorBlob_) {
 	/*CloseWindow(WinApp::GetHwnd());*/
 	
 }
+void MyEngine::Update()
+{
 
+}
+void MyEngine::Draw()
+{
+	for (int i = 0; i < 10; i++) {
+		triangle[i]->Draw(data1[i], data2[i], data3[i]);
+	}
+	
+}
+//
 WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;
-IDxcUtils* MyEngine::dxcUtils_;
-IDxcCompiler3* MyEngine::dxcCompiler_;
-IDxcIncludeHandler* MyEngine::includeHandler_;
-ID3DBlob* MyEngine::signatureBlob_;
-ID3DBlob* MyEngine::errorBlob_;
-ID3D12RootSignature* MyEngine::rootSignature_;
-
-IDxcBlob* MyEngine::vertexShaderBlob_;
-IDxcBlob* MyEngine::pixelShaderBlob_;
-
-ID3D12PipelineState* MyEngine::graphicsPipelineState_;
-//ID3D12Resource* MyEngine::vertexResource_;
- D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
- Vector4* MyEngine:: vertexData_;
-
- D3D12_VERTEX_BUFFER_VIEW  MyEngine::vertexBufferView_{};
+//IDxcUtils* MyEngine::dxcUtils_;
+//IDxcCompiler3* MyEngine::dxcCompiler_;
+//IDxcIncludeHandler* MyEngine::includeHandler_;
+//ID3DBlob* MyEngine::signatureBlob_;
+//ID3DBlob* MyEngine::errorBlob_;
+//ID3D12RootSignature* MyEngine::rootSignature_;
+//
+//IDxcBlob* MyEngine::vertexShaderBlob_;
+//IDxcBlob* MyEngine::pixelShaderBlob_;
+//
+//ID3D12PipelineState* MyEngine::graphicsPipelineState_;
+////ID3D12Resource* MyEngine::vertexResource_;
+// D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
+// /*Vector4* MyEngine:: vertexData_;
+//
+// D3D12_VERTEX_BUFFER_VIEW  MyEngine::vertexBufferView_{};*/
