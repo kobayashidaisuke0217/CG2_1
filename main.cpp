@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 		MyEngine::DrawTriangle(data2[0], data2[1], data2[2]);
-		MyEngine::DrawTriangle(data[0], data[1], data[2]);
+		//MyEngine::DrawTriangle(data[0], data[1], data[2]);
 		MyEngine::EndFrame();
 	}
 	

@@ -61,16 +61,17 @@ IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* p
 
 void MyEngine::InitializeDxcCompiler()
 {
+	HRESULT hr;
 	dxcUtils_ = nullptr;
 	dxcCompiler_ = nullptr;
-	direct_->SetHr( DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_)));
-	assert(SUCCEEDED(direct_->GetHr()));
-	direct_->SetHr( DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_)));
-	assert(SUCCEEDED(direct_->GetHr()));
+	hr= DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
+	assert(SUCCEEDED(hr));
+	hr= DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
+	assert(SUCCEEDED(hr));
 	//現時点でincludeはしないが、includeに対応するための設定を行っていく
 	includeHandler_ = nullptr;
-	direct_->SetHr( dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_));
-	assert(SUCCEEDED(direct_->GetHr()));
+	hr =dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
+	assert(SUCCEEDED(hr));
 
 }
 void MyEngine::CreateRootSignature() {
@@ -82,17 +83,18 @@ void MyEngine::CreateRootSignature() {
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
 	errorBlob_ = nullptr;
-	direct_->SetHr(  D3D12SerializeRootSignature(&descriptionRootSignature,
-		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_));
+	HRESULT hr;
+	hr= D3D12SerializeRootSignature(&descriptionRootSignature,
+		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
 	if (FAILED(direct_->GetHr())) {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
 		assert(false);
 	}
 	//バイナリを元に生成
 	rootSignature_ = nullptr;
-	direct_->SetHr( direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
-		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_)));
-	assert(SUCCEEDED(direct_->GetHr()));
+	hr= direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
+		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
+	assert(SUCCEEDED(hr));
 }
 void MyEngine::CreateInputlayOut() {
 	//inputElementDescsをメンバ変数にすると治った
@@ -170,11 +172,22 @@ void MyEngine::SettingVertex() {
 	vertexResourceDesc.SampleDesc.Count = 1;
 	//バッファの場合はこれにする決まり
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	HRESULT hr;
 	//実際に頂点リソースを作る
-	 direct_->SetHr( direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
+	 hr= direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertexResource_[drawCount])));
-	assert(SUCCEEDED(direct_->GetHr()));
+		IID_PPV_ARGS(&vertexResource_));
+	assert(SUCCEEDED(hr));
+	
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点3つ分のサイズ
+	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	//1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
 }
 void MyEngine::SettingViePort() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -210,54 +223,33 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	InitializePSO();
 
-	
-
-}
-void MyEngine::DrawTriangle(Vector4& a, Vector4& b, Vector4& c)
-{
-
 	SettingVertex();
 
 	SettingViePort();
 
 	SettingScissor();
-	assert(drawCount < drawMaxCount);
-		
-	
-		D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-		//リソースの先頭のアドレスから使う
-		vertexBufferView.BufferLocation = vertexResource_[drawCount]->GetGPUVirtualAddress();
-		//使用するリソースのサイズは頂点3つ分のサイズ
-		vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
-		//1頂点当たりのサイズ
-		vertexBufferView.StrideInBytes = sizeof(Vector4);
-		//頂点リソースにデータを書き込む
-		vertexData_ = nullptr;
-		//書き込むためのアドレスを取得
-		vertexResource_[drawCount]->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
+}
+void MyEngine::DrawTriangle(Vector4& a, Vector4& b, Vector4& c)
+{
 		//左下
 		vertexData_[0] = a;
 		//上
 		vertexData_[1] = b;
 		//右下
 		vertexData_[2] = c;
-
-
-		
-
 		direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 		direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 		//RootSignatureを設定。PS0に設定しているけど別途設定が必要
 		direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
 		direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
-		direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
+		direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 		//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 		direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
 		direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
-		drawCount++;
+		
 
 	}
 
@@ -267,19 +259,12 @@ void MyEngine::BeginFrame() {
 }
 void MyEngine::EndFrame() {
 	direct_->PostDraw();
-	drawCount = 0;
+	
 }
 
 void MyEngine::Finalize()
 {
-	if (drawCount == 0) {
-
-		for (int i = 0; i < drawMaxCount; i++) {
-			vertexResource_[i]->Release();
-		}
-	}
-	
-
+	vertexResource_->Release();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 if (errorBlob_) {
@@ -295,8 +280,6 @@ if (errorBlob_) {
 	
 }
 
- int MyEngine::drawCount;
-const int MyEngine::drawMaxCount;
 WinApp*MyEngine:: win_;
 DirectXCommon* MyEngine::direct_;
 IDxcUtils* MyEngine::dxcUtils_;
@@ -310,6 +293,8 @@ IDxcBlob* MyEngine::vertexShaderBlob_;
 IDxcBlob* MyEngine::pixelShaderBlob_;
 
 ID3D12PipelineState* MyEngine::graphicsPipelineState_;
-ID3D12Resource* MyEngine::vertexResource_[];
+//ID3D12Resource* MyEngine::vertexResource_;
  D3D12_INPUT_ELEMENT_DESC MyEngine:: inputElementDescs_[1];
  Vector4* MyEngine:: vertexData_;
+
+ D3D12_VERTEX_BUFFER_VIEW  MyEngine::vertexBufferView_{};

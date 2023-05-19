@@ -7,14 +7,13 @@ class MyEngine
 {
 public:
 
-	static void Initialize(WinApp* win, int32_t width, int32_t height);
+	 void Initialize(WinApp* win, int32_t width, int32_t height);
 	static	void DrawTriangle(Vector4& a,Vector4& b,Vector4& c);
 	static void BeginFrame();
 	static void EndFrame();
-	static void Finalize();
+	 void Finalize();
 private:
-	static  int drawCount ;
-	static const int drawMaxCount = 2;
+
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
 	static	IDxcUtils* dxcUtils_;
@@ -29,7 +28,8 @@ private:
 	static	IDxcBlob* pixelShaderBlob_;
 	static inline D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	static	ID3D12PipelineState* graphicsPipelineState_;
-	static ID3D12Resource* vertexResource_[drawMaxCount];
+	ID3D12Resource* vertexResource_;
+	static D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	
 	static inline  D3D12_VIEWPORT viewport_{};
 	static inline D3D12_RECT scissorRect_{};
@@ -46,15 +46,15 @@ private:
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler
 	);
-	static void InitializeDxcCompiler();
-	static void CreateRootSignature();
-	static void CreateInputlayOut();
-	static void SettingBlendState();
-	static void SettingRasterizerState();
-	static void InitializePSO();
-	static void SettingVertex();
-	static void SettingViePort();
-	static void SettingScissor();
+	 void InitializeDxcCompiler();
+	 void CreateRootSignature();
+	 void CreateInputlayOut();
+	 void SettingBlendState();
+	 void SettingRasterizerState();
+	 void InitializePSO();
+	 void SettingVertex();
+	 void SettingViePort();
+	 void SettingScissor();
 
 };
 
