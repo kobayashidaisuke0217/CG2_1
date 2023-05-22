@@ -16,25 +16,31 @@
     <Filter Include="base">
       <UniqueIdentifier>{9b5ed66e-2450-4e58-bd1e-496326d595bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\base">
+      <UniqueIdentifier>{b8335c80-086a-4d5a-8839-b0b8ba702bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\base">
+      <UniqueIdentifier>{e22db1a1-353c-46c2-a55e-a5b6452e27e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="combert.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="base\DirectXCommon.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="base\MyEngine.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="base\WinApp.cpp">
-      <Filter>base</Filter>
+    <ClCompile Include="base\DirectXCommon.cpp">
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="base\Triangle.cpp">
-      <Filter>base</Filter>
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\MyEngine.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
+    <ClCompile Include="base\WinApp.cpp">
+      <Filter>ソース ファイル\base</Filter>
+    </ClCompile>
+    <ClCompile Include="combert.cpp">
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,20 +51,20 @@
     <ClInclude Include="Vector4.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="combert.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="base\DirectXCommon.h">
-      <Filter>base</Filter>
+    <ClInclude Include="base\WinApp.h">
+      <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
     <ClInclude Include="base\MyEngine.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\WinApp.h">
-      <Filter>base</Filter>
+      <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
     <ClInclude Include="base\Triangle.h">
-      <Filter>base</Filter>
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+    <ClInclude Include="base\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\base</Filter>
+    </ClInclude>
+    <ClInclude Include="combert.h">
+      <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
