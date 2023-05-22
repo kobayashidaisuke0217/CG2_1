@@ -48,7 +48,7 @@ IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* p
 	}
 	//コンパイル結果から実行用のバイナリ部分を取得
 	IDxcBlob* shaderBlob = nullptr;
-	direct_->SetHr( shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr));
+	direct_->SetHr(shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr));
 	assert(SUCCEEDED(direct_->GetHr()));
 	//成功したログを出す
 	Log(ConvertString(std::format(L"Compile Succeeded, path:{},profile:{}\n", filePath, profile)));
@@ -64,13 +64,13 @@ void MyEngine::InitializeDxcCompiler()
 	HRESULT hr;
 	dxcUtils_ = nullptr;
 	dxcCompiler_ = nullptr;
-	hr= DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
+	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
 	assert(SUCCEEDED(hr));
-	hr= DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
+	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
 	assert(SUCCEEDED(hr));
 	//現時点でincludeはしないが、includeに対応するための設定を行っていく
 	includeHandler_ = nullptr;
-	hr =dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
+	hr = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
 	assert(SUCCEEDED(hr));
 
 }
@@ -84,7 +84,7 @@ void MyEngine::CreateRootSignature() {
 	signatureBlob_ = nullptr;
 	errorBlob_ = nullptr;
 	HRESULT hr;
-	hr= D3D12SerializeRootSignature(&descriptionRootSignature,
+	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
 	if (FAILED(direct_->GetHr())) {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
@@ -92,7 +92,7 @@ void MyEngine::CreateRootSignature() {
 	}
 	//バイナリを元に生成
 	rootSignature_ = nullptr;
-	hr= direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
+	hr = direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
 		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(hr));
 }
@@ -151,12 +151,12 @@ void MyEngine::InitializePSO() {
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	//実際に生成
 	graphicsPipelineState_ = nullptr;
-	HRESULT hr= direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+	HRESULT hr = direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr));
 }
 void MyEngine::SettingVertex() {
-	
+
 	//頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
 	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
@@ -175,7 +175,7 @@ void MyEngine::SettingVertex() {
 	HRESULT hr;
 
 	//実際に頂点リソースを作る
-	 hr = direct_->GetDevice()-> CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
+	hr = direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&vertexResource_));
 	assert(SUCCEEDED(hr));
@@ -207,62 +207,62 @@ void MyEngine::SettingScissor() {
 }
 void MyEngine::variableInitialize()
 {
-		data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
-		data2[0] = { -0.15f,0.1f,0.0f,1.0f };
-		data3[0] = { -0.1f,-0.1f,0.0f,1.0f };
+	data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
+	data2[0] = { -0.15f,0.1f,0.0f,1.0f };
+	data3[0] = { -0.1f,-0.1f,0.0f,1.0f };
 
-		data1[1] = { -0.2f,-0.3f,0.0f,1.0f };
-		data2[1] = { -0.15f,-0.1f,0.0f,1.0f };
-		data3[1] = { -0.1f,-0.3f,0.0f,1.0f };
+	data1[1] = { -0.2f,-0.3f,0.0f,1.0f };
+	data2[1] = { -0.15f,-0.1f,0.0f,1.0f };
+	data3[1] = { -0.1f,-0.3f,0.0f,1.0f };
 
-		data1[2] = { -0.2f,-0.5f,0.0f,1.0f };
-		data2[2] = { -0.15f,-0.3f,0.0f,1.0f };
-		data3[2] = { -0.1f,-0.5f,0.0f,1.0f };
+	data1[2] = { -0.2f,-0.5f,0.0f,1.0f };
+	data2[2] = { -0.15f,-0.3f,0.0f,1.0f };
+	data3[2] = { -0.1f,-0.5f,0.0f,1.0f };
 
-		data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
-		data2[3] = { -0.15f,-0.5f,0.0f,1.0f };
-		data3[3] = { -0.1f,-0.7f,0.0f,1.0f };
+	data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
+	data2[3] = { -0.15f,-0.5f,0.0f,1.0f };
+	data3[3] = { -0.1f,-0.7f,0.0f,1.0f };
 
-		data1[4] = { -0.2f,-0.9f,0.0f,1.0f };
-		data2[4] = { -0.15f,-0.7f,0.0f,1.0f };
-		data3[4] = { -0.1f,-0.9f,0.0f,1.0f };
+	data1[4] = { -0.2f,-0.9f,0.0f,1.0f };
+	data2[4] = { -0.15f,-0.7f,0.0f,1.0f };
+	data3[4] = { -0.1f,-0.9f,0.0f,1.0f };
 
-		data1[5] = { -0.2f,0.7f,0.0f,1.0f };
-		data2[5] = { -0.15f,0.9f,0.0f,1.0f };
-		data3[5] = { -0.1f,0.7f,0.0f,1.0f };
+	data1[5] = { -0.2f,0.7f,0.0f,1.0f };
+	data2[5] = { -0.15f,0.9f,0.0f,1.0f };
+	data3[5] = { -0.1f,0.7f,0.0f,1.0f };
 
-		data1[6] = { -0.2f,0.5f,0.0f,1.0f };
-		data2[6] = { -0.15f,0.7f,0.0f,1.0f };
-		data3[6] = { -0.1f,0.5f,0.0f,1.0f };
+	data1[6] = { -0.2f,0.5f,0.0f,1.0f };
+	data2[6] = { -0.15f,0.7f,0.0f,1.0f };
+	data3[6] = { -0.1f,0.5f,0.0f,1.0f };
 
-		data1[7] = { -0.2f,0.3f,0.0f,1.0f };
-		data2[7] = { -0.15f,0.5f,0.0f,1.0f };
-		data3[7] = { -0.1f,0.3f,0.0f,1.0f };
+	data1[7] = { -0.2f,0.3f,0.0f,1.0f };
+	data2[7] = { -0.15f,0.5f,0.0f,1.0f };
+	data3[7] = { -0.1f,0.3f,0.0f,1.0f };
 
-		data1[8] = { -0.2f,0.1f,0.0f,1.0f };
-		data2[8] = { -0.15f,0.3f,0.0f,1.0f };
-		data3[8] = { -0.1f,0.1f,0.0f,1.0f };
+	data1[8] = { -0.2f,0.1f,0.0f,1.0f };
+	data2[8] = { -0.15f,0.3f,0.0f,1.0f };
+	data3[8] = { -0.1f,0.1f,0.0f,1.0f };
 
-		data1[9] = { -0.5f,-0.5f,0.0f,1.0f };
-		data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
-		data3[9] = { -0.3f,-0.5f,0.0f,1.0f };
-	
+	data1[9] = { -0.5f,-0.5f,0.0f,1.0f };
+	data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
+	data3[9] = { -0.3f,-0.5f,0.0f,1.0f };
+
 	for (int i = 0; i < 10; i++) {
-		triangle[i] = new DrawTriangle();
+		triangle[i] = new Triangle();
 		triangle[i]->Initialize(direct_);
 	}
-	
+
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
-    
+
 	InitializeDxcCompiler();
-	
+
 
 	CreateRootSignature();
 	CreateInputlayOut();
-	
-	
+
+
 	SettingBlendState();
 
 	SettingRasterizerState();
@@ -286,7 +286,7 @@ void MyEngine::BeginFrame() {
 }
 void MyEngine::EndFrame() {
 	direct_->PostDraw();
-	
+
 }
 
 void MyEngine::Finalize()
@@ -296,16 +296,16 @@ void MyEngine::Finalize()
 	}
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
-if (errorBlob_) {
+	if (errorBlob_) {
 		errorBlob_->Release();
 	}
 	rootSignature_->Release();
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
-	
 
-	
+
+
 }
 void MyEngine::Update()
 {
@@ -316,8 +316,8 @@ void MyEngine::Draw()
 	for (int i = 0; i < 10; i++) {
 		triangle[i]->Draw(data1[i], data2[i], data3[i]);
 	}
-	
+
 }
 
-WinApp*MyEngine:: win_;
+WinApp* MyEngine::win_;
 DirectXCommon* MyEngine::direct_;

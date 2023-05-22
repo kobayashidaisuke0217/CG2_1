@@ -18,7 +18,7 @@ public:
 	static inline void ClearRenderTarget();
 	static void Finalize();
 	HRESULT GetHr() { return  hr_; }
-	void SetHr(HRESULT a) { this->hr_=a ; }
+	void SetHr(HRESULT a) { this->hr_ = a; }
 	ID3D12Device* GetDevice() { return device_; }
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 	//int32_t GetBackBufferWidth() const;
@@ -46,7 +46,7 @@ private:
 	static	HANDLE fenceEvent_;
 	static HRESULT hr_;
 private:
-	
+
 
 	void InitializeDXGIDevice();
 	void CreateSwapChain();

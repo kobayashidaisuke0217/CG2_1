@@ -1,15 +1,15 @@
-#include "DrawTriangle.h"
+#include "Triangle.h"
 #include<assert.h>
 #include"base/MyEngine.h"
 
-void DrawTriangle::Initialize(DirectXCommon* direct)
+void Triangle::Initialize(DirectXCommon* direct)
 {
 	direct_ = direct;
 	SettingVertex();
 
 }
 
-void DrawTriangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c)
+void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c)
 {
 	//左下
 	vertexData_[0] = a;
@@ -24,11 +24,11 @@ void DrawTriangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c)
 	direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
 }
-void DrawTriangle::Finalize()
+void Triangle::Finalize()
 {
 	vertexResource_->Release();
 }
-void DrawTriangle::SettingVertex() {
+void Triangle::SettingVertex() {
 
 	//頂点リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};

@@ -3,7 +3,7 @@
 #include"Vector4.h"
 class MyEngine;
 
-class DrawTriangle
+class Triangle
 {
 public:
 	void Initialize(DirectXCommon* direct);

@@ -33,7 +33,7 @@
     <ClCompile Include="base\WinApp.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="base\DrawTriangle.cpp">
+    <ClCompile Include="base\Triangle.cpp">
       <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,7 +57,7 @@
     <ClInclude Include="base\WinApp.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="base\DrawTriangle.h">
+    <ClInclude Include="base\Triangle.h">
       <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>

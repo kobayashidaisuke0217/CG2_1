@@ -13,11 +13,11 @@
 
 void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight)
 {
-	
+
 	winApp_ = win;
 	backBufferWidth_ = backBufferWidth;
 	backBufferHeight_ = backBufferHeight;
-	winApp_->CreateGameWindow(L"CG2",1280,720);
+	winApp_->CreateGameWindow(L"CG2", 1280, 720);
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
 
@@ -215,7 +215,7 @@ void DirectXCommon::PreDraw()
 }
 
 void DirectXCommon::PostDraw() {
-	 hr_;
+	hr_;
 	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	//TransitonBarrierを張る
@@ -245,12 +245,12 @@ void DirectXCommon::PostDraw() {
 		//イベント待つ
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
-		//次のフレーム用のコマンドリストを準備
-		hr_ = commandAllocator_->Reset();
-		assert(SUCCEEDED(hr_));
-		hr_ = commandList_->Reset(commandAllocator_, nullptr);
-		assert(SUCCEEDED(hr_));
-	
+	//次のフレーム用のコマンドリストを準備
+	hr_ = commandAllocator_->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = commandList_->Reset(commandAllocator_, nullptr);
+	assert(SUCCEEDED(hr_));
+
 }
 
 void DirectXCommon::ClearRenderTarget()
