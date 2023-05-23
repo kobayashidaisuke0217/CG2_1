@@ -313,7 +313,7 @@ void MyEngine::Finalize()
 }
 void MyEngine::Update()
 {
-
+	material[0].x += 0.01f;
 }
 void MyEngine::Draw()
 {
