@@ -79,6 +79,13 @@ void MyEngine::CreateRootSignature() {
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	//RootParameter作成。複数設定できるので配列。今回は結果1つだけなので長さ１の配列
+	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//pixelShaderを使う
+	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
+	descriptionRootSignature.NumParameters = _countof(rootParameters);
 
 	//シリアライズしてバイナリにする
 	signatureBlob_ = nullptr;
@@ -155,40 +162,7 @@ void MyEngine::InitializePSO() {
 		IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr));
 }
-void MyEngine::SettingVertex() {
 
-	//頂点リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
-	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;//リソースサイズ　今回はvector4を四分割
-	//バッファの場合はこれらは１にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	HRESULT hr;
-
-	//実際に頂点リソースを作る
-	hr = direct_->GetDevice()->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&vertexResource_));
-	assert(SUCCEEDED(hr));
-	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
-	//1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
-	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-
-}
 void MyEngine::SettingViePort() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApp::kClientWidth;
@@ -205,21 +179,51 @@ void MyEngine::SettingScissor() {
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
+// ID3D12Resource* MyEngine::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes)
+//{
+//	//頂点リソース用のヒープの設定
+//	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
+//	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
+//	//頂点リソースの設定
+//	D3D12_RESOURCE_DESC ResourceDesc{};
+//	//バッファリソース。テクスチャの場合はまた別の設定をする
+//	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+//	ResourceDesc.Width = sizeInBytes;//リソースサイズ
+//	//バッファの場合はこれらは１にする決まり
+//	ResourceDesc.Height = 1;
+//	ResourceDesc.DepthOrArraySize = 1;
+//	ResourceDesc.MipLevels = 1;
+//	ResourceDesc.SampleDesc.Count = 1;
+//	//バッファの場合はこれにする決まり
+//	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+//	HRESULT hr;
+//	ID3D12Resource* Resource=nullptr;
+//	//実際に頂点リソースを作る
+//	hr = device->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
+//		&ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+//		IID_PPV_ARGS(&Resource));
+//	assert(SUCCEEDED(hr));
+//	
+//	return Resource ;
+//}
 void MyEngine::variableInitialize()
 {
 	data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
 	data2[0] = { -0.15f,0.1f,0.0f,1.0f };
 	data3[0] = { -0.1f,-0.1f,0.0f,1.0f };
+	material[0] = { 0.1f,1.0f,1.0f,1.0f };
 
 	data1[1] = { -0.2f,-0.3f,0.0f,1.0f };
 	data2[1] = { -0.15f,-0.1f,0.0f,1.0f };
 	data3[1] = { -0.1f,-0.3f,0.0f,1.0f };
+	material[1] = { 1.0f,0.1f,1.0f,1.0f };
 
 	data1[2] = { -0.2f,-0.5f,0.0f,1.0f };
 	data2[2] = { -0.15f,-0.3f,0.0f,1.0f };
 	data3[2] = { -0.1f,-0.5f,0.0f,1.0f };
+	material[2] = { 1.0f,1.0f,0.1f,1.0f };
 
-	data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
+	/*data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
 	data2[3] = { -0.15f,-0.5f,0.0f,1.0f };
 	data3[3] = { -0.1f,-0.7f,0.0f,1.0f };
 
@@ -245,9 +249,9 @@ void MyEngine::variableInitialize()
 
 	data1[9] = { -0.5f,-0.5f,0.0f,1.0f };
 	data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
-	data3[9] = { -0.3f,-0.5f,0.0f,1.0f };
+	data3[9] = { -0.3f,-0.5f,0.0f,1.0f };*/
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 3; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(direct_);
 	}
@@ -291,7 +295,7 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 3; i++) {
 		triangle[i]->Finalize();
 	}
 	graphicsPipelineState_->Release();
@@ -313,8 +317,8 @@ void MyEngine::Update()
 }
 void MyEngine::Draw()
 {
-	for (int i = 0; i < 10; i++) {
-		triangle[i]->Draw(data1[i], data2[i], data3[i]);
+	for (int i = 0; i < 3; i++) {
+		triangle[i]->Draw(data1[i], data2[i], data3[i],material[i]);
 	}
 
 }

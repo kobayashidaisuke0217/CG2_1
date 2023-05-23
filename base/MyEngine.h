@@ -14,11 +14,12 @@ public:
 	void Finalize();
 	void Update();
 	void Draw();
+	
 private:
 
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
-	Triangle* triangle[10];
+	Triangle* triangle[3];
 
 
 	IDxcUtils* dxcUtils_;
@@ -33,7 +34,7 @@ private:
 	IDxcBlob* pixelShaderBlob_;
 	D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	ID3D12PipelineState* graphicsPipelineState_;
-	ID3D12Resource* vertexResource_;
+	//ID3D12Resource* vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 	D3D12_VIEWPORT viewport_{};
@@ -42,10 +43,10 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	Vector4 data1[10];
-	Vector4 data2[10];
-	Vector4 data3[10];
-
+	Vector4 data1[3];
+	Vector4 data2[3];
+	Vector4 data3[3];
+	Vector4 material[3];
 
 
 	IDxcBlob* CompileShader(
@@ -64,9 +65,10 @@ private:
 	void SettingBlendState();
 	void SettingRasterizerState();
 	void InitializePSO();
-	void SettingVertex();
+	
 	void SettingViePort();
 	void SettingScissor();
+	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
 
 };
 
