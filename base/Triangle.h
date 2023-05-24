@@ -2,7 +2,7 @@
 #include<base/DirectXCommon.h>
 #include"Vector4.h"
 #include<math/matrixCalc.h>
-class MyEngine;
+
 
 class Triangle
 {
@@ -20,7 +20,6 @@ private:
 	void TransformMatrix();
 private:
 	ID3D12Resource* MaterialResource_;
-	MyEngine* Engine;
 	DirectXCommon* direct_;
 	Vector4* vertexData_;
 	ID3D12Resource* vertexResource_;

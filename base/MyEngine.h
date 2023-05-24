@@ -33,8 +33,8 @@ private:
 	IDxcBlob* pixelShaderBlob_;
 	D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	ID3D12PipelineState* graphicsPipelineState_;
-	//ID3D12Resource* vertexResource_;
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	
+	
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
