@@ -80,10 +80,13 @@ void MyEngine::CreateRootSignature() {
 	descriptionRootSignature.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	//RootParameter作成。複数設定できるので配列。今回は結果1つだけなので長さ１の配列
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//pixelShaderを使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//vertexShaderを使う
+	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);
 
@@ -208,19 +211,19 @@ void MyEngine::SettingScissor() {
 //}
 void MyEngine::variableInitialize()
 {
-	data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
-	data2[0] = { -0.15f,0.1f,0.0f,1.0f };
-	data3[0] = { -0.1f,-0.1f,0.0f,1.0f };
+	data1[0] = { -0.4f,-0.1f,0.0f,1.0f };
+	data2[0] = { 0.0f,0.1f,0.0f,1.0f };
+	data3[0] = { 0.4f,-0.1f,0.0f,1.0f };
 	material[0] = { 0.1f,1.0f,1.0f,1.0f };
 
-	data1[1] = { -0.2f,-0.3f,0.0f,1.0f };
-	data2[1] = { -0.15f,-0.1f,0.0f,1.0f };
-	data3[1] = { -0.1f,-0.3f,0.0f,1.0f };
+	data1[1] = { -0.4f,-0.3f,0.0f,1.0f };
+	data2[1] = { 0.0f,-0.1f,0.0f,1.0f };
+	data3[1] = { 0.4f,-0.3f,0.0f,1.0f };
 	material[1] = { 1.0f,0.1f,1.0f,1.0f };
 
-	data1[2] = { -0.2f,-0.5f,0.0f,1.0f };
-	data2[2] = { -0.15f,-0.3f,0.0f,1.0f };
-	data3[2] = { -0.1f,-0.5f,0.0f,1.0f };
+	data1[2] = { -0.4f,-0.5f,0.0f,1.0f };
+	data2[2] = { 0.0f,-0.3f,0.0f,1.0f };
+	data3[2] = { 0.4f,-0.5f,0.0f,1.0f };
 	material[2] = { 1.0f,1.0f,0.1f,1.0f };
 
 	/*data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
@@ -251,6 +254,7 @@ void MyEngine::variableInitialize()
 	data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
 	data3[9] = { -0.3f,-0.5f,0.0f,1.0f };*/
 
+	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	for (int i = 0; i < 3; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(direct_);
@@ -314,11 +318,14 @@ void MyEngine::Finalize()
 void MyEngine::Update()
 {
 	material[0].x += 0.01f;
+	transform_.rotate.y += 0.03f;
+  worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	
 }
 void MyEngine::Draw()
 {
 	for (int i = 0; i < 3; i++) {
-		triangle[i]->Draw(data1[i], data2[i], data3[i],material[i]);
+		triangle[i]->Draw(data1[i], data2[i], data3[i],material[i],worldMatrix_);
 	}
 
 }

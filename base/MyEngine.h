@@ -3,6 +3,7 @@
 #include <dxcapi.h>
 #include"Vector4.h"
 #include "Triangle.h"
+#include <Transform.h>
 #pragma comment(lib,"dxcompiler.lib")
 class MyEngine
 {
@@ -19,8 +20,6 @@ private:
 
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
-	Triangle* triangle[3];
-
 
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
@@ -43,6 +42,11 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
+
+	//三角形のデータ
+	Triangle* triangle[3];
+	Transform transform_;
+	Matrix4x4 worldMatrix_;
 	Vector4 data1[3];
 	Vector4 data2[3];
 	Vector4 data3[3];

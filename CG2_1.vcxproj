@@ -100,6 +100,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="combert.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\matrixCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -123,6 +124,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="base\MyEngine.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="combert.h" />
+    <ClInclude Include="math\Matrix4x4.h" />
+    <ClInclude Include="math\matrixCalc.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
