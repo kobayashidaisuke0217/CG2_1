@@ -12,7 +12,7 @@ public:
 	void Initialize(
 		WinApp* win, int32_t backBufferWidth = WinApp::kClientWidth,
 		int32_t backBufferHeight = WinApp::kClientHeight);
-
+	static void ImGuiInitialize();
 	void PreDraw();
 	void PostDraw();
 	static inline void ClearRenderTarget();

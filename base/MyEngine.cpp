@@ -228,24 +228,24 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	SettingViePort();
 
 	SettingScissor();
-	
+	direct_->ImGuiInitialize();
 
 }
 
 
 void MyEngine::BeginFrame() {
-	
 	direct_->PreDraw();
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
 	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
-	
+	ImGui::ShowDemoWindow();
 }
 void MyEngine::EndFrame() {
+	ImGui::Render();
 	direct_->PostDraw();
-	
+
 }
 
 void MyEngine::Finalize()
@@ -269,11 +269,11 @@ void MyEngine::Finalize()
 }
 void MyEngine::Update()
 {
-	ImGui::ShowDemoWindow();
+
 	material[0].x += 0.01f;
-	
+	transform_.rotate.y -= 0.01f;
   worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-  ImGui::Render();
+
 }
 void MyEngine::Draw()
 {

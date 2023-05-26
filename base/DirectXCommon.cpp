@@ -32,10 +32,14 @@ void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t bac
 
 	// フェンス生成
 	CreateFence();
+	
+}
+
+void DirectXCommon::ImGuiInitialize() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(win->GetHwnd());
+	ImGui_ImplWin32_Init(winApp_->GetHwnd());
 	ImGui_ImplDX12_Init(device_,
 		swapChainDesc_.BufferCount,
 		rtvDesc_.Format,
@@ -43,6 +47,7 @@ void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t bac
 		srvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(),
 		srvDescriptorHeap_->GetGPUDescriptorHandleForHeapStart());
 }
+
 
 //デバイスの作成
 void DirectXCommon::InitializeDXGIDevice() {
@@ -294,9 +299,11 @@ ID3D12DescriptorHeap* DirectXCommon::CreateDescriptionHeap(ID3D12Device* device,
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
 	fence_->Release();
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 	srvDescriptorHeap_->Release();
 	rtvDescriptorHeap_->Release();
-	
 	backBuffers_[0]->Release();
 	backBuffers_[1]->Release();
 	swapChain_->Release();
