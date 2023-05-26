@@ -182,33 +182,7 @@ void MyEngine::SettingScissor() {
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
-// ID3D12Resource* MyEngine::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes)
-//{
-//	//頂点リソース用のヒープの設定
-//	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
-//	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
-//	//頂点リソースの設定
-//	D3D12_RESOURCE_DESC ResourceDesc{};
-//	//バッファリソース。テクスチャの場合はまた別の設定をする
-//	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-//	ResourceDesc.Width = sizeInBytes;//リソースサイズ
-//	//バッファの場合はこれらは１にする決まり
-//	ResourceDesc.Height = 1;
-//	ResourceDesc.DepthOrArraySize = 1;
-//	ResourceDesc.MipLevels = 1;
-//	ResourceDesc.SampleDesc.Count = 1;
-//	//バッファの場合はこれにする決まり
-//	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-//	HRESULT hr;
-//	ID3D12Resource* Resource=nullptr;
-//	//実際に頂点リソースを作る
-//	hr = device->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
-//		&ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-//		IID_PPV_ARGS(&Resource));
-//	assert(SUCCEEDED(hr));
-//	
-//	return Resource ;
-//}
+
 void MyEngine::variableInitialize()
 {
 	data1[0] = { -0.4f,-0.1f,0.0f,1.0f };
@@ -226,33 +200,7 @@ void MyEngine::variableInitialize()
 	data3[2] = { 0.4f,-0.5f,0.0f,1.0f };
 	material[2] = { 1.0f,1.0f,0.1f,1.0f };
 
-	/*data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
-	data2[3] = { -0.15f,-0.5f,0.0f,1.0f };
-	data3[3] = { -0.1f,-0.7f,0.0f,1.0f };
-
-	data1[4] = { -0.2f,-0.9f,0.0f,1.0f };
-	data2[4] = { -0.15f,-0.7f,0.0f,1.0f };
-	data3[4] = { -0.1f,-0.9f,0.0f,1.0f };
-
-	data1[5] = { -0.2f,0.7f,0.0f,1.0f };
-	data2[5] = { -0.15f,0.9f,0.0f,1.0f };
-	data3[5] = { -0.1f,0.7f,0.0f,1.0f };
-
-	data1[6] = { -0.2f,0.5f,0.0f,1.0f };
-	data2[6] = { -0.15f,0.7f,0.0f,1.0f };
-	data3[6] = { -0.1f,0.5f,0.0f,1.0f };
-
-	data1[7] = { -0.2f,0.3f,0.0f,1.0f };
-	data2[7] = { -0.15f,0.5f,0.0f,1.0f };
-	data3[7] = { -0.1f,0.3f,0.0f,1.0f };
-
-	data1[8] = { -0.2f,0.1f,0.0f,1.0f };
-	data2[8] = { -0.15f,0.3f,0.0f,1.0f };
-	data3[8] = { -0.1f,0.1f,0.0f,1.0f };
-
-	data1[9] = { -0.5f,-0.5f,0.0f,1.0f };
-	data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
-	data3[9] = { -0.3f,-0.5f,0.0f,1.0f };*/
+	
 
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	for (int i = 0; i < 3; i++) {
@@ -280,25 +228,29 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	SettingViePort();
 
 	SettingScissor();
+	
 
 }
 
 
 void MyEngine::BeginFrame() {
+	
 	direct_->PreDraw();
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
 	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
+	
 }
 void MyEngine::EndFrame() {
 	direct_->PostDraw();
-
+	
 }
 
 void MyEngine::Finalize()
 {
+	
 	for (int i = 0; i < 3; i++) {
 		triangle[i]->Finalize();
 	}
@@ -317,10 +269,11 @@ void MyEngine::Finalize()
 }
 void MyEngine::Update()
 {
+	ImGui::ShowDemoWindow();
 	material[0].x += 0.01f;
-	transform_.rotate.y += 0.03f;
-  worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	
+  worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+  ImGui::Render();
 }
 void MyEngine::Draw()
 {

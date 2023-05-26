@@ -32,11 +32,16 @@ private:
 	static	ID3D12CommandQueue* commandQueue_;
 	static	ID3D12CommandAllocator* commandAllocator_;
 	static	ID3D12GraphicsCommandList* commandList_;
+	static DXGI_SWAP_CHAIN_DESC1 swapChainDesc_;
 	static	IDXGISwapChain4* swapChain_;
+	static D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_;
 	static	ID3D12DescriptorHeap* rtvDescriptorHeap_;
+	static ID3D12DescriptorHeap* srvDescriptorHeap_;
 	//RTVを２つ作るのでディスクリプタを２つ用意
 	static	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
 	static	ID3D12Resource* backBuffers_[2];//(swapChainResources???)
+	
+	
 	static	UINT64 fenceVal_;
 	static	int32_t backBufferWidth_;
 	static	int32_t backBufferHeight_;
@@ -45,6 +50,7 @@ private:
 	static	ID3D12Fence* fence_;
 	static	HANDLE fenceEvent_;
 	static HRESULT hr_;
+	ID3D12DescriptorHeap* CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible);
 private:
 
 
