@@ -117,11 +117,11 @@ void MyEngine::CreateInputlayOut() {
 	inputLayoutDesc_.NumElements = _countof(inputElementDescs_);
 }
 void MyEngine::SettingBlendState() {
-
 	//すべての色要素を書き込む
 	blendDesc_.RenderTarget[0].RenderTargetWriteMask =
 		D3D12_COLOR_WRITE_ENABLE_ALL;
 }
+
 void MyEngine::SettingRasterizerState() {
 
 	//裏面（時計回り）を表示しない
@@ -199,10 +199,10 @@ void MyEngine::variableInitialize()
 	data2[2] = { 0.0f,-0.3f,0.0f,1.0f };
 	data3[2] = { 0.4f,-0.5f,0.0f,1.0f };
 	material[2] = { 1.0f,1.0f,0.1f,1.0f };
-
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 	
 
-	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	vertexTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	for (int i = 0; i < 3; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(direct_);
@@ -269,11 +269,21 @@ void MyEngine::Finalize()
 }
 void MyEngine::Update()
 {
+	 worldMatrix_ = MakeAffineMatrix(vertexTransform_.scale , vertexTransform_.rotate, vertexTransform_.translate);
+	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform_.scale,cameraTransform_.rotate,cameraTransform_.translate);
+	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(win_->kClientWidth) / float(win_->kClientHeight), 0.1f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix_, Multiply(viewMatrix, projectionMatrix));
+	
 
-	material[0].x += 0.01f;
-	transform_.rotate.y -= 0.01f;
-  worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-
+	material[0].x += 0.5f;
+	vertexTransform_.rotate.y -= 0.05f;
+  
+  worldMatrix_ = worldViewProjectionMatrix;
+  ImGui::Begin("Window");
+  ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
+  
+  ImGui::End();
 }
 void MyEngine::Draw()
 {

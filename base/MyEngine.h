@@ -45,13 +45,14 @@ private:
 
 	//三角形のデータ
 	Triangle* triangle[3];
-	Transform transform_;
+	Transform vertexTransform_;
 	Matrix4x4 worldMatrix_;
 	Vector4 data1[3];
 	Vector4 data2[3];
 	Vector4 data3[3];
 	Vector4 material[3];
-
+	//マトリックスデータ
+	Transform cameraTransform_;
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
