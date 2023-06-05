@@ -58,7 +58,7 @@ private:
 	void InitializeCommand();
 	void CreateFinalRenderTargets();
 	void CreateFence();
-	//DirectX::ScratchImage LoadTexture(const std::string& filePath);
-	//ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
+	DirectX::ScratchImage LoadTexture(const std::string& filePath);
+	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
 };
 
