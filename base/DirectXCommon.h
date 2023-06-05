@@ -4,6 +4,7 @@
 #include <dxgi1_6.h>
 #include "WinApp.h"
 #include"combert.h"
+#include "/Desktop/LE2B/CG2/CG2_1/externals/DirectXTex/DirectXTex.h"
 
 class DirectXCommon
 {
@@ -21,9 +22,7 @@ public:
 	void SetHr(HRESULT a) { this->hr_ = a; }
 	ID3D12Device* GetDevice() { return device_; }
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
-	//int32_t GetBackBufferWidth() const;
-	//int32_t GetBackBufferHeight() const;
-	//size_t GetBackBufferCount() const { return backBuffers_.size(); }
+	
 private:
 	static	WinApp* winApp_;
 	static IDXGIAdapter4* useAdapter_;
@@ -39,7 +38,7 @@ private:
 	static ID3D12DescriptorHeap* srvDescriptorHeap_;
 	//RTVを２つ作るのでディスクリプタを２つ用意
 	static	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
-	static	ID3D12Resource* backBuffers_[2];//(swapChainResources???)
+	static	ID3D12Resource* backBuffers_[2];
 	
 	
 	static	UINT64 fenceVal_;
@@ -59,5 +58,7 @@ private:
 	void InitializeCommand();
 	void CreateFinalRenderTargets();
 	void CreateFence();
+	DirectX::ScratchImage LoadTexture(const std::string& filePath);
+	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
 };
 

@@ -1,7 +1,10 @@
 #include "base/MyEngine.h"
 #include"base/Triangle.h"
+
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+
 	WinApp* win_ = nullptr;
 	MyEngine* Engine = new MyEngine;
 	Engine->Initialize(win_, 1280, 720);
@@ -25,5 +28,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	Engine->Finalize();
+	CoUninitialize();
 	return 0;
 }
