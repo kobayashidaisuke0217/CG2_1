@@ -13,6 +13,7 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 }
 void WinApp::CreateGameWindow(const wchar_t* title, int32_t clientWidth, int32_t clientheight)
 {
+
 	wc_.lpfnWndProc = WindowProc;
 	wc_.lpszClassName = L"CG2WINDOWClass";
 	wc_.hInstance = GetModuleHandle(nullptr);
