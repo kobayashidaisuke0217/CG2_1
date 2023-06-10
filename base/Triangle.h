@@ -14,7 +14,7 @@ private:
 	void SettingVertex();
 
 private:
-	MyEngine* Engine;
+	//MyEngine* Engine;
 	DirectXCommon* direct_;
 	Vector4* vertexData_;
 	ID3D12Resource* vertexResource_;
