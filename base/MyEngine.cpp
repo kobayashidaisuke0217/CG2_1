@@ -201,7 +201,6 @@ void MyEngine::variableInitialize()
 	material[2] = { 1.0f,1.0f,0.1f,1.0f };
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 	
-
 	vertexTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	for (int i = 0; i < 3; i++) {
 		triangle[i] = new Triangle();
@@ -229,7 +228,7 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	SettingScissor();
 	direct_->ImGuiInitialize();
-
+	//SendTexture();
 }
 
 

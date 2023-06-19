@@ -4,8 +4,7 @@
 #include <dxgi1_6.h>
 #include "WinApp.h"
 #include"combert.h"
-#include "/Desktop/LE2B/CG2/CG2_1/externals/DirectXTex/DirectXTex.h"
-
+#include"externals/DirectXTex/DirectXTex.h"
 class DirectXCommon
 {
 public:
@@ -60,5 +59,7 @@ private:
 	void CreateFence();
 	DirectX::ScratchImage LoadTexture(const std::string& filePath);
 	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
+	void UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+	void SendTexture();
 };
 

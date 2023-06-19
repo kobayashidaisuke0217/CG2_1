@@ -5,6 +5,8 @@
 #include "Triangle.h"
 #include <Transform.h>
 #pragma comment(lib,"dxcompiler.lib")
+
+
 class MyEngine
 {
 public:
@@ -53,6 +55,8 @@ private:
 	Vector4 material[3];
 	//マトリックスデータ
 	Transform cameraTransform_;
+
+	
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
