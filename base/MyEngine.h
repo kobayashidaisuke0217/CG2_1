@@ -5,7 +5,9 @@
 #include "Triangle.h"
 #include <Transform.h>
 #pragma comment(lib,"dxcompiler.lib")
-
+#include"externals/DirectXTex/DirectXTex.h"
+#include"externals/DirectXTex/d3dx12.h"
+#include<vector>
 class MyEngine
 {
 public:
@@ -22,7 +24,7 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
-
+	DirectX::ScratchImage mipImage;
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
@@ -35,7 +37,7 @@ private:
 	IDxcBlob* pixelShaderBlob_;
 	D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	ID3D12PipelineState* graphicsPipelineState_;
-	
+	ID3D12Resource* intermediateResource;
 	
 
 	D3D12_VIEWPORT viewport_{};
@@ -79,7 +81,7 @@ private:
 	void SettingScissor();
 	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
 	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
-	void UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+	ID3D12Resource* UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 	DirectX::ScratchImage SendTexture(const std::string& filePath);
 	void LoadTexture(const std::string& filePath);
 };

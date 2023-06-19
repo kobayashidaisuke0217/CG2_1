@@ -210,6 +210,34 @@ void MyEngine::SettingScissor() {
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
 
+ID3D12Resource* MyEngine::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes)
+{
+	//頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uplodeHeapProperties{};
+	uplodeHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
+	//頂点リソースの設定
+	D3D12_RESOURCE_DESC ResourceDesc{};
+	//バッファリソース。テクスチャの場合はまた別の設定をする
+	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	ResourceDesc.Width = sizeInBytes;//リソースサイズ
+	//バッファの場合はこれらは１にする決まり
+	ResourceDesc.Height = 1;
+	ResourceDesc.DepthOrArraySize = 1;
+	ResourceDesc.MipLevels = 1;
+	ResourceDesc.SampleDesc.Count = 1;
+	//バッファの場合はこれにする決まり
+	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	HRESULT hr;
+	ID3D12Resource* Resource = nullptr;
+	//実際に頂点リソースを作る
+	hr = device->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
+		&ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
+		IID_PPV_ARGS(&Resource));
+	assert(SUCCEEDED(hr));
+
+	return Resource;
+}
+
 void MyEngine::variableInitialize()
 {
 	data1[0] = { -0.4f,-0.1f,0.0f,1.0f };
@@ -269,6 +297,7 @@ void MyEngine::BeginFrame() {
 	ImGui::ShowDemoWindow();
 }
 void MyEngine::EndFrame() {
+
 	ImGui::Render();
 	direct_->PostDraw();
 
@@ -276,6 +305,7 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
+	intermediateResource->Release();
 	textureResource->Release();
 	for (int i = 0; i < 3; i++) {
 		triangle[i]->Finalize();
@@ -349,30 +379,20 @@ ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const Dire
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);//テクスチャの次元数
 	//利用するheapの設定。非常に特殊な運用
 	D3D12_HEAP_PROPERTIES heapProperties{};
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;//細かい設定を行う
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//細かい設定を行う
+	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
+	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
 	//Resourceの作成
 	ID3D12Resource* resource = nullptr;
-	HRESULT hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource));
+	HRESULT hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&resource));
 	assert(SUCCEEDED(hr));
 	return resource;
 }
-void MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
-	//meta情報を取得
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	for (size_t miplevel = 0; miplevel < metadata.mipLevels; ++miplevel) {
-		const DirectX::Image* img = mipImages.GetImage(miplevel, 0, 0);
-		HRESULT hr = texture->WriteToSubresource(UINT(miplevel), nullptr, img->pixels, UINT(img->rowPitch), UINT(img->slicePitch));
-
-		assert(SUCCEEDED(hr));
-	}
-}
 void MyEngine::LoadTexture(const std::string& filePath)
 {
-	DirectX::ScratchImage mipImage = SendTexture(filePath);
+	 mipImage = SendTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
-	 textureResource = CreateTextureResource(direct_->GetDevice(), metadata);
+	textureResource = CreateTextureResource(direct_->GetDevice(), metadata);
 	UploadtextureData(textureResource, mipImage);
 	//metaDataを元にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -390,6 +410,32 @@ void MyEngine::LoadTexture(const std::string& filePath)
 	direct_->GetDevice()->CreateShaderResourceView(textureResource, &srvDesc, textureSrvHandleCPU_);
 }
 
+[[nodiscard]]
+ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
+	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
+	DirectX::PrepareUpload(direct_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
+	uint64_t  intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
+	intermediateResource = CreateBufferResource(direct_->GetDevice(), intermediateSize);
+	UpdateSubresources(direct_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
 
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = texture;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
+	direct_->GetCommandList()->ResourceBarrier(1, &barrier);
+	return intermediateResource;
+	////meta情報を取得
+	//const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	//for (size_t miplevel = 0; miplevel < metadata.mipLevels; ++miplevel) {
+	//	const DirectX::Image* img = mipImages.GetImage(miplevel, 0, 0);
+	//	HRESULT hr = texture->WriteToSubresource(UINT(miplevel), nullptr, img->pixels, UINT(img->rowPitch), UINT(img->slicePitch));
+
+	//	assert(SUCCEEDED(hr));
+	//}
+
+}
 WinApp* MyEngine::win_;
 DirectXCommon* MyEngine::direct_;
