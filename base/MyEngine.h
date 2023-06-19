@@ -6,7 +6,6 @@
 #include <Transform.h>
 #pragma comment(lib,"dxcompiler.lib")
 
-
 class MyEngine
 {
 public:
@@ -17,9 +16,10 @@ public:
 	void Finalize();
 	void Update();
 	void Draw();
-	
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVHandleGPU() { return textureSrvHandleGPU_; }
 private:
-
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
 
@@ -40,7 +40,7 @@ private:
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[1];
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[2];
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
@@ -56,7 +56,7 @@ private:
 	//マトリックスデータ
 	Transform cameraTransform_;
 
-	
+	ID3D12Resource* textureResource;
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
@@ -78,7 +78,10 @@ private:
 	void SettingViePort();
 	void SettingScissor();
 	ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
-
+	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
+	void UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+	DirectX::ScratchImage SendTexture(const std::string& filePath);
+	void LoadTexture(const std::string& filePath);
 };
 
 

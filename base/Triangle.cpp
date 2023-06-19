@@ -1,16 +1,17 @@
 #include "Triangle.h"
 #include<assert.h>
+#include"MyEngine.h"
 
-
-void Triangle::Initialize(DirectXCommon* direct)
+void Triangle::Initialize(DirectXCommon* direct,MyEngine*engine)
 {
 	direct_ = direct;
+	engine_ = engine;
 	SettingVertex();
 	SetColor();
 	TransformMatrix();
 }
 void Triangle::SetColor() {
-	 MaterialResource_ = CreateBufferResource(direct_->GetDevice(), sizeof(Vector4));
+	 MaterialResource_ = CreateBufferResource(direct_->GetDevice(), sizeof(VertexData));
 	
 	MaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 }
@@ -24,12 +25,14 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c,const V
 {
 
 	//左下
-	vertexData_[0] = a;
+	vertexData_[0].position = a;
+	vertexData_[0].texcoord = { 0.0f,1.0f };
 	//上
-	vertexData_[1] = b;
+	vertexData_[1].position = b;
+	vertexData_[1].texcoord = { 0.5f,0.0f };
 	//右下
-	vertexData_[2] = c;
-
+	vertexData_[2].position = c;
+	vertexData_[2].texcoord = { 1.0f,1.0f };
 	*materialData_ = material;
 	
 	*wvpData_ = wvpdata;
@@ -41,7 +44,8 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c,const V
 	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(0, MaterialResource_->GetGPUVirtualAddress());//material用のCBufferの場所を設定
 
 	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-
+	//srvのDescriptortableの先頭を設定2はrootParameter[2]である
+	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->GetSRVHandleGPU());
 	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
 	direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
@@ -56,13 +60,13 @@ void Triangle::Finalize()
 void Triangle::SettingVertex() {
 
 	
-	vertexResource_=   CreateBufferResource(direct_->GetDevice(), sizeof(Vector4) * 3);
+	vertexResource_=   CreateBufferResource(direct_->GetDevice(), sizeof(VertexData) * 3);
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3;
 	//1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 

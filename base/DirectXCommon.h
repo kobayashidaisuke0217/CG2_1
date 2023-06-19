@@ -5,10 +5,12 @@
 #include "WinApp.h"
 #include"combert.h"
 #include"externals/DirectXTex/DirectXTex.h"
+
 class DirectXCommon
 {
 public:
 
+	
 	void Initialize(
 		WinApp* win, int32_t backBufferWidth = WinApp::kClientWidth,
 		int32_t backBufferHeight = WinApp::kClientHeight);
@@ -21,8 +23,11 @@ public:
 	void SetHr(HRESULT a) { this->hr_ = a; }
 	ID3D12Device* GetDevice() { return device_; }
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
+	ID3D12DescriptorHeap* GetSrvDescriptiorHeap() { return srvDescriptorHeap_; }
 	
 private:
+	
+	
 	static	WinApp* winApp_;
 	static IDXGIAdapter4* useAdapter_;
 	static	IDXGIFactory7* dxgiFactory_;
@@ -51,15 +56,13 @@ private:
 	ID3D12DescriptorHeap* CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible);
 private:
 
-
+	
 	void InitializeDXGIDevice();
 	void CreateSwapChain();
 	void InitializeCommand();
 	void CreateFinalRenderTargets();
 	void CreateFence();
-	DirectX::ScratchImage LoadTexture(const std::string& filePath);
-	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
-	void UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
-	void SendTexture();
+
+	
 };
 

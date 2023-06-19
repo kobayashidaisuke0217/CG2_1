@@ -32,6 +32,9 @@ void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t bac
 	// フェンス生成
 	CreateFence();
 	
+	/*SendTexture();
+
+	CreateShaderResourceView();*/
 }
 
 void DirectXCommon::ImGuiInitialize() {
@@ -46,6 +49,8 @@ void DirectXCommon::ImGuiInitialize() {
 		srvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(),
 		srvDescriptorHeap_->GetGPUDescriptorHandleForHeapStart());
 }
+
+
 
 
 //デバイスの作成
@@ -295,61 +300,7 @@ ID3D12DescriptorHeap* DirectXCommon::CreateDescriptionHeap(ID3D12Device* device,
 	assert(SUCCEEDED(hr));
 	return descriptorHeap;
 }
-//テクスチャデータを読み込む
-DirectX::ScratchImage DirectXCommon::LoadTexture(const std::string& filePath)
-{
-	//テクスチャファイルを読んでうろグラムで扱えるようにする
-	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
 
-	//ミップマップの作成
-	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
-	return mipImages;
-}
-//テクスチャリソースを作る
-ID3D12Resource* DirectXCommon::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
-{
-	//メタデータをもとにResourceの設定
-	D3D12_RESOURCE_DESC resourceDesc{};
-	resourceDesc.Width = UINT(metadata.width);//texturの幅
-	resourceDesc.Height = UINT(metadata.height);
-	resourceDesc.MipLevels = UINT16(metadata.mipLevels);//mipmapの数
-	resourceDesc.DepthOrArraySize = UINT16(metadata.arraySize);//奥行or配列テクスチャの配列数
-	resourceDesc.Format = metadata.format;//TextureのFormat
-	resourceDesc.SampleDesc.Count = 1;//サンプリングカウント.1固定
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);//テクスチャの次元数
-	//利用するheapの設定。非常に特殊な運用
-	D3D12_HEAP_PROPERTIES heapProperties{};
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;//細かい設定を行う
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
-	//Resourceの作成
-	ID3D12Resource* resource = nullptr;
-	HRESULT hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource));
-	assert(SUCCEEDED(hr));
-	return resource;
-}
-void DirectXCommon::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
-	//meta情報を取得
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	for (size_t miplevel = 0; miplevel < metadata.mipLevels; ++miplevel) {
-		const DirectX::Image* img = mipImages.GetImage(miplevel, 0, 0);
-		HRESULT hr = texture->WriteToSubresource(UINT(miplevel), nullptr, img->pixels, UINT(img->rowPitch), UINT(img->slicePitch));
-
-		assert(SUCCEEDED(hr));
-	}
-}
-void DirectXCommon::SendTexture()
-{
-	DirectX::ScratchImage mipImage=  LoadTexture("Resource/uvChecker.png");
-	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
-	ID3D12Resource* textureResource = CreateTextureResource(device_, metadata);
-	UploadtextureData(textureResource, mipImage);
-}
 
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
