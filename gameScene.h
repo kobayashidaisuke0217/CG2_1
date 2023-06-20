@@ -16,5 +16,7 @@ private:
 	Vector4 data3_[2];
 	Vector4 material[2];
 	Triangle* triangle_[2];
+	Transform transform_;
+	Matrix4x4 worldMatrix_;
 };
 

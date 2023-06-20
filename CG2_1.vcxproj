@@ -101,6 +101,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="combert.cpp" />
     <ClCompile Include="gameScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mymath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
