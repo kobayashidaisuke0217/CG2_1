@@ -7,19 +7,20 @@ class Triangle
 {
 public:
 	void Initialize(DirectXCommon* direct);
-	void Draw(const Vector4& a,const Vector4& b,const Vector4& c);
+	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material);
 	void Finalize();
 	
 private:
 	void SettingVertex();
-
+	void SetColor();
 private:
 	//MyEngine* Engine;
+	ID3D12Resource* materialResource_;
 	DirectXCommon* direct_;
 	Vector4* vertexData_;
 	ID3D12Resource* vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
-	
+	Vector4* materialData_;
 };
 

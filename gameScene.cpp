@@ -10,7 +10,8 @@ void GameScene::Initialize(DirectXCommon* direct)
 	data1_[1] = { -0.2f,-0.3f,0.0f,1.0f };
 	data2_[1] = { -0.15f,-0.1f,0.0f,1.0f };
 	data3_[1] = { -0.1f,-0.3f,0.0f,1.0f };
-
+	material[0] = { 1.0f,1.0f,0.1f,1.0f };
+	material[1] = { 1.0f,0.1f,1.0f,1.0f };
 	
 
 	for (int i = 0; i < 2; i++) {
@@ -27,7 +28,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	for (int i = 0; i < 2; i++) {
-		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i]);
+		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i]);
 	}
 }
 

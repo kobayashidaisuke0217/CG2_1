@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector4.h"
 #include "base/Triangle.h"
+#include "base/MyEngine.h"
 class GameScene
 {
 public:
@@ -13,6 +14,7 @@ private:
 	Vector4 data1_[2];
 	Vector4 data2_[2];
 	Vector4 data3_[2];
+	Vector4 material[2];
 	Triangle* triangle_[2];
 };
 
