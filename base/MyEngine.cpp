@@ -221,6 +221,7 @@ void MyEngine::variableInitialize()
 
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
+	win = new WinApp();
 	direct_ = new DirectXCommon();
 	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
 

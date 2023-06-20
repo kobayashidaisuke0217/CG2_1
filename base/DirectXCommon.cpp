@@ -13,7 +13,7 @@
 
 void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight)
 {
-
+	
 	winApp_ = win;
 	backBufferWidth_ = backBufferWidth;
 	backBufferHeight_ = backBufferHeight;
@@ -293,20 +293,3 @@ void DirectXCommon::Finalize() {
 		debug->Release();
 	}
 }
-WinApp* DirectXCommon::winApp_;
-IDXGIAdapter4* DirectXCommon::useAdapter_;
-IDXGIFactory7* DirectXCommon::dxgiFactory_;
-ID3D12Device* DirectXCommon::device_;
-ID3D12CommandQueue* DirectXCommon::commandQueue_;
-ID3D12CommandAllocator* DirectXCommon::commandAllocator_;
-ID3D12GraphicsCommandList* DirectXCommon::commandList_;
-IDXGISwapChain4* DirectXCommon::swapChain_;
-ID3D12DescriptorHeap* DirectXCommon::rtvDescriptorHeap_;
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::rtvHandles_[2];
-ID3D12Resource* DirectXCommon::backBuffers_[2];
-UINT64 DirectXCommon::fenceVal_;
-int32_t DirectXCommon::backBufferWidth_;
-int32_t DirectXCommon::backBufferHeight_;
-ID3D12Fence* DirectXCommon::fence_;
-HANDLE DirectXCommon::fenceEvent_;
-HRESULT DirectXCommon::hr_;

@@ -1,7 +1,7 @@
 #include "WinApp.h"
 
 #include<string>
-LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT  WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch (msg)
 	{
@@ -14,7 +14,7 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 void WinApp::CreateGameWindow(const wchar_t* title, int32_t clientWidth, int32_t clientheight)
 {
 
-	wc_.lpfnWndProc = WindowProc;
+	wc_.lpfnWndProc =WindowProc;
 	wc_.lpszClassName = L"CG2WINDOWClass";
 	wc_.hInstance = GetModuleHandle(nullptr);
 	wc_.hCursor = LoadCursor(nullptr, IDC_ARROW);
@@ -66,6 +66,6 @@ void WinApp::Finalize()
 }
 
 
-HWND WinApp::hwnd_;
-UINT WinApp::windowStyle_;
-ID3D12Debug1*WinApp:: debugController_;
+//HWND WinApp::hwnd_;
+//UINT WinApp::windowStyle_;
+//ID3D12Debug1*WinApp:: debugController_;
