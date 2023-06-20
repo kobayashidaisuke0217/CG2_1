@@ -174,51 +174,7 @@ void MyEngine::SettingScissor() {
 }
 void MyEngine::variableInitialize()
 {
-	data1[0] = { -0.2f,-0.1f,0.0f,1.0f };
-	data2[0] = { -0.15f,0.1f,0.0f,1.0f };
-	data3[0] = { -0.1f,-0.1f,0.0f,1.0f };
-
-	data1[1] = { -0.2f,-0.3f,0.0f,1.0f };
-	data2[1] = { -0.15f,-0.1f,0.0f,1.0f };
-	data3[1] = { -0.1f,-0.3f,0.0f,1.0f };
-
-	data1[2] = { -0.2f,-0.5f,0.0f,1.0f };
-	data2[2] = { -0.15f,-0.3f,0.0f,1.0f };
-	data3[2] = { -0.1f,-0.5f,0.0f,1.0f };
-
-	data1[3] = { -0.2f,-0.7f,0.0f,1.0f };
-	data2[3] = { -0.15f,-0.5f,0.0f,1.0f };
-	data3[3] = { -0.1f,-0.7f,0.0f,1.0f };
-
-	data1[4] = { -0.2f,-0.9f,0.0f,1.0f };
-	data2[4] = { -0.15f,-0.7f,0.0f,1.0f };
-	data3[4] = { -0.1f,-0.9f,0.0f,1.0f };
-
-	data1[5] = { -0.2f,0.7f,0.0f,1.0f };
-	data2[5] = { -0.15f,0.9f,0.0f,1.0f };
-	data3[5] = { -0.1f,0.7f,0.0f,1.0f };
-
-	data1[6] = { -0.2f,0.5f,0.0f,1.0f };
-	data2[6] = { -0.15f,0.7f,0.0f,1.0f };
-	data3[6] = { -0.1f,0.5f,0.0f,1.0f };
-
-	data1[7] = { -0.2f,0.3f,0.0f,1.0f };
-	data2[7] = { -0.15f,0.5f,0.0f,1.0f };
-	data3[7] = { -0.1f,0.3f,0.0f,1.0f };
-
-	data1[8] = { -0.2f,0.1f,0.0f,1.0f };
-	data2[8] = { -0.15f,0.3f,0.0f,1.0f };
-	data3[8] = { -0.1f,0.1f,0.0f,1.0f };
-
-	data1[9] = { -0.5f,-0.5f,0.0f,1.0f };
-	data2[9] = { -0.4f,-0.3f,0.0f,1.0f };
-	data3[9] = { -0.3f,-0.5f,0.0f,1.0f };
-
-	for (int i = 0; i < 10; i++) {
-		triangle[i] = new Triangle();
-		triangle[i]->Initialize(direct_);
-	}
-
+	
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	win = new WinApp();
@@ -260,9 +216,7 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
-	for (int i = 0; i < 10; i++) {
-		triangle[i]->Finalize();
-	}
+	
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
@@ -282,9 +236,7 @@ void MyEngine::Update()
 }
 void MyEngine::Draw()
 {
-	for (int i = 0; i < 10; i++) {
-		triangle[i]->Draw(data1[i], data2[i], data3[i]);
-	}
+	
 
 }
 

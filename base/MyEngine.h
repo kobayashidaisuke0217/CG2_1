@@ -2,7 +2,6 @@
 #include "DirectXCommon.h"
 #include <dxcapi.h>
 #include"Vector4.h"
-#include "Triangle.h"
 #pragma comment(lib,"dxcompiler.lib")
 class MyEngine
 {
@@ -14,11 +13,12 @@ public:
 	void Finalize();
 	void Update();
 	void Draw();
+	DirectXCommon* GetDirectXCommon() { return direct_; }
 private:
 
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
-	Triangle* triangle[10];
+	
 
 
 	IDxcUtils* dxcUtils_;
@@ -41,9 +41,7 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	Vector4 data1[10];
-	Vector4 data2[10];
-	Vector4 data3[10];
+	
 
 
 

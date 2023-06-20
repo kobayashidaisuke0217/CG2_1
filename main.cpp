@@ -1,13 +1,14 @@
 #include "base/MyEngine.h"
-
+#include"gameScene.h"
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win_ = nullptr;
 	MyEngine* Engine = new MyEngine;
 	Engine->Initialize(win_, 1280, 720);
 
-
-	Engine->variableInitialize();
+	GameScene* gameScene = new GameScene();
+	gameScene->Initialize(Engine->GetDirectXCommon());
+	//Engine->variableInitialize();
 	while (true) {
 		// メッセージ処理
 		if (win_->Procesmessage()) {
@@ -17,13 +18,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Engine->BeginFrame();
 
-		Engine->Update();
+		gameScene->Update();
 
-		Engine->Draw();
+		gameScene->Draw();
+		
 
 		Engine->EndFrame();
 	}
-
+	gameScene->Finalize();
 	Engine->Finalize();
 	return 0;
 }
