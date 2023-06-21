@@ -159,7 +159,6 @@ void DirectXCommon::CreateSwapChain() {
 	assert(SUCCEEDED(hr));
 	hr = swapChain_->GetBuffer(1, IID_PPV_ARGS(&backBuffers_[1]));
 	assert(SUCCEEDED(hr));
-	srvDescriptorHeap_ = CreateDescriptionHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 }
 
 // レンダーターゲット生成
@@ -197,7 +196,7 @@ void DirectXCommon::CreateFence() {
 }
 void DirectXCommon::CreateSrvheap()
 {
-	
+	srvDescriptorHeap_ = CreateDescriptionHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 }
 void DirectXCommon::PreDraw()
 {
