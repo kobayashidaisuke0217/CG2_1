@@ -18,20 +18,22 @@ void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t bac
 	backBufferWidth_ = backBufferWidth;
 	backBufferHeight_ = backBufferHeight;
 	winApp_->CreateGameWindow(L"CG2", 1280, 720);
+	
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
-
+	
 	// コマンド関連初期化
 	InitializeCommand();
 
 	// スワップチェーンの生成
 	CreateSwapChain();
-
+	CreateSrvheap();
 	// レンダーターゲット生成
 	CreateFinalRenderTargets();
 
 	// フェンス生成
 	CreateFence();
+	
 }
 //デバイスの作成
 void DirectXCommon::InitializeDXGIDevice() {
@@ -157,13 +159,14 @@ void DirectXCommon::CreateSwapChain() {
 	assert(SUCCEEDED(hr));
 	hr = swapChain_->GetBuffer(1, IID_PPV_ARGS(&backBuffers_[1]));
 	assert(SUCCEEDED(hr));
+	srvDescriptorHeap_ = CreateDescriptionHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 }
 
 // レンダーターゲット生成
 void DirectXCommon::CreateFinalRenderTargets() {
 
 	//RTVの設定
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2Dテクスチャとして書き込む
 	//ディスクリプタの先頭を取得する
@@ -191,6 +194,10 @@ void DirectXCommon::CreateFence() {
 	assert(fenceEvent_ != nullptr);
 
 
+}
+void DirectXCommon::CreateSrvheap()
+{
+	
 }
 void DirectXCommon::PreDraw()
 {
@@ -263,7 +270,7 @@ void DirectXCommon::ClearRenderTarget()
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
 	fence_->Release();
-
+	srvDescriptorHeap_->Release();
 	rtvDescriptorHeap_->Release();
 	backBuffers_[0]->Release();
 	backBuffers_[1]->Release();

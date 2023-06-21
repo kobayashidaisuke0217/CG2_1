@@ -3,15 +3,18 @@
 #include "base/Triangle.h"
 #include "base/MyEngine.h"
 #include "ImGuiManger.h"
+
 class GameScene
 {
 public:
-	void Initialize(DirectXCommon*direct);
+	void Initialize(MyEngine*engine,DirectXCommon*direct);
 	void Update();
 	void Draw();
 	void Finalize();
 private:
+	MyEngine* engine_;
 	DirectXCommon* directX_;
+	
 	Vector4 data1_[2];
 	Vector4 data2_[2];
 	Vector4 data3_[2];

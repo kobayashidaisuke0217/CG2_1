@@ -11,6 +11,10 @@ struct Vector3 {
 	float y;
 	float z;
 };
+struct Vector2 {
+	float x;
+	float y;
+};
 struct Matrix4x4 final {
 	float m[4][4];
 };
@@ -19,6 +23,10 @@ struct Transform
 	Vector3 scale;
 	Vector3 rotate;
 	Vector3 translate;
+};
+struct VertexData {
+	Vector4 position;
+	Vector2 texcoord;
 };
 Matrix4x4 MakeRotateXMatrix(float theta);
 Matrix4x4 MakeRotateYMatrix(float theta);

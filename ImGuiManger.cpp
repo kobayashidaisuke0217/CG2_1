@@ -3,17 +3,17 @@
 void ImGuiManger::Initialize(WinApp* winApp, DirectXCommon* dxCommon)
 {
 	dxCommon_ = dxCommon;
-	srvDescriptorHeap_ = dxCommon_->CreateDescriptionHeap(dxCommon_->GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+	 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(dxCommon_->GetDevice(),
 		dxCommon_->GetbackBufferCount(),
-		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-		srvDescriptorHeap_,
-		srvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart(),
-		srvDescriptorHeap_->GetGPUDescriptorHandleForHeapStart());
+		dxCommon_->getRtvDesc().Format,
+		dxCommon_->GetSrvHeap(),
+		dxCommon_->GetSrvHeap()->GetCPUDescriptorHandleForHeapStart(),
+		dxCommon_->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart());
 }
 
 void ImGuiManger::Finalize()
@@ -21,7 +21,7 @@ void ImGuiManger::Finalize()
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	srvDescriptorHeap_->Release();
+
 }
 
 void ImGuiManger::Begin()

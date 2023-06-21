@@ -4,7 +4,7 @@
 #include <dxgi1_6.h>
 #include "WinApp.h"
 #include"combert.h"
-
+#include"externals/DirectXTex/DirectXTex.h"
 class DirectXCommon
 {
 public:
@@ -25,11 +25,12 @@ public:
 	WinApp* GetWin() { return winApp_;}
 	UINT GetbackBufferCount() { return swapChainDesc.BufferCount ; }
 	ID3D12DescriptorHeap* CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible);
-
-	//int32_t GetBackBufferWidth() const;
-	//int32_t GetBackBufferHeight() const;
-	//size_t GetBackBufferCount() const { return backBuffers_.size(); }
+	ID3D12DescriptorHeap* GetSrvHeap() { return srvDescriptorHeap_; }
+	D3D12_RENDER_TARGET_VIEW_DESC getRtvDesc() {return rtvDesc;}
+	
 private:
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	ID3D12DescriptorHeap* srvDescriptorHeap_;
 		WinApp* winApp_;
 	 IDXGIAdapter4* useAdapter_;
 		IDXGIFactory7* dxgiFactory_;
@@ -59,5 +60,6 @@ private:
 	void InitializeCommand();
 	void CreateFinalRenderTargets();
 	void CreateFence();
+	void CreateSrvheap();
 };
 

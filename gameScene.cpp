@@ -1,7 +1,9 @@
 #include "gameScene.h"
 
-void GameScene::Initialize(DirectXCommon* direct)
+void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 {
+	engine_ = engine;
+	
 	directX_ = direct;
 	data1_[0] = { -0.2f,-0.1f,0.0f,1.0f };
 	data2_[0] = { -0.15f,0.1f,0.0f,1.0f };
@@ -14,9 +16,10 @@ void GameScene::Initialize(DirectXCommon* direct)
 	material[1] = { 1.0f,0.1f,1.0f,1.0f };
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
+	engine_->LoadTexture("Resource/uvChecker.png");
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
-		triangle_[i]->Initialize(directX_);
+		triangle_[i]->Initialize(directX_,engine_);
 	}
 
 }
