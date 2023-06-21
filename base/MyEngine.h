@@ -3,6 +3,7 @@
 #include <dxcapi.h>
 #include"Vector4.h"
 #pragma comment(lib,"dxcompiler.lib")
+#include <ImGuiManger.h>
 class MyEngine
 {
 public:
@@ -18,7 +19,7 @@ private:
 
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
-	
+  ImGuiManger* imguiManager_;
 
 
 	IDxcUtils* dxcUtils_;

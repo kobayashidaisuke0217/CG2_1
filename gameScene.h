@@ -1,7 +1,8 @@
 #pragma once
 #include "Vector4.h"
 #include "base/Triangle.h"
-//#include "base/MyEngine.h"
+#include "base/MyEngine.h"
+#include "ImGuiManger.h"
 class GameScene
 {
 public:

@@ -22,7 +22,10 @@ public:
 	ID3D12Device* GetDevice() { return device_; }
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 	static ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
-	WinApp* GetWin() { return winApp_; }
+	WinApp* GetWin() { return winApp_;}
+	UINT GetbackBufferCount() { return swapChainDesc.BufferCount ; }
+	ID3D12DescriptorHeap* CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible);
+
 	//int32_t GetBackBufferWidth() const;
 	//int32_t GetBackBufferHeight() const;
 	//size_t GetBackBufferCount() const { return backBuffers_.size(); }
@@ -35,6 +38,7 @@ private:
 		ID3D12CommandAllocator* commandAllocator_;
 		ID3D12GraphicsCommandList* commandList_;
 		IDXGISwapChain4* swapChain_;
+		DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 		ID3D12DescriptorHeap* rtvDescriptorHeap_;
 	//RTVを２つ作るのでディスクリプタを２つ用意
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];

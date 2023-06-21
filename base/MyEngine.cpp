@@ -186,10 +186,12 @@ void MyEngine::variableInitialize()
 	
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
-	win = new WinApp();
+	win_ = win;
+	win_ = new WinApp();
 	direct_ = new DirectXCommon();
-	direct_->Initialize(win, win->kClientWidth, win->kClientHeight);
-
+	direct_->Initialize(win_, win_->kClientWidth, win->kClientHeight);
+	imguiManager_ = new ImGuiManger();
+	imguiManager_->Initialize(win_,direct_);
 	InitializeDxcCompiler();
 
 
@@ -211,21 +213,26 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 
 void MyEngine::BeginFrame() {
-	direct_->PreDraw();
+	imguiManager_->Begin();
+	
+	
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
 	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
+	direct_->PreDraw();
 }
 void MyEngine::EndFrame() {
+	imguiManager_->End();
+	
+	imguiManager_->Draw();
 	direct_->PostDraw();
-
 }
 
 void MyEngine::Finalize()
 {
-	
+	imguiManager_->Finalize();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
@@ -245,7 +252,7 @@ void MyEngine::Update()
 }
 void MyEngine::Draw()
 {
-	
+	ImGui::ShowDemoWindow();
 
 }
 

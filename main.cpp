@@ -19,7 +19,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Engine->BeginFrame();
 
 		gameScene->Update();
-
+		Engine->Draw();
 		gameScene->Draw();
 		
 

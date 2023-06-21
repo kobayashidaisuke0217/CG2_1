@@ -30,6 +30,10 @@ void GameScene::Update()
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix_, Multiply(viewMatrix, projectionMatrix));
 
 	worldMatrix_ = worldViewProjectionMatrix;
+	ImGui::Begin("Window");
+	ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
+
+	ImGui::End();
 }
 
 void GameScene::Draw()

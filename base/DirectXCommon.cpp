@@ -135,7 +135,7 @@ void DirectXCommon::InitializeCommand() {
 //スワップチェーンを生成
 void DirectXCommon::CreateSwapChain() {
 	swapChain_ = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	
 	swapChainDesc.Width = WinApp::kClientWidth;//画面の幅
 	swapChainDesc.Height = WinApp::kClientHeight;//画面の高さ
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色の形式
@@ -148,12 +148,7 @@ void DirectXCommon::CreateSwapChain() {
 	assert(SUCCEEDED(hr));
 
 	//ディスクリプタヒープの生成
-	rtvDescriptorHeap_ = nullptr;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptionHeapDesc{};
-	rtvDescriptionHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
-	rtvDescriptionHeapDesc.NumDescriptors = 2;//ダブルバッファ用に二つ。多くても別にかまわない
-	hr = device_->CreateDescriptorHeap(&rtvDescriptionHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
-	assert(SUCCEEDED(hr));
+	rtvDescriptorHeap_ = CreateDescriptionHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 	//SwapChainからResourceを引っ張ってくる
 	backBuffers_[0] = { nullptr };
 	backBuffers_[1] = { nullptr };
@@ -321,4 +316,16 @@ ID3D12Resource* DirectXCommon::CreateBufferResource(ID3D12Device* device, size_t
 	assert(SUCCEEDED(hr));
 
 	return Resource;
+}
+//デスクリプタヒープの作成
+ID3D12DescriptorHeap* DirectXCommon::CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible)
+{
+	ID3D12DescriptorHeap* descriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC descriptionHeapDesc{};
+	descriptionHeapDesc.Type = heapType;//レンダーターゲットビュー用
+	descriptionHeapDesc.NumDescriptors = numDescripters;//ダブルバッファ用に二つ。多くても別にかまわない
+	descriptionHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	HRESULT hr = device_->CreateDescriptorHeap(&descriptionHeapDesc, IID_PPV_ARGS(&descriptorHeap));
+	assert(SUCCEEDED(hr));
+	return descriptorHeap;
 }
