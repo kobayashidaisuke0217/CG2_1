@@ -185,6 +185,8 @@ void MyEngine::InitializePSO() {
 	//どのように画面に色を打ち込むのかの設定（気にしなく良い）
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	//実際に生成
 	graphicsPipelineState_ = nullptr;
 	HRESULT hr = direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
@@ -207,6 +209,12 @@ void MyEngine::SettingScissor() {
 	scissorRect_.right = WinApp::kClientWidth;
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
+}
+void MyEngine::SettingDepth()
+{
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
 void MyEngine::variableInitialize()
 {
@@ -231,6 +239,7 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 
 	SettingRasterizerState();
 
+	SettingDepth();
 	InitializePSO();
 
 	SettingViePort();

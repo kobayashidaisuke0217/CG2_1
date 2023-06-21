@@ -26,11 +26,13 @@ public:
 	UINT GetbackBufferCount() { return swapChainDesc.BufferCount ; }
 	ID3D12DescriptorHeap* CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible);
 	ID3D12DescriptorHeap* GetSrvHeap() { return srvDescriptorHeap_; }
+	ID3D12DescriptorHeap* GetDsvHeap() { return dsvDescriptorHeap_; }
 	D3D12_RENDER_TARGET_VIEW_DESC getRtvDesc() {return rtvDesc;}
 	
 private:
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	ID3D12DescriptorHeap* srvDescriptorHeap_;
+	ID3D12DescriptorHeap* dsvDescriptorHeap_;
 		WinApp* winApp_;
 	 IDXGIAdapter4* useAdapter_;
 		IDXGIFactory7* dxgiFactory_;
@@ -42,6 +44,7 @@ private:
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 		ID3D12DescriptorHeap* rtvDescriptorHeap_;
 	//RTVを２つ作るのでディスクリプタを２つ用意
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvhandle;
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];
 		ID3D12Resource* backBuffers_[2];//(swapChainResources???)
 		UINT64 fenceVal_;
@@ -52,6 +55,7 @@ private:
 		ID3D12Fence* fence_;
 		HANDLE fenceEvent_;
 	 HRESULT hr_;
+	 ID3D12Resource* depthStencilResource;
 private:
 
 
@@ -61,5 +65,7 @@ private:
 	void CreateFinalRenderTargets();
 	void CreateFence();
 	void CreateSrvheap();
+	ID3D12Resource* CreateDepthStenciltextureResource(ID3D12Device* device,int32_t width,int32_t height);
+	void CreateDepthStensil();
 };
 

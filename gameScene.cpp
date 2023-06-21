@@ -5,15 +5,15 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	engine_ = engine;
 	
 	directX_ = direct;
-	data1_[0] = { -0.2f,-0.1f,0.0f,1.0f };
-	data2_[0] = { -0.15f,0.1f,0.0f,1.0f };
-	data3_[0] = { -0.1f,-0.1f,0.0f,1.0f };
+	data1_[0] = { -0.5f,-0.5f,0.5f,1.0f };
+	data2_[0] = { 0.0f,0.0f,0.0f,1.0f };
+	data3_[0] = { 0.5f,-0.5f,-0.5f,1.0f };
 
-	data1_[1] = { -0.2f,-0.3f,0.0f,1.0f };
-	data2_[1] = { -0.15f,-0.1f,0.0f,1.0f };
-	data3_[1] = { -0.1f,-0.3f,0.0f,1.0f };
-	material[0] = { 1.0f,1.0f,0.1f,1.0f };
-	material[1] = { 1.0f,0.1f,1.0f,1.0f };
+	data1_[1] = { -0.5f,-0.5f,0.0f,1.0f };
+	data2_[1] = { 0.0f,0.5f,0.0f,1.0f };
+	data3_[1] = { 0.5f,-0.5f,0.0f,1.0f };
+	material[0] = { 1.0f,1.0f,1.0f,1.0f };
+	material[1] = { 1.0f,1.0f,1.0f,1.0f };
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 	engine_->LoadTexture("Resource/uvChecker.png");
@@ -26,6 +26,7 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 
 void GameScene::Update()
 {
+	transform_.rotate.y += 0.01f;
 	worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);

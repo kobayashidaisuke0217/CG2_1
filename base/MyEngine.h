@@ -27,6 +27,7 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
   ImGuiManger* imguiManager_;
   //TextureManager* textureManager_;
   ID3D12Resource* intermediateResource;
@@ -72,7 +73,7 @@ private:
 	void InitializePSO();
 	void SettingViePort();
 	void SettingScissor();
-
+	void SettingDepth();
 
 	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);  
 	ID3D12Resource* UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
