@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector4.h"
 #include "base/Triangle.h"
-#include "base/MyEngine.h"
+//#include "base/MyEngine.h"
 class GameScene
 {
 public:
@@ -18,5 +18,7 @@ private:
 	Triangle* triangle_[2];
 	Transform transform_;
 	Matrix4x4 worldMatrix_;
+	//マトリックスデータ
+	Transform cameraTransform_;
 };
 

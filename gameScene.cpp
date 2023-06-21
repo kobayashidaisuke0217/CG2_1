@@ -13,7 +13,7 @@ void GameScene::Initialize(DirectXCommon* direct)
 	material[0] = { 1.0f,1.0f,0.1f,1.0f };
 	material[1] = { 1.0f,0.1f,1.0f,1.0f };
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
 		triangle_[i]->Initialize(directX_);
@@ -24,6 +24,12 @@ void GameScene::Initialize(DirectXCommon* direct)
 void GameScene::Update()
 {
 	worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
+	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(directX_->GetWin()->kClientWidth) / float(directX_->GetWin()->kClientHeight), 0.1f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix_, Multiply(viewMatrix, projectionMatrix));
+
+	worldMatrix_ = worldViewProjectionMatrix;
 }
 
 void GameScene::Draw()

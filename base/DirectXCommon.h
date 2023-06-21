@@ -22,6 +22,7 @@ public:
 	ID3D12Device* GetDevice() { return device_; }
 	ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 	static ID3D12Resource* CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
+	WinApp* GetWin() { return winApp_; }
 	//int32_t GetBackBufferWidth() const;
 	//int32_t GetBackBufferHeight() const;
 	//size_t GetBackBufferCount() const { return backBuffers_.size(); }
