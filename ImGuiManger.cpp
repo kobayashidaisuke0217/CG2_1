@@ -29,6 +29,8 @@ void ImGuiManger::Begin()
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+	ID3D12DescriptorHeap* descriptorHeaps[] = { dxCommon_->GetSrvHeap() };
+	dxCommon_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 void ImGuiManger::End()
@@ -39,8 +41,7 @@ void ImGuiManger::End()
 
 void ImGuiManger::Draw()
 {
-	ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap_ };
-	dxCommon_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
+	
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), dxCommon_->GetCommandList());
 	
 }

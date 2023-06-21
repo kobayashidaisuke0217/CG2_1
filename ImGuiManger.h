@@ -10,6 +10,6 @@ public:
 	void Draw();
 private:
 	DirectXCommon* dxCommon_;
-	ID3D12DescriptorHeap* srvDescriptorHeap_;
+	
 };
 

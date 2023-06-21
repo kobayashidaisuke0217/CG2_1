@@ -75,7 +75,7 @@ private:
 
 
 	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);  
-	void UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+	ID3D12Resource* UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 	DirectX::ScratchImage  SendTexture(const std::string& filePath);
 };
 
