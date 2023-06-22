@@ -20,10 +20,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Engine->BeginFrame();
 
 		gameScene->Update();
-		Engine->Draw();
-		gameScene->Draw();
-		
 
+		gameScene->Draw3D();
+		gameScene->Draw2D();
+		
+		Engine->Draw();
 		Engine->EndFrame();
 	}
 	gameScene->Finalize();
