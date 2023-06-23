@@ -1,13 +1,14 @@
 #pragma once
 #include "base/DirectXCommon.h"
 #include"Vector4.h"
+#include "base/MyEngine.h"
 class Sprite
 {
 public:
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
 
 
-	void Draw(Vector4 a,Vector4 b, Transform transform);
+	void Draw(const Vector4& a, const Vector4& b, const Transform& transform, const Vector4& material);
 	void Finalize();
 private:
 	
@@ -17,8 +18,12 @@ private:
 	VertexData* vertexData_;
 	ID3D12Resource* transformationMatrixResource;
 	Matrix4x4* transformationMatrixdata;
+	ID3D12Resource* materialResource_;
+	Vector4* materialData_;
+	MyEngine* engine_;
 private:
 	void CreateVartexData();
 	void CreateTransform();
+	void SetColor();
 };
 
