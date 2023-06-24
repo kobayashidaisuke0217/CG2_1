@@ -22,6 +22,13 @@ void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, 
 	vertexData_[3].position = { a.x,a.y,0.0f,1.0f };
 	vertexData_[4].position = { b.x,a.y,0.0f,1.0f };
 	vertexData_[5].position = { b.x,b.y,0.0f,1.0f };
+	//texcoord
+	vertexData_[0].texcoord = { 0.0f,1.0f };
+	vertexData_[1].texcoord = { 0.0f,0.0f };
+	vertexData_[2].texcoord = { 1.0f,1.0f };
+	vertexData_[3].texcoord = { 0.0f,0.0f };
+	vertexData_[4].texcoord = { 1.0f,0.0f };
+	vertexData_[5].texcoord = { 1.0f,1.0f };
 	*materialData_ = material;
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
@@ -58,13 +65,7 @@ void Sprite::CreateVartexData()
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	//texcoord
-	vertexData_[0].texcoord = { 0.0f,1.0f };
-	vertexData_[1].texcoord = { 0.0f,0.0f };
-	vertexData_[2].texcoord = { 1.0f,1.0f };
-	vertexData_[3].texcoord = { 0.0f,0.0f };
-	vertexData_[4].texcoord = { 1.0f,0.0f };
-	vertexData_[5].texcoord = { 1.0f,1.0f };
+	
 }
 
 void Sprite::CreateTransform()

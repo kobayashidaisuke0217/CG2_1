@@ -15,7 +15,7 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	material[0] = { 1.0f,1.0f,1.0f,1.0f };
 	material[1] = { 1.0f,1.0f,1.0f,1.0f };
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-10.0f} };
 
 	spritedataLeftTop_[0] = {0.0f,0.0f,0.0f,1.0f};
 	spritedataRightDown_[0] = {320.0f,180.0f,0.0f,1.0f};
@@ -25,6 +25,10 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	spritedataRightDown_[1] = {1280.0f,720.0f,0.0f,1.0f};
 	spriteTransform_ [1] = {{1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 	spriteMaterial[0] = {1.0f,1.0f,1.0f,1.0f};
+	sphereTransform_= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
+	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
+	sphere_ = new Sphere();
+	sphere_->Initialize(directX_, engine_);
 	engine_->LoadTexture("Resource/uvChecker.png");
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
@@ -39,15 +43,24 @@ void GameScene::Update()
 {
 	transform_.rotate.y += 0.01f;
 	worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	Matrix4x4 sphereAffine= MakeAffineMatrix(sphereTransform_.scale, sphereTransform_.rotate, sphereTransform_.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(directX_->GetWin()->kClientWidth) / float(directX_->GetWin()->kClientHeight), 0.1f, 100.0f);
+	
+	
+	
+	
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix_, Multiply(viewMatrix, projectionMatrix));
-
+	spherematrix_ = Multiply(sphereAffine, Multiply(viewMatrix, projectionMatrix));
 	worldMatrix_ = worldViewProjectionMatrix;
+	sphereTransform_.rotate.y += 0.1f;
 	ImGui::Begin("Window");
 	ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
 	ImGui::DragFloat3("spritetranslate", &spriteTransform_[0].translate.x, 0.1f);
+	ImGui::DragFloat3("spheretranslate", &sphereTransform_.translate.x, 0.1f);
+	ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
 	ImGui::End();
 }
 
@@ -56,6 +69,7 @@ void GameScene::Draw3D()
 	for (int i = 0; i < 2; i++) {
 		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i],worldMatrix_);
 	}
+	sphere_->Draw( sphereMaterial_,spherematrix_);
 }
 void GameScene::Draw2D() {
 	for (int i = 0; i < 1; i++) {
@@ -65,6 +79,7 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
+	sphere_->Finalize();
 	for (int i = 0; i < 2; i++) {
 		triangle_[i]->Finalize();
 		sprite_[i]->Finalize();

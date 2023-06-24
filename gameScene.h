@@ -4,6 +4,7 @@
 #include "base/MyEngine.h"
 #include "ImGuiManger.h"
 #include"Sprite.h"
+#include "Sphere.h"
 class GameScene
 {
 public:
@@ -27,6 +28,10 @@ private:
 	Triangle* triangle_[2];
 	Transform transform_;
 	Matrix4x4 worldMatrix_;
+	Sphere* sphere_;
+	Transform sphereTransform_;
+	Vector4 sphereMaterial_;
+	Matrix4x4 spherematrix_;
 	//マトリックスデータ
 	Transform cameraTransform_;
 };
