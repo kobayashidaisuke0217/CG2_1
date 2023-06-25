@@ -8,7 +8,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
 
 
-	void Draw(const Vector4& material, const Matrix4x4& wvpdata);
+	void Draw(const Vector4& material, const Matrix4x4& wvpdata, uint32_t texIndex);
 	void Finalize();
 private:
 	DirectXCommon* dxCommon_;

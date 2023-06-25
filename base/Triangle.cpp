@@ -39,7 +39,7 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 
 	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2,Engine->GettextureSrvHandleGPU() );
+	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2,Engine->textureSrvHandleGPU_[0]);
 	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
 	direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 

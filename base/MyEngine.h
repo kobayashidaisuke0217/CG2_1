@@ -6,7 +6,7 @@
 #include <ImGuiManger.h>
 #include"externals/DirectXTex/d3dx12.h"
 #include<vector>
-//#include <TextureManager.h>
+
 class MyEngine
 {
 public:
@@ -19,12 +19,21 @@ public:
 	void Draw();
  //void Loadtexture(const std::string& filePath) { textureManager_->LoadTexture( filePath); }
 	DirectXCommon* GetDirectXCommon() { return direct_; }
-	void LoadTexture(const std::string& filePath);
-	D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU() { return textureSrvHandleCPU_; }
-	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU() { return textureSrvHandleGPU_; }
+	void LoadTexture(const std::string& filePath,uint32_t index);
+	/*D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU() { return textureSrvHandleCPU_; }
+	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU() { return textureSrvHandleGPU_; }*/
+	
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[2];
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[2];
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap,uint32_t descriptorSize,uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index);
 private:
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+	
+	 uint32_t descriptorSizeSRV;
+	 uint32_t descriptorSizeRTV;
+	 uint32_t descriptorSizeDSV;
+	
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
@@ -79,5 +88,6 @@ private:
 	ID3D12Resource* UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 	DirectX::ScratchImage  SendTexture(const std::string& filePath);
 };
+ 
 
 

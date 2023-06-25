@@ -11,8 +11,9 @@ void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
 	TransformMatrix();
 }
 
-void Sphere::Draw(const Vector4& material, const Matrix4x4& wvpdata)
+void Sphere::Draw(const Vector4& material, const Matrix4x4& wvpdata, uint32_t texIndex)
 {
+	assert(texIndex < 2);
 	//経度一つ分の角度
 	const float kLonEvery = pi * 2.0f / float(kSubDivision);
 	//緯度一つ分の角度
@@ -50,7 +51,7 @@ void Sphere::Draw(const Vector4& material, const Matrix4x4& wvpdata)
 
 			dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 			dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->GettextureSrvHandleGPU());
+			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
 			dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
 	
 	   }

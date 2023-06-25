@@ -29,7 +29,10 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	sphere_ = new Sphere();
 	sphere_->Initialize(directX_, engine_);
-	engine_->LoadTexture("Resource/uvChecker.png");
+	uvResourceNum = 0;
+	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);
+	monsterBallResourceNum = 1;
+	engine_->LoadTexture("Resource/monsterBall.png",monsterBallResourceNum);
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
 		triangle_[i]->Initialize(directX_,engine_);
@@ -61,6 +64,7 @@ void GameScene::Update()
 	ImGui::DragFloat3("spheretranslate", &sphereTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
+	ImGui::InputInt("SphereResource", &monsterBallResourceNum);
 	ImGui::End();
 }
 
@@ -69,11 +73,11 @@ void GameScene::Draw3D()
 	for (int i = 0; i < 2; i++) {
 		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i],worldMatrix_);
 	}
-	sphere_->Draw( sphereMaterial_,spherematrix_);
+	sphere_->Draw( sphereMaterial_,spherematrix_,monsterBallResourceNum);
 }
 void GameScene::Draw2D() {
 	for (int i = 0; i < 1; i++) {
-		sprite_[i]->Draw(spritedataLeftTop_[i], spritedataRightDown_[i], spriteTransform_[i],spriteMaterial[0]);
+		sprite_[i]->Draw(spritedataLeftTop_[i], spritedataRightDown_[i], spriteTransform_[i],spriteMaterial[0],uvResourceNum);
 	}
 	
 }
