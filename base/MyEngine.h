@@ -29,10 +29,7 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap,uint32_t descriptorSize,uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index);
 private:
-	
-	 uint32_t descriptorSizeSRV;
-	 uint32_t descriptorSizeRTV;
-	 uint32_t descriptorSizeDSV;
+
 	
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
@@ -60,8 +57,10 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	ID3D12Resource* textureResource;
-
+	ID3D12Resource* textureResource[2];
+	uint32_t descriptorSizeSRV;
+	uint32_t descriptorSizeRTV;
+	uint32_t descriptorSizeDSV;
 
 
 	IDxcBlob* CompileShader(

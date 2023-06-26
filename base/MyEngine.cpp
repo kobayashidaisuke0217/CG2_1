@@ -276,9 +276,9 @@ void MyEngine::EndFrame() {
 void MyEngine::Finalize()
 {
 	intermediateResource->Release();
-	
-    textureResource->Release();
-	
+	for (int i = 0; i < 2; i++) {
+		textureResource[i]->Release();
+	}
 	imguiManager_->Finalize();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
@@ -347,8 +347,8 @@ void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 {
 	DirectX::ScratchImage mipImage = SendTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
-	 textureResource = CreateTextureResource(direct_->GetDevice(), metadata);
-	UploadtextureData(textureResource, mipImage);
+	 textureResource[index] = CreateTextureResource(direct_->GetDevice(), metadata);
+	UploadtextureData(textureResource[index], mipImage);
 	//metaDataを元にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -362,7 +362,7 @@ void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 	//先頭はIMGUIが使ってるからその次を使う
 	textureSrvHandleCPU_[index].ptr += direct_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_[index].ptr += direct_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	direct_->GetDevice()->CreateShaderResourceView(textureResource, &srvDesc, textureSrvHandleCPU_[index]);
+	direct_->GetDevice()->CreateShaderResourceView(textureResource[index], &srvDesc, textureSrvHandleCPU_[index]);
 	
 }
 
