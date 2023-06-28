@@ -304,7 +304,7 @@ void MyEngine::Draw()
 }
 
 //テクスチャデータを読み込む
-DirectX::ScratchImage MyEngine::SendTexture(const std::string& filePath)
+DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
 {
 	//テクスチャファイルを読んでうろグラムで扱えるようにする
 	DirectX::ScratchImage image{};
@@ -345,7 +345,7 @@ ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const Dire
 
 void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 {
-	DirectX::ScratchImage mipImage = SendTexture(filePath);
+	DirectX::ScratchImage mipImage = LoadTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
 	 textureResource[index] = CreateTextureResource(direct_->GetDevice(), metadata);
 	UploadtextureData(textureResource[index], mipImage);
