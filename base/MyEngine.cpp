@@ -275,6 +275,7 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
+	Texresource->Release();
 	intermediateResource->Release();
 	for (int i = 0; i < 2; i++) {
 		textureResource[i]->Release();
@@ -336,10 +337,10 @@ ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const Dire
 	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
 	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
 	//Resourceの作成
-	ID3D12Resource* resource = nullptr;
-	HRESULT hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&resource));
+	 Texresource = nullptr;
+	HRESULT hr = device->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, IID_PPV_ARGS(&Texresource));
 	assert(SUCCEEDED(hr));
-	return resource;
+	return Texresource;
 }
 
 

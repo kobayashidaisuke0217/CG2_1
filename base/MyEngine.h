@@ -29,7 +29,7 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap,uint32_t descriptorSize,uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index);
 private:
-
+	ID3D12Resource* Texresource;
 	
 	static WinApp* win_;
 	static	DirectXCommon* direct_;
