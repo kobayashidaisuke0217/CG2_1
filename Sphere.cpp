@@ -4,7 +4,7 @@ void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
 {
 	dxCommon_ = dxCommon;
 	engine_ = engine;
-	kSubDivision = 32;
+	kSubDivision = 16;
 	vertexCount = kSubDivision * kSubDivision * 6;
 	CreateVartexData();
 	SetColor();
