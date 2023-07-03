@@ -36,7 +36,7 @@ private:
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
   ImGuiManger* imguiManager_;
   //TextureManager* textureManager_;
-  ID3D12Resource* intermediateResource;
+  ID3D12Resource* intermediateResource[2];
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
@@ -84,7 +84,7 @@ private:
 	void SettingDepth();
 
 	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);  
-	ID3D12Resource* UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+	ID3D12Resource* UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages, uint32_t index);
 	DirectX::ScratchImage  LoadTexture(const std::string& filePath);
 };
  

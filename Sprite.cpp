@@ -41,7 +41,7 @@ void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, 
 
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[ texIndex]);
+	//dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[ texIndex]);
 	dxCommon_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 }

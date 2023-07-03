@@ -275,7 +275,9 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
-	intermediateResource->Release();
+	for (int i = 0; i < 2; i++) {
+		intermediateResource[i]->Release();
+	}
 	for (int i = 0; i < 2; i++) {
 		textureResource[i]->Release();
 	}
@@ -348,7 +350,7 @@ void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
 	 textureResource[index] = CreateTextureResource(direct_->GetDevice(), metadata);
-	UploadtextureData(textureResource[index], mipImage);
+	UploadtextureData(textureResource[index], mipImage,index);
 	//metaDataを元にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -381,12 +383,12 @@ D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GettextureSrvHandleGPU(ID3D12DescriptorHea
 }
 
 [[nodiscard]]
-ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
+ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,uint32_t index) {
 	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
 	DirectX::PrepareUpload(direct_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
 	uint64_t  intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
-	intermediateResource = direct_->CreateBufferResource(direct_->GetDevice(), intermediateSize);
-	UpdateSubresources(direct_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
+	intermediateResource[index] = direct_->CreateBufferResource(direct_->GetDevice(), intermediateSize);
+	UpdateSubresources(direct_->GetCommandList(), texture, intermediateResource[index], 0, 0, UINT(subresource.size()), subresource.data());
 
 	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -396,7 +398,7 @@ ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const Direc
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
 	direct_->GetCommandList()->ResourceBarrier(1, &barrier);
-	return intermediateResource;
+	return intermediateResource[index];
 	
 
 }
