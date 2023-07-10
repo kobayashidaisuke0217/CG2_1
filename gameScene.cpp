@@ -25,7 +25,7 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	spritedataRightDown_[1] = {1280.0f,720.0f,0.0f,1.0f};
 	spriteTransform_ [1] = {{1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 	spriteMaterial[0] = {1.0f,1.0f,1.0f,1.0f};
-	sphereTransform_= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
+	sphereTransform_= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,1.3f,0.0f} };
 	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	sphere_ = new Sphere();
 	sphere_->Initialize(directX_, engine_);
