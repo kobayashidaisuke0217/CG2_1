@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include<stdint.h>
 struct Vector4 {
 	float x;
 	float y;
@@ -27,6 +28,15 @@ struct Transform
 struct VertexData {
 	Vector4 position;
 	Vector2 texcoord;
+	Vector3 normal;
+};
+struct Material {
+	Vector4 color;
+	int32_t enableLighting;
+};
+struct Transformmatrix {
+	Matrix4x4 WVP;
+	Matrix4x4 World;
 };
 Matrix4x4 MakeRotateXMatrix(float theta);
 Matrix4x4 MakeRotateYMatrix(float theta);

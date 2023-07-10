@@ -9,7 +9,7 @@ void Sprite::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
 	CreateTransform();
 }
 void Sprite::SetColor() {
-	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData));
+	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 }
@@ -29,7 +29,7 @@ void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, 
 	vertexData_[3].texcoord = { 0.0f,0.0f };
 	vertexData_[4].texcoord = { 1.0f,0.0f };
 	vertexData_[5].texcoord = { 1.0f,1.0f };
-	*materialData_ = material;
+	*materialData_ = { material,false };
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	Matrix4x4 projectionmatrix = MakeOrthographicMatrix(0.0f, 0.0f, (float)dxCommon_->GetWin()->kClientWidth, (float)dxCommon_->GetWin()->kClientHeight, 0.0f, 100.0f);

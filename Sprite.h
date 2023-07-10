@@ -19,7 +19,7 @@ private:
 	ID3D12Resource* transformationMatrixResource;
 	Matrix4x4* transformationMatrixdata;
 	ID3D12Resource* materialResource_;
-	Vector4* materialData_;
+	Material* materialData_;
 	MyEngine* engine_;
 private:
 	void CreateVartexData();

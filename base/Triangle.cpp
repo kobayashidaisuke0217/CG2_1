@@ -12,17 +12,23 @@ void Triangle::Initialize(DirectXCommon* direct,MyEngine*engine)
 }
 void Triangle::TransformMatrix()
 {
-	wvpResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(Matrix4x4));
+	wvpResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(Transformmatrix));
 	wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
-	*wvpData_ = MakeIdentity4x4();
+	wvpData_->WVP = MakeIdentity4x4();
 }
 void Triangle::SetColor() {
-	materialResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(VertexData));
+	materialResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 }
-void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material, const Matrix4x4& wvpdata)
+void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material, const Transform& transform, const Transform& cameraTransform)
 {
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(direct_->GetWin()->kClientWidth) / float(direct_->GetWin()->kClientHeight), 0.1f, 100.0f);
+
+	Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	vertexData_[0].position = a;
 	vertexData_[0].texcoord = { 0.0f,1.0f };
 	//上
@@ -31,8 +37,8 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	//右下
 	vertexData_[2].position = c;
 	vertexData_[2].texcoord = { 1.0f,1.0f };
-	*materialData_ = material;
-	*wvpData_ = wvpdata;
+	*materialData_ = { material,true };
+	*wvpData_ = {wvpmatrix_,worldMatrix};
 	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

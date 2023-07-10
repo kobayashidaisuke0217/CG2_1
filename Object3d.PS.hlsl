@@ -1,6 +1,7 @@
 #include "Object3D.hlsli"
 struct Material {
 	float32_t4 color;
+	int32_t enableLighting;
 };
 ConstantBuffer<Material> gMaterial : register(b0);
 Texture2D<float32_t4> gTexture : register(t0);

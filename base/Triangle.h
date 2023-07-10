@@ -8,7 +8,7 @@ class Triangle
 {
 public:
 	void Initialize(DirectXCommon* direct,MyEngine* engine);
-	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material, const Matrix4x4& wvpdata);
+	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material, const Transform& transform, const Transform& cameraTransform );
 	void Finalize();
 	
 private:
@@ -23,8 +23,8 @@ private:
 	ID3D12Resource* vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
-	Vector4* materialData_;
+	Material *materialData_;
 	ID3D12Resource* wvpResource_;
-	Matrix4x4* wvpData_;
+	Transformmatrix* wvpData_;
 };
 

@@ -8,7 +8,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
 
 
-	void Draw(const Vector4& material, const Matrix4x4& wvpdata, uint32_t texIndex);
+	void Draw(const Vector4& material, const Transform& wvpdata, uint32_t texIndex, const Transform& cameratransform);
 	void Finalize();
 private:
 	DirectXCommon* dxCommon_;
@@ -18,9 +18,9 @@ private:
 	//ID3D12Resource* transformationMatrixResource;
 	//Matrix4x4* transformationMatrixdata;
 	ID3D12Resource* wvpResource_;
-	Matrix4x4* wvpData_;
+	Transformmatrix* wvpData_;
 	ID3D12Resource* materialResource_;
-	Vector4* materialData_;
+	Material* materialData_;
 	MyEngine* engine_;
 	const float pi = 3.1415f;
 	uint32_t kSubDivision ;
