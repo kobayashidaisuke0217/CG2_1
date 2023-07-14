@@ -8,13 +8,14 @@ class Triangle
 {
 public:
 	void Initialize(DirectXCommon* direct,MyEngine* engine);
-	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material, const Transform& transform, const Transform& cameraTransform );
+	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material, const Transform& transform, const Transform& cameraTransform,  const DirectionalLight& light);
 	void Finalize();
 	
 private:
 	void SettingVertex();
 	void SetColor();
 	void TransformMatrix();
+	void CreateDictionalLight();
 private:
 	MyEngine* Engine;
 	ID3D12Resource* materialResource_;
@@ -26,5 +27,7 @@ private:
 	Material *materialData_;
 	ID3D12Resource* wvpResource_;
 	Transformmatrix* wvpData_;
+	DirectionalLight* directionalLight_;
+	ID3D12Resource* directionalLightResource_;
 };
 

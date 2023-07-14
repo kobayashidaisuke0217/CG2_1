@@ -33,6 +33,7 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);
 	monsterBallResourceNum = 1;
 	engine_->LoadTexture("Resource/monsterBall.png",monsterBallResourceNum);
+	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
 		triangle_[i]->Initialize(directX_,engine_);
@@ -45,19 +46,8 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 void GameScene::Update()
 {
 	transform_.rotate.y += 0.01f;
-	//worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//Matrix4x4 sphereAffine= MakeAffineMatrix(sphereTransform_.scale, sphereTransform_.rotate, sphereTransform_.translate);
-	//Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
-	//Matrix4x4 viewMatrix = Inverse(cameraMatrix);
-	//Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(directX_->GetWin()->kClientWidth) / float(directX_->GetWin()->kClientHeight), 0.1f, 100.0f);
-	//
-	//
-	//
-	//
-	//Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix_, Multiply(viewMatrix, projectionMatrix));
-	////spherematrix_ = Multiply(sphereAffine, Multiply(viewMatrix, projectionMatrix));
-	//worldMatrix_ = worldViewProjectionMatrix;
-	//sphereTransform_.rotate.y += 0.1f;
+	directionalLight_.direction= Normalise(directionalLight_.direction);
+	
 	ImGui::Begin("Window");
 	ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
 	ImGui::DragFloat3("spritetranslate", &spriteTransform_[0].translate.x, 0.1f);
@@ -71,14 +61,14 @@ void GameScene::Update()
 void GameScene::Draw3D()
 {
 	for (int i = 0; i < 2; i++) {
-		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i],transform_,cameraTransform_);
+		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i],transform_,cameraTransform_,directionalLight_);
 	}
-	sphere_->Draw( sphereMaterial_,sphereTransform_,monsterBallResourceNum,cameraTransform_);
+	sphere_->Draw( sphereMaterial_,sphereTransform_,monsterBallResourceNum,cameraTransform_,directionalLight_);
 }
 void GameScene::Draw2D() {
-	for (int i = 0; i < 1; i++) {
-		sprite_[i]->Draw(spritedataLeftTop_[i], spritedataRightDown_[i], spriteTransform_[i],spriteMaterial[0],uvResourceNum);
-	}
+	
+		sprite_[0]->Draw(spritedataLeftTop_[0], spritedataRightDown_[0], spriteTransform_[0],spriteMaterial[0],uvResourceNum,directionalLight_);
+	
 	
 }
 void GameScene::Finalize()
