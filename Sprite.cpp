@@ -96,6 +96,7 @@ void Sprite::CreateVartexData()
 	indexData_[3] = 1;
 	indexData_[4] = 3;
 	indexData_[5] = 2;
+
 }
 
 void Sprite::CreateTransform()
