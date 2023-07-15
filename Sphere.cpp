@@ -69,14 +69,15 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 			vertexData_[start + 5].normal.x = vertexData_[start + 5].position.x;
 			vertexData_[start + 5].normal.y = vertexData_[start + 5].position.y;
 			vertexData_[start + 5].normal.z = vertexData_[start + 5].position.z;
-			*materialData_ = { material,true };
-			*wvpData_ = { wvpmatrix_,worldMatrix };
-			*directionalLight_ = light;
+
+		
 			
 	
 	   }
 	}
-	
+		*materialData_ = { material,true };
+			*wvpData_ = { wvpmatrix_,worldMatrix };
+			*directionalLight_ = light;
 			dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 			//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 			dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -110,7 +111,14 @@ void Sphere::CreateVartexData()
 
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
+	/*indexResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(uint32_t) * 6);
 
+	indexBufferView.BufferLocation = indexResource_->GetGPUVirtualAddress();
+
+	indexBufferView.SizeInBytes = sizeof(uint32_t) * 6;
+
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));*/
 }
 
 
