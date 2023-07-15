@@ -24,6 +24,9 @@ private:
 	ID3D12Resource* directionalLightResource_;
 	ID3D12Resource* wvpResource_;
 	Transformmatrix* wvpData_;
+	ID3D12Resource* indexResource_;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
+	uint32_t* indexData_;
 private:
 	void CreateVartexData();
 	void CreateTransform();

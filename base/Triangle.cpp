@@ -41,7 +41,7 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	vertexData_[2].position = c;
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 	
-	*materialData_ = { material,false };
+	*materialData_ = { material,true };
 	*wvpData_ = {wvpmatrix_,worldMatrix};
 	*directionalLight_ = light;
 	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定

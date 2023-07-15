@@ -26,6 +26,8 @@ private:
 	uint32_t vertexCount;
 	DirectionalLight* directionalLight_; 
 	ID3D12Resource* directionalLightResource_;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
+	uint32_t* indexData_;
 private:
 	void CreateVartexData();
 	void SetColor();
