@@ -67,6 +67,7 @@ void Sprite::Finalize()
 	materialResource_->Release();
 	wvpResource_->Release();
 	directionalLightResource_->Release();
+	indexResource_->Release();
 }
 
 void Sprite::CreateVartexData()
