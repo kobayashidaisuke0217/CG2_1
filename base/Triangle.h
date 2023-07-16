@@ -8,7 +8,7 @@ class Triangle
 {
 public:
 	void Initialize(DirectXCommon* direct,MyEngine* engine);
-	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material, const Transform& transform, const Transform& cameraTransform,  const DirectionalLight& light);
+	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material ,const Transform& transform, const Transform& cameraTransform,  const DirectionalLight& light);
 	void Finalize();
 	
 private:

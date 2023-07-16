@@ -8,7 +8,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
 
 
-	void Draw(const Vector4& a, const Vector4& b, const Transform& transform, const Vector4& material, uint32_t texIndex, const DirectionalLight& light);
+	void Draw(const Vector4& a, const Vector4& b, const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex, const DirectionalLight& light);
 	void Finalize();
 private:
 	

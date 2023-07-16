@@ -21,6 +21,7 @@ private:
 	Vector4 spritedataRightDown_[2];
 	Transform spriteTransform_[2];
 	Vector4 spriteMaterial[2];
+	Transform SpriteuvTransform;
 	Vector4 data1_[2];
 	Vector4 data2_[2];
 	Vector4 data3_[2];

@@ -30,6 +30,13 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(direct_->GetWin()->kClientWidth) / float(direct_->GetWin()->kClientHeight), 0.1f, 100.0f);
 
 	Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+
+	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
+
+	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
+	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
+	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
+
 	vertexData_[0].position = a;
 	vertexData_[0].texcoord = { 0.0f,1.0f };
 	
@@ -41,7 +48,9 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	vertexData_[2].position = c;
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 	
-	*materialData_ = { material,true };
+	*materialData_ = { material,false };
+	materialData_->uvTransform = uvtransformMtrix;
+
 	*wvpData_ = {wvpmatrix_,worldMatrix};
 	*directionalLight_ = light;
 	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定

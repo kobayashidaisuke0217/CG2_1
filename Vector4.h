@@ -20,6 +20,9 @@ struct Vector2 {
 struct Matrix4x4 final {
 	float m[4][4];
 };
+struct Matrix3x3 {
+	float m[3][3];
+};
 struct Transform
 {
 	Vector3 scale;
@@ -34,6 +37,8 @@ struct VertexData {
 struct Material {
 	Vector4 color;
 	int32_t enableLighting;
+	float padding[3];
+	Matrix4x4 uvTransform;
 };
 struct Transformmatrix {
 	Matrix4x4 WVP;
@@ -51,7 +56,8 @@ Matrix4x4 MakeRotateZMatrix(float theta);
 
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
-
+Matrix4x4 MakeScaleMatrix(const Vector3& scale);
+Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 //1　行列の加法
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
 //２　行列の減法

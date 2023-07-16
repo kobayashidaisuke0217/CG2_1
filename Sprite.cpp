@@ -13,14 +13,19 @@ void Sprite::SetColor() {
 	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->uvTransform = MakeIdentity4x4();
 }
-void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, const Vector4& material,uint32_t texIndex, const DirectionalLight& light)
+void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, const Transform& uvTransform, const Vector4& material,uint32_t texIndex, const DirectionalLight& light)
 {
 	
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	Matrix4x4 projectionmatrix = MakeOrthographicMatrix(0.0f, 0.0f, (float)dxCommon_->GetWin()->kClientWidth, (float)dxCommon_->GetWin()->kClientHeight, 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionmatrix));
+
+	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
+	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
+	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 	//座標
 	vertexData_[0].position = {a.x,b.y,0.0f,1.0f};
 	vertexData_[1].position = { a.x,a.y,0.0f,1.0f };
@@ -39,9 +44,9 @@ void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, 
 	for (int i = 0; i < 6; i++) {
 		vertexData_[i].normal = { 0.0f,0.0f,-1.0f };
 	}
-	*materialData_ = { material,false };
-	
-
+	*materialData_ = { material,false};
+	/*materialData_->uvTransform = MakeAffineMatrix(uvTransform.scale, uvTransform.rotate, uvTransform.translate);*/
+	materialData_->uvTransform = uvtransformMtrix;
 	*wvpData_ = { worldViewProjectionMatrix,worldMatrix };
 	*directionalLight_ = light;
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
