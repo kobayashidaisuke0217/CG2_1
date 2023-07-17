@@ -98,9 +98,9 @@ void Sprite::CreateVartexData()
 	indexData_[0] = 0;
 	indexData_[1] = 1;
 	indexData_[2] = 2;
-	indexData_[3] = 1;
-	indexData_[4] = 3;
-	indexData_[5] = 2;
+	indexData_[3] = 4;
+	indexData_[4] = 2;
+	indexData_[5] = 3;
 
 }
 
