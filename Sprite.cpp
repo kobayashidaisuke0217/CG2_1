@@ -40,7 +40,12 @@ void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, 
 	vertexData_[3].texcoord = { 0.0f,0.0f };
 	vertexData_[4].texcoord = { 1.0f,0.0f };
 	vertexData_[5].texcoord = { 1.0f,1.0f };
-	
+	indexData_[0] = 0;
+	indexData_[1] = 1;
+	indexData_[2] = 2;
+	indexData_[3] = 1;
+	indexData_[4] = 3;
+	indexData_[5] = 2;
 	for (int i = 0; i < 6; i++) {
 		vertexData_[i].normal = { 0.0f,0.0f,-1.0f };
 	}
@@ -95,12 +100,7 @@ void Sprite::CreateVartexData()
 
 	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
-	indexData_[0] = 0;
-	indexData_[1] = 1;
-	indexData_[2] = 2;
-	indexData_[3] = 1;
-	indexData_[4] = 3;
-	indexData_[5] = 2;
+	
 
 }
 

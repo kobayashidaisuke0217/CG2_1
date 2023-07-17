@@ -2,6 +2,7 @@
 #include <math.h>
 #include<stdint.h>
 #include<cassert>
+#include <vector>
 struct Vector4 {
 	float x;
 	float y;
@@ -48,6 +49,9 @@ struct DirectionalLight {
 	Vector4 color;//ライトの色
 	Vector3 direction;//ライトの向き
 	float intensity;//輝度
+};
+struct ModelData {
+	std::vector<VertexData> vertices;
 };
 Matrix4x4 MakeRotateXMatrix(float theta);
 Matrix4x4 MakeRotateYMatrix(float theta);

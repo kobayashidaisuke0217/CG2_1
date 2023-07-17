@@ -2,14 +2,7 @@
 #include<cmath>
 void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
 {
-	dxCommon_ = dxCommon;
-	engine_ = engine;
-	kSubDivision = 16;
-	vertexCount = kSubDivision * kSubDivision * 6;
-	CreateVartexData();
-	SetColor();
-	TransformMatrix();
-	CreateDictionalLight();
+	
 }
 
 void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
@@ -82,19 +75,20 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 		}
 	}
 
-		*materialData_ = { material,true };
-		materialData_->uvTransform = uvtransformMtrix;
-			*wvpData_ = { wvpmatrix_,worldMatrix };
-			*directionalLight_ = light;
-			dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-			//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
-			dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-           dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-			dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-			dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-			
-			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
-			dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
+	*materialData_ = { material,true };
+	materialData_->uvTransform = uvtransformMtrix;
+	*wvpData_ = { wvpmatrix_,worldMatrix };
+	*directionalLight_ = light;
+	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
+	dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
+
 }
 
 

@@ -5,6 +5,7 @@
 #include "ImGuiManger.h"
 #include"Sprite.h"
 #include "Sphere.h"
+#include "Model.h"
 class GameScene
 {
 public:
@@ -37,7 +38,7 @@ private:
 	Transform cameraTransform_;
 	//Light
 	DirectionalLight directionalLight_;
-
+	Model* model_;
 	uint32_t uvResourceNum;
 	int monsterBallResourceNum;
 };
