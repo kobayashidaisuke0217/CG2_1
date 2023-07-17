@@ -43,9 +43,9 @@ void Sprite::Draw(const Vector4& a,const Vector4& b,const Transform& transform, 
 	indexData_[0] = 0;
 	indexData_[1] = 1;
 	indexData_[2] = 2;
-	indexData_[3] = 1;
-	indexData_[4] = 3;
-	indexData_[5] = 2;
+	indexData_[3] = 4;
+	indexData_[4] = 2;
+	indexData_[5] = 3;
 	for (int i = 0; i < 6; i++) {
 		vertexData_[i].normal = { 0.0f,0.0f,-1.0f };
 	}

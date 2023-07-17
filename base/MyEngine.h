@@ -10,6 +10,7 @@
 class MyEngine
 {
 public:
+	static const int maxtex = 3;
 	void variableInitialize();
 	void Initialize(WinApp* win, int32_t width, int32_t height);
 	void BeginFrame();
@@ -23,8 +24,8 @@ public:
 	/*D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU() { return textureSrvHandleCPU_; }
 	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU() { return textureSrvHandleGPU_; }*/
 	
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[2];
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[2];
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[maxtex];
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[maxtex];
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap,uint32_t descriptorSize,uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index);
@@ -36,7 +37,7 @@ private:
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
   ImGuiManger* imguiManager_;
   //TextureManager* textureManager_;
-  ID3D12Resource* intermediateResource[2];
+  ID3D12Resource* intermediateResource[maxtex];
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
@@ -53,11 +54,11 @@ private:
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[3];
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[maxtex];
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	ID3D12Resource* textureResource[2];
+	ID3D12Resource* textureResource[3];
 	uint32_t descriptorSizeSRV;
 	uint32_t descriptorSizeRTV;
 	uint32_t descriptorSizeDSV;

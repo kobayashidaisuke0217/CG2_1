@@ -30,7 +30,7 @@ private:
 	Triangle* triangle_[2];
 	Transform transform_;
 	Matrix4x4 worldMatrix_;
-	Sphere* sphere_;
+	/*Sphere* sphere_;*/
 	Transform sphereTransform_;
 	Vector4 sphereMaterial_;
 	Matrix4x4 spherematrix_;

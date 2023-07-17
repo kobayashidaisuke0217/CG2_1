@@ -3,6 +3,7 @@
 #include<stdint.h>
 #include<cassert>
 #include <vector>
+#include <string>
 struct Vector4 {
 	float x;
 	float y;
@@ -50,8 +51,13 @@ struct DirectionalLight {
 	Vector3 direction;//ライトの向き
 	float intensity;//輝度
 };
+
+struct MaterialData {
+	std::string textureFilePath;
+};
 struct ModelData {
 	std::vector<VertexData> vertices;
+	MaterialData material;
 };
 Matrix4x4 MakeRotateXMatrix(float theta);
 Matrix4x4 MakeRotateYMatrix(float theta);

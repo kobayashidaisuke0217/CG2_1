@@ -1,9 +1,6 @@
 #include "MyEngine.h"
 #include <assert.h>
 
-
-
-
 IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	//これからシェーダーをコンパイルする旨をログに出す
@@ -288,10 +285,10 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < maxtex; i++) {
 		intermediateResource[i]->Release();
 	}
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < maxtex; i++) {
 		textureResource[i]->Release();
 	}
 	imguiManager_->Finalize();
@@ -321,6 +318,7 @@ void MyEngine::Draw()
 //テクスチャデータを読み込む
 DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
 {
+	
 	//テクスチャファイルを読んでうろグラムで扱えるようにする
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertString(filePath);
@@ -360,6 +358,7 @@ ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const Dire
 
 void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 {
+	assert(index < maxtex);
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
 	 textureResource[index] = CreateTextureResource(direct_->GetDevice(), metadata);

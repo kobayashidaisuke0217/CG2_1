@@ -1,12 +1,14 @@
 #include "Model.h"
 #include<fstream>
 #include<sstream>
-void Model::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
+void Model::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename,uint32_t index)
 {
     dxCommon_ = dxCommon;
 	engine_ = engine;
-	kSubDivision = 16;
-	vertexCount = kSubDivision * kSubDivision * 6;
+	
+    modelData_ = LoadObjFile(directoryPath, filename);
+    
+    engine_->LoadTexture(modelData_.material.textureFilePath, index);
 	CreateVartexData();
 	SetColor();
 	TransformMatrix();
@@ -29,8 +31,8 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
 	
 	
 
-		*materialData_ = { material,false };
-		materialData_->uvTransform = uvtransformMtrix;
+		*material_ = { material,false };
+		material_->uvTransform = uvtransformMtrix;
 			*wvpData_ = { wvpmatrix_,worldMatrix };
 			*directionalLight_ = light;
 			dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
@@ -46,6 +48,10 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
 }
 void Model::Finalize()
 {
+    vertexResource->Release();
+    materialResource_->Release();
+    wvpResource_->Release();
+    directionalLightResource_->Release();
 }
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
@@ -67,19 +73,23 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
         if (identifier == "v") {
             Vector4 position;
             s >> position.x >> position.y >> position.z;
+            position.z *= -1.0f;
             position.w = 1.0f;
             positions.push_back(position);
         }
         else if (identifier == "vt") {
             Vector2 texcoord;
             s >> texcoord.x >> texcoord.y;
+            texcoord.y = 1.0f - texcoord.y;
             texcoords.push_back(texcoord);
         }
         else if (identifier == "vn") {
             Vector3 normal;
             s >> normal.x >> normal.y >> normal.z;
+            normal.z *= -1.0f;
             normals.push_back(normal);
         }else if (identifier == "f") {
+            VertexData triangle[3];
             //面は三角形限定 その他は未対応
             for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
                 std::string vertexDefinition;
@@ -94,20 +104,53 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
                 }
                 //要素へのIndexから、実際の要素の値を取得して、頂点を構築する
                 Vector4 position = positions[elementIndeices[0] - 1];
-                Vector2 texcoord = texcoords[elementIndeices[1] = 1];
+                Vector2 texcoord = texcoords[elementIndeices[1] - 1];
                 Vector3 normal = normals[elementIndeices[2] - 1];
                 VertexData vertex = { position,texcoord,normal };
                 modelData.vertices.push_back(vertex);
+                triangle[faceVertex] = { position,texcoord,normal };
+                modelData.vertices.push_back(triangle[2]);
+                modelData.vertices.push_back(triangle[1]);
+                modelData.vertices.push_back(triangle[0]);
             }
+        }
+        else if (identifier == "mtllib") {
+            //materialTemplateLibraryファイルの名前を取得
+            std::string materialFilname;
+            s >> materialFilname;
+            //基本的にobjファイルと同一階層にmtlは存在させるから、ディレクトリ名とファイル名を渡す
+            modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilname);
         }
        
     } 
     return modelData;
 }
 
+MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
+{
+    MaterialData materialData;//構築するマテリアルデータ
+    std::string line;
+    std::ifstream file(directoryPath + "/" + filename);
+    assert(file.is_open());
+    while (std::getline(file,line))
+    {
+        std::string identifier;
+        std::istringstream s(line);
+        s >> identifier;
+        //identifierに応じた処理
+        if (identifier == "map_Kd") {
+            std::string textureFilname;
+            s >> textureFilname;
+            //連結してファイルパスにする
+            materialData.textureFilePath = directoryPath + "/" + textureFilname;
+        }
+    }
+    return materialData;
+}
+
 void Model::CreateVartexData()
 {
-	modelData_ = LoadObjFile("resource","plane.obj");
+	
 	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * modelData_.vertices.size());
 
 
@@ -126,8 +169,8 @@ void Model::SetColor()
 {
 	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(Material));
 
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->uvTransform = MakeIdentity4x4();
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&material_));
+	material_->uvTransform = MakeIdentity4x4();
 
 }
 
