@@ -10,7 +10,7 @@
 class MyEngine
 {
 public:
-	static const int maxtex = 3;
+	static const int maxtex = 4;
 	void variableInitialize();
 	void Initialize(WinApp* win, int32_t width, int32_t height);
 	void BeginFrame();
