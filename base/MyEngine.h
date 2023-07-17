@@ -10,7 +10,7 @@
 class MyEngine
 {
 public:
-	static const int maxtex = 4;
+	static const int maxtex = 3;
 	void variableInitialize();
 	void Initialize(WinApp* win, int32_t width, int32_t height);
 	void BeginFrame();
@@ -58,7 +58,7 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	ID3D12Resource* textureResource[3];
+	ID3D12Resource* textureResource[maxtex];
 	uint32_t descriptorSizeSRV;
 	uint32_t descriptorSizeRTV;
 	uint32_t descriptorSizeDSV;

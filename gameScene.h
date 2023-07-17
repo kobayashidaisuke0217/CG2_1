@@ -38,7 +38,7 @@ private:
 	Transform cameraTransform_;
 	//Light
 	DirectionalLight directionalLight_;
-	Model* model_[2];
+	Model* model_;
 	uint32_t uvResourceNum;
 	int monsterBallResourceNum;
 };

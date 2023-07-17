@@ -35,10 +35,9 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	};
 	/*sphere_ = new Sphere();
 	sphere_->Initialize(directX_, engine_);*/
-	model_[0] = new Model();
-	model_[0]->Initialize(directX_, engine_, "Resource", "axis.obj", 0);
-	model_[1] = new Model();
-	model_[1]->Initialize(directX_, engine_, "Resource", "plane.obj", 3);
+	model_ = new Model();
+	model_->Initialize(directX_, engine_, "Resource", "axis.obj", 0);
+	
 	uvResourceNum = 1;
 	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);
 	monsterBallResourceNum = 2;
@@ -81,8 +80,7 @@ void GameScene::Draw3D()
 	for (int i = 0; i < 2; i++) {
 		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i],transform_,cameraTransform_,directionalLight_);
 	}
-	model_[0]->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_, directionalLight_);
-	model_[1]->Draw(sphereMaterial_, sphereTransform_, 3, cameraTransform_, directionalLight_);
+	model_->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_, directionalLight_);
 
 
 
@@ -96,8 +94,7 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
-	model_[1]->Finalize();
-	model_[0]->Finalize();
+	model_->Finalize();
 	//sphere_->Finalize();
 	for (int i = 0; i < 2; i++) {
 		triangle_[i]->Finalize();
