@@ -109,10 +109,11 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
                 VertexData vertex = { position,texcoord,normal };
                 modelData.vertices.push_back(vertex);
                 triangle[faceVertex] = { position,texcoord,normal };
-                modelData.vertices.push_back(triangle[2]);
+               
+            }
+            modelData.vertices.push_back(triangle[2]);
                 modelData.vertices.push_back(triangle[1]);
                 modelData.vertices.push_back(triangle[0]);
-            }
         }
         else if (identifier == "mtllib") {
             //materialTemplateLibraryファイルの名前を取得
