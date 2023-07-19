@@ -94,11 +94,15 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
-	model_->Finalize();
+	delete model_;
+	/*model_->Finalize();*/
 	//sphere_->Finalize();
+	
 	for (int i = 0; i < 2; i++) {
-		triangle_[i]->Finalize();
-		sprite_[i]->Finalize();
+		delete triangle_[i];
+		delete  sprite_[i];
+		/*triangle_[i]->Finalize();
+		sprite_[i]->Finalize();*/
 	}
 	
 }

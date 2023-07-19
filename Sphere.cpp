@@ -94,16 +94,16 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 
 void Sphere::Finalize()
 {
-	vertexResource->Release();
+	/*vertexResource->Release();
 	materialResource_->Release();
 	wvpResource_->Release();
-	directionalLightResource_->Release();
+	directionalLightResource_->Release();*/
 	
 }
 
 void Sphere::CreateVartexData()
 {
-	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) *vertexCount);
+	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(VertexData) *vertexCount);
 
 
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
@@ -128,17 +128,17 @@ void Sphere::CreateVartexData()
 
 void Sphere::TransformMatrix()
 {
-	wvpResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(Transformmatrix));
+	wvpResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(Transformmatrix));
 	wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
 	wvpData_->WVP = MakeIdentity4x4();
 }
 void Sphere::CreateDictionalLight()
 {
-	directionalLightResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(DirectionalLight));
+	directionalLightResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
 }
 void Sphere::SetColor() {
-	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice(), sizeof(Material));
+	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(Material));
 	
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->uvTransform = MakeIdentity4x4();

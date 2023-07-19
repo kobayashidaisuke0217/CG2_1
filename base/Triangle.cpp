@@ -13,12 +13,12 @@ void Triangle::Initialize(DirectXCommon* direct,MyEngine*engine)
 }
 void Triangle::TransformMatrix()
 {
-	wvpResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(Transformmatrix));
+	wvpResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(Transformmatrix));
 	wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
 	wvpData_->WVP = MakeIdentity4x4();
 }
 void Triangle::SetColor() {
-	materialResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(Material));
+	materialResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 }
@@ -68,19 +68,19 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 }
 void Triangle::Finalize()
 {
-	vertexResource_->Release();
-	materialResource_->Release();
-	wvpResource_->Release();
-	directionalLightResource_->Release();
+	//vertexResource_->Release();
+	//materialResource_->Release();
+	//wvpResource_->Release();
+	//directionalLightResource_->Release();
 }
 void Triangle::CreateDictionalLight()
 {
-	directionalLightResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(DirectionalLight));
+	directionalLightResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
 }
 void Triangle::SettingVertex() {
 
-	vertexResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice(), sizeof(VertexData) * 3);
+	vertexResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(VertexData) * 3);
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ

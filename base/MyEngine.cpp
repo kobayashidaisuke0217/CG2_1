@@ -178,7 +178,7 @@ void MyEngine::SettingRasterizerState() {
 void MyEngine::InitializePSO() {
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature_;//RootSignature
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();//RootSignature
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;//Inputlayout
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),
 		vertexShaderBlob_->GetBufferSize() };//vertexShader
@@ -231,7 +231,7 @@ void MyEngine::variableInitialize()
 	
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
-	
+	resourceLeak = new LeakCheck();
 	win_ = win;
 	win_ = new WinApp();
 	direct_ = new DirectXCommon();
@@ -270,8 +270,8 @@ void MyEngine::BeginFrame() {
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
-	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_);
-	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_);//PS0を設定
+	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());//PS0を設定
 	direct_->PreDraw();
 
 }
@@ -285,25 +285,27 @@ void MyEngine::EndFrame() {
 
 void MyEngine::Finalize()
 {
-	for (int i = 0; i < maxtex; i++) {
+	imguiManager_->Finalize();
+	/*for (int i = 0; i < maxtex; i++) {
 		intermediateResource[i]->Release();
 	}
 	for (int i = 0; i < maxtex; i++) {
 		textureResource[i]->Release();
 	}
-	imguiManager_->Finalize();
+	
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
 		errorBlob_->Release();
 	}
 	rootSignature_->Release();
+	*/
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
-
-
-
+	delete direct_;
+	
+	
 }
 void MyEngine::Update()
 {
@@ -313,6 +315,11 @@ void MyEngine::Draw()
 {
 	ImGui::ShowDemoWindow();
 
+}
+
+MyEngine::~MyEngine()
+{
+	delete resourceLeak;
 }
 
 //テクスチャデータを読み込む
@@ -332,7 +339,7 @@ DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
 	return mipImages;
 }
 //テクスチャリソースを作る
-ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
+Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
 {
 	//メタデータをもとにResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -361,8 +368,8 @@ void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 	assert(index < maxtex);
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
-	 textureResource[index] = CreateTextureResource(direct_->GetDevice(), metadata);
-	UploadtextureData(textureResource[index], mipImage,index);
+	 textureResource[index] = CreateTextureResource(direct_->GetDevice().Get(), metadata);
+	UploadtextureData(textureResource[index].Get(), mipImage, index);
 	//metaDataを元にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -371,12 +378,12 @@ void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
 	//SRVを作成するDescripterHeapの場所を決める
-	textureSrvHandleGPU_[index] = GettextureSrvHandleGPU(direct_->GetSrvHeap(), descriptorSizeSRV, index+1);//direct_->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
-	textureSrvHandleCPU_[index] = GettextureSrvHandleCPU(direct_->GetSrvHeap(), descriptorSizeSRV, index+1);
+	textureSrvHandleGPU_[index] = GettextureSrvHandleGPU(direct_->GetSrvHeap().Get(), descriptorSizeSRV, index + 1);//direct_->GetSrvHeap()->GetGPUDescriptorHandleForHeapStart();
+	textureSrvHandleCPU_[index] = GettextureSrvHandleCPU(direct_->GetSrvHeap().Get(), descriptorSizeSRV, index + 1);
 	//先頭はIMGUIが使ってるからその次を使う
 	textureSrvHandleCPU_[index].ptr += direct_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_[index].ptr += direct_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	direct_->GetDevice()->CreateShaderResourceView(textureResource[index], &srvDesc, textureSrvHandleCPU_[index]);
+	direct_->GetDevice()->CreateShaderResourceView(textureResource[index].Get(), &srvDesc, textureSrvHandleCPU_[index]);
 	
 }
 
@@ -395,12 +402,12 @@ D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GettextureSrvHandleGPU(ID3D12DescriptorHea
 }
 
 [[nodiscard]]
-ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,uint32_t index) {
+Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,uint32_t index) {
 	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
-	DirectX::PrepareUpload(direct_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
+	DirectX::PrepareUpload(direct_->GetDevice().Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
 	uint64_t  intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
-	intermediateResource[index] = direct_->CreateBufferResource(direct_->GetDevice(), intermediateSize);
-	UpdateSubresources(direct_->GetCommandList(), texture, intermediateResource[index], 0, 0, UINT(subresource.size()), subresource.data());
+	intermediateResource[index] = direct_->CreateBufferResource(direct_->GetDevice().Get(), intermediateSize);
+	UpdateSubresources(direct_->GetCommandList().Get(), texture, intermediateResource[index].Get(), 0, 0, UINT(subresource.size()), subresource.data());
 
 	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -414,5 +421,16 @@ ID3D12Resource* MyEngine::UploadtextureData(ID3D12Resource* texture, const Direc
 	
 
 }
-WinApp* MyEngine::win_;
-DirectXCommon* MyEngine::direct_;
+LeakCheck::~LeakCheck()
+{
+	////リソースリークチェック
+	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
+	}
+}
+//WinApp* MyEngine::win_;
+//DirectXCommon* MyEngine::direct_;

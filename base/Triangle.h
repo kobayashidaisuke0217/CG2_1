@@ -18,16 +18,16 @@ private:
 	void CreateDictionalLight();
 private:
 	MyEngine* Engine;
-	ID3D12Resource* materialResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	DirectXCommon* direct_;
 	VertexData* vertexData_;
-	ID3D12Resource* vertexResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 	Material *materialData_;
-	ID3D12Resource* wvpResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
 	Transformmatrix* wvpData_;
 	DirectionalLight* directionalLight_;
-	ID3D12Resource* directionalLightResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 };
 

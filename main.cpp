@@ -28,7 +28,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Engine->EndFrame();
 	}
 	gameScene->Finalize();
-	Engine->Finalize();
+	delete gameScene;
 	CoUninitialize();
+	Engine->Finalize();
+	//delete win_;
+	
+	delete Engine;
 	return 0;
 }

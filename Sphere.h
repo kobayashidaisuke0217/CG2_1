@@ -13,19 +13,19 @@ public:
 private:
 	DirectXCommon* dxCommon_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	ID3D12Resource* vertexResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 	VertexData* vertexData_;
 	
-	ID3D12Resource* wvpResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
 	Transformmatrix* wvpData_;
-	ID3D12Resource* materialResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
 	MyEngine* engine_;
 	const float pi = 3.14159265358979f;
 	uint32_t kSubDivision ;
 	uint32_t vertexCount;
 	DirectionalLight* directionalLight_; 
-	ID3D12Resource* directionalLightResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 	//D3D12_INDEX_BUFFER_VIEW indexBufferView{};
 	//uint32_t* indexData_;
 	//ID3D12Resource* indexResource_;
