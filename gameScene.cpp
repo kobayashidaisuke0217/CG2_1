@@ -67,8 +67,8 @@ void GameScene::Draw3D()
 	}
 	sphere_->Draw( sphereMaterial_,sphereTransform_,monsterBallResourceNum,cameraTransform_,directionalLight_);
 }
-void GameScene::Draw2D() {
-	
+void GameScene::Draw2D() {	
+
 		sprite_[0]->Draw(spritedataLeftTop_[0], spritedataRightDown_[0], spriteTransform_[0],spriteMaterial[0],uvResourceNum,directionalLight_);
 	
 	
