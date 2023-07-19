@@ -55,6 +55,8 @@ void GameScene::Update()
 	ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
 	ImGui::InputInt("SphereResource", &monsterBallResourceNum);
+	ImGui::DragFloat4("LightColor", &directionalLight_.color.x, 1.0f);
+	ImGui::DragFloat3("lightDirection", &directionalLight_.direction.x, 0.1f);
 	ImGui::End();
 }
 
