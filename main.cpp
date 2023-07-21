@@ -1,5 +1,6 @@
 #include "base/MyEngine.h"
 #include"gameScene.h"
+#include "SceneManager.h"
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
@@ -9,7 +10,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	GameScene* gameScene = new GameScene();
 	gameScene->Initialize(Engine,Engine->GetDirectXCommon());
-	//Engine->variableInitialize();
+	
+
 	while (true) {
 		// メッセージ処理
 		if (win_->Procesmessage()) {

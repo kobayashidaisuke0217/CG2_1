@@ -108,9 +108,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="gameScene.cpp" />
     <ClCompile Include="ImGuiManger.cpp" />
+    <ClCompile Include="Iscene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Mymath.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
@@ -146,7 +148,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="gameScene.h" />
     <ClInclude Include="ImGuiManger.h" />
+    <ClInclude Include="Iscene.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Vector4.h" />
