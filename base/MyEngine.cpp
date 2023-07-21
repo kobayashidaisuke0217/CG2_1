@@ -253,7 +253,7 @@ void MyEngine::variableInitialize()
 
 	for (int i = 0; i < 3; i++) {
 		triangle[i] = new Triangle();
-		triangle[i]->Initialize(direct_);
+		triangle[i]->Initialize(direct_,data1[i], data2[i], data3[i], material[i]);
 	}
 
 }
@@ -318,7 +318,7 @@ void MyEngine::Update()
 void MyEngine::Draw()
 {
 	for (int i = 0; i < 3; i++) {
-		triangle[i]->Draw(data1[i], data2[i], data3[i],material[i]);
+		triangle[i]->Draw();
 	}
 
 }

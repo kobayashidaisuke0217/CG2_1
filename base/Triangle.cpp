@@ -2,27 +2,23 @@
 #include<assert.h>
 #include"base/MyEngine.h"
 
-void Triangle::Initialize(DirectXCommon* direct)
+void Triangle::Initialize(DirectXCommon* direct, const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material)
 {
 	direct_ = direct;
-	SettingVertex();
-	SetColor();
+	SettingVertex(a,b,c);
+	SetColor(material);
 }
-void Triangle::SetColor() {
+void Triangle::SetColor( const Vector4& material) {
 	 MaterialResource_ = CreateBufferResource(direct_->GetDevice(), sizeof(Vector4));
 	
 	MaterialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-}
-void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c,const Vector4& material)
-{
-	//左下
-	vertexData_[0] = a;
-	//上
-	vertexData_[1] = b;
-	//右下
-	vertexData_[2] = c;
-
 	*materialData_ = material;
+}
+void Triangle::Draw()
+{
+	
+
+	
 	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -42,7 +38,7 @@ void Triangle::Finalize()
 	vertexResource_->Release();
 	
 }
-void Triangle::SettingVertex() {
+void Triangle::SettingVertex(const Vector4& a, const Vector4& b, const Vector4& c) {
 
 	
 	vertexResource_=   CreateBufferResource(direct_->GetDevice(), sizeof(Vector4) * 3);
@@ -55,6 +51,12 @@ void Triangle::SettingVertex() {
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
+	//左下
+	vertexData_[0] = a;
+	//上
+	vertexData_[1] = b;
+	//右下
+	vertexData_[2] = c;
 }
 
  ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes)

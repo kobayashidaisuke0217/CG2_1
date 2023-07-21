@@ -6,15 +6,15 @@ class MyEngine;
 class Triangle
 {
 public:
-	void Initialize(DirectXCommon* direct);
-	void Draw(const Vector4& a,const Vector4& b,const Vector4& c,const Vector4& material);
+	void Initialize(DirectXCommon* direct, const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material);
+	void Draw();
 	void Finalize();
 	
 private:
-	void SettingVertex();
+	void SettingVertex(const Vector4& a,const Vector4& b,const Vector4& c);
 
 	
-	void SetColor();
+	void SetColor(const Vector4& material);
 
 private:
 	ID3D12Resource* MaterialResource_;
