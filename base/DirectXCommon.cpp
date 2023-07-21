@@ -203,6 +203,7 @@ void DirectXCommon::PostDraw() {
 	assert(SUCCEEDED(hr_));
 
 	//GPUにコマンドリストを準備する
+	//Microsoft::WRL::ComPtr<ID3D12CommandList>commandLists[] = { commandList_.Get() };
 	ID3D12CommandList* commandLists[] = { commandList_.Get()};
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うように通知する
@@ -272,7 +273,8 @@ Microsoft::WRL::ComPtr <ID3D12Resource> DirectXCommon::CreateBufferResource(ID3D
 	//バッファの場合はこれにする決まり
 	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	HRESULT hr;
-	ID3D12Resource* Resource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
+	//	ID3D12Resource* Resource = nullptr;
 	//実際に頂点リソースを作る
 	hr = device->CreateCommittedResource(&uplodeHeapProperties, D3D12_HEAP_FLAG_NONE,
 		&ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
@@ -284,7 +286,8 @@ Microsoft::WRL::ComPtr <ID3D12Resource> DirectXCommon::CreateBufferResource(ID3D
 //デスクリプタヒープの作成
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> DirectXCommon::CreateDescriptionHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescripters, bool shaderVisible)
 {
-	ID3D12DescriptorHeap* descriptorHeap = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap = nullptr;
+	//ID3D12DescriptorHeap* descriptorHeap = nullptr;
 	D3D12_DESCRIPTOR_HEAP_DESC descriptionHeapDesc{};
 	descriptionHeapDesc.Type = heapType;//レンダーターゲットビュー用
 	descriptionHeapDesc.NumDescriptors = numDescripters;//ダブルバッファ用に二つ。多くても別にかまわない
@@ -311,8 +314,8 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateDepthStenciltextureR
 	D3D12_CLEAR_VALUE depthClearValue{};
 	depthClearValue.DepthStencil.Depth = 1.0f;
 	depthClearValue.Format= DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-	ID3D12Resource* resource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>resource = nullptr;
+	//ID3D12Resource* resource = nullptr;
 	HRESULT hr = device->CreateCommittedResource(
 		&heapProperties,
 		D3D12_HEAP_FLAG_NONE,

@@ -231,7 +231,7 @@ void MyEngine::variableInitialize()
 	
 }
 void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
-	resourceLeak = new LeakCheck();
+	//resourceLeak = new LeakCheck();
 	win_ = win;
 	win_ = new WinApp();
 	direct_ = new DirectXCommon();
@@ -319,7 +319,7 @@ void MyEngine::Draw()
 
 MyEngine::~MyEngine()
 {
-	delete resourceLeak;
+	//delete resourceLeak;
 }
 
 //テクスチャデータを読み込む
@@ -421,16 +421,16 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadtextureData(ID3D12Resourc
 	
 
 }
-LeakCheck::~LeakCheck()
-{
-	////リソースリークチェック
-	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug->Release();
-	}
-}
+//LeakCheck::~LeakCheck()
+//{
+//	////リソースリークチェック
+//	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
+//	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+//		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+//		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+//		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+//		debug->Release();
+//	}
+//}
 //WinApp* MyEngine::win_;
 //DirectXCommon* MyEngine::direct_;
