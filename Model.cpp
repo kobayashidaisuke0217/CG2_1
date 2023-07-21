@@ -1,7 +1,7 @@
 #include "Model.h"
 #include<fstream>
 #include<sstream>
-void Model::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename,uint32_t index)
+void Model::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename,uint32_t index, const DirectionalLight& light)
 {
     dxCommon_ = dxCommon;
 	engine_ = engine;
@@ -12,9 +12,9 @@ void Model::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::str
 	CreateVartexData();
 	SetColor();
 	TransformMatrix();
-	CreateDictionalLight();
+	CreateDictionalLight(light);
 }
-void Model::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
+void Model::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform)
 {Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
@@ -34,7 +34,7 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
 		*material_ = { material,false };
 		material_->uvTransform = uvtransformMtrix;
 			*wvpData_ = { wvpmatrix_,worldMatrix };
-			*directionalLight_ = light;
+			
 			dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 			//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 			dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -182,9 +182,9 @@ void Model::TransformMatrix()
 	wvpData_->WVP = MakeIdentity4x4();
 }
 
-void Model::CreateDictionalLight()
+void Model::CreateDictionalLight(const DirectionalLight& light)
 {
 	directionalLightResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
-
+    *directionalLight_ = light;
 }

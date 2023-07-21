@@ -33,25 +33,26 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
-	/*sphere_ = new Sphere();
-	sphere_->Initialize(directX_, engine_);*/
+	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
+	sphere_ = new Sphere();
+	sphere_->Initialize(directX_, engine_,directionalLight_);
 	model_ = new Model();
-	model_->Initialize(directX_, engine_, "Resource", "axis.obj", 0);
+	model_->Initialize(directX_, engine_, "Resource", "axis.obj", 0, directionalLight_);
 	
-	uvResourceNum = 1;
-	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);
-	monsterBallResourceNum = 2;
+	/*uvResourceNum = 1;
+	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);*/
+	monsterBallResourceNum = 1;
 	engine_->LoadTexture("Resource/monsterBall.png",monsterBallResourceNum);
 	
 	
 	
 	
-	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
+	
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
-		triangle_[i]->Initialize(directX_,engine_);
+		triangle_[i]->Initialize(directX_,engine_, data1_[i], data2_[i], data3_[i],   directionalLight_);
 		sprite_[i] = new Sprite();
-		sprite_[i]->Initialize(directX_,engine_);
+		sprite_[i]->Initialize(directX_,engine_, spritedataLeftTop_[0], spritedataRightDown_[0], directionalLight_);
 	}
 
 }
@@ -60,7 +61,8 @@ void GameScene::Update()
 {
 	transform_.rotate.y += 0.01f;
 	directionalLight_.direction= Normalise(directionalLight_.direction);
-	
+	material[0].y -= 0.1f;
+	material[0].x -= 0.1f;
 	ImGui::Begin("Window");
 	ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
 	ImGui::DragFloat3("spritetranslate", &spriteTransform_[0].translate.x, 0.1f);
@@ -72,29 +74,31 @@ void GameScene::Update()
 	ImGui::DragFloat3("lightDirection", &directionalLight_.direction.x, 0.1f);
 	ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
 	ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
+	ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
 	ImGui::End();
 }
 
 void GameScene::Draw3D()
 {
 	for (int i = 0; i < 2; i++) {
-		triangle_[i]->Draw(data1_[i], data2_[i], data3_[i],material[i],transform_,cameraTransform_,directionalLight_);
+		triangle_[i]->Draw(transform_, cameraTransform_, material[i] );
 	}
-	model_->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_, directionalLight_);
+	model_->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_);
 
-
+	sphere_->Draw(sphereMaterial_, sphereTransform_, 1, cameraTransform_);
 
 
 }
 void GameScene::Draw2D() {
 	
-		/*sprite_[0]->Draw(spritedataLeftTop_[0], spritedataRightDown_[0], spriteTransform_[0],SpriteuvTransform,spriteMaterial[0],uvResourceNum,directionalLight_);
-	*/
+		sprite_[0]->Draw( spriteTransform_[0],SpriteuvTransform,spriteMaterial[0],0);
+	
 	
 }
 void GameScene::Finalize()
 {
 	delete model_;
+	delete sphere_;
 	/*model_->Finalize();*/
 	//sphere_->Finalize();
 	

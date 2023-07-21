@@ -5,10 +5,10 @@
 class Sprite
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
+	void Initialize(DirectXCommon* dxCommon, MyEngine* engine,const Vector4& a, const Vector4& b,const DirectionalLight& light);
 
 
-	void Draw(const Vector4& a, const Vector4& b, const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex, const DirectionalLight& light);
+	void Draw( const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );
 	void Finalize();
 private:
 	
@@ -28,9 +28,9 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
 	uint32_t* indexData_;
 private:
-	void CreateVartexData();
+	void CreateVartexData(const Vector4& a, const Vector4& b);
 	void CreateTransform();
 	void SetColor();
-	void CreateDictionalLight();
+	void CreateDictionalLight(const DirectionalLight& light);
 };
 

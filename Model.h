@@ -6,10 +6,10 @@
 class Model
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename, uint32_t index);
+	void Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename, uint32_t index, const DirectionalLight& light);
 
 
-	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light);
+	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform);
      ModelData modelData_;
 	void Finalize();
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
@@ -37,7 +37,7 @@ private:
 	void CreateVartexData();
 	void SetColor();
 	void TransformMatrix();
-	void CreateDictionalLight();
+	void CreateDictionalLight(const DirectionalLight& light);
 
 };
 

@@ -2,34 +2,40 @@
 #include<assert.h>
 #include"base/MyEngine.h"
 
-void Triangle::Initialize(DirectXCommon* direct,MyEngine*engine)
+void Triangle::Initialize(DirectXCommon* direct,MyEngine*engine ,const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light)
 {
 	Engine = engine;
 	direct_ = direct;
-	SettingVertex();
+	SettingVertex( a,  b,  c);
 	SetColor();
 	TransformMatrix();
-	CreateDictionalLight();
+	CreateDictionalLight(light);
 }
 void Triangle::TransformMatrix()
 {
 	wvpResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(Transformmatrix));
+	
 	wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
 	wvpData_->WVP = MakeIdentity4x4();
+	
 }
 void Triangle::SetColor() {
 	materialResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(Material));
 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	
 }
-void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& material, const Transform& transform, const Transform& cameraTransform,const DirectionalLight& light)
+void Triangle::Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material)
 {
+	
+
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(direct_->GetWin()->kClientWidth) / float(direct_->GetWin()->kClientHeight), 0.1f, 100.0f);
 
 	Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+	*wvpData_ = { wvpmatrix_,worldMatrix };
 
 	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 
@@ -37,22 +43,11 @@ void Triangle::Draw(const Vector4& a, const Vector4& b, const Vector4& c, const 
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 
-	vertexData_[0].position = a;
-	vertexData_[0].texcoord = { 0.0f,1.0f };
-	
-	//上
-	vertexData_[1].position = b;
-	vertexData_[1].texcoord = { 0.5f,0.0f };
-	
-	//右下
-	vertexData_[2].position = c;
-	vertexData_[2].texcoord = { 1.0f,1.0f };
-	
+
+
 	*materialData_ = { material,false };
 	materialData_->uvTransform = uvtransformMtrix;
-
-	*wvpData_ = {wvpmatrix_,worldMatrix};
-	*directionalLight_ = light;
+	
 	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -73,12 +68,13 @@ void Triangle::Finalize()
 	//wvpResource_->Release();
 	//directionalLightResource_->Release();
 }
-void Triangle::CreateDictionalLight()
+void Triangle::CreateDictionalLight(const DirectionalLight& light)
 {
 	directionalLightResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
+	*directionalLight_ = light;
 }
-void Triangle::SettingVertex() {
+void Triangle::SettingVertex(const Vector4& a, const Vector4& b, const Vector4& c) {
 
 	vertexResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(VertexData) * 3);
 	//リソースの先頭のアドレスから使う
@@ -89,5 +85,14 @@ void Triangle::SettingVertex() {
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	vertexData_[0].position = a;
+	vertexData_[0].texcoord = { 0.0f,1.0f };
 
+	//上
+	vertexData_[1].position = b;
+	vertexData_[1].texcoord = { 0.5f,0.0f };
+
+	//右下
+	vertexData_[2].position = c;
+	vertexData_[2].texcoord = { 1.0f,1.0f };
 }

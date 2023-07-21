@@ -1,11 +1,18 @@
 #include "Sphere.h"
 #include<cmath>
-void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine)
+void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const DirectionalLight& light)
 {
-	
+	dxCommon_ = dxCommon;
+	engine_ = engine;
+	kSubDivision = 32;
+	vertexCount = kSubDivision*kSubDivision*6;
+	CreateVartexData();
+	TransformMatrix();
+	SetColor();
+	CreateDictionalLight(light);
 }
 
-void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
+void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform)
 {
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
@@ -21,6 +28,47 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 
 	assert(texIndex < 2);
+	
+	*materialData_ = { material,true };
+	materialData_->uvTransform = uvtransformMtrix;
+	*wvpData_ = { wvpmatrix_,worldMatrix };
+	
+	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
+	dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
+
+}
+
+
+void Sphere::Finalize()
+{
+	/*vertexResource->Release();
+	materialResource_->Release();
+	wvpResource_->Release();
+	directionalLightResource_->Release();*/
+	
+}
+
+void Sphere::CreateVartexData()
+{
+	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(VertexData) *vertexCount);
+
+
+	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * vertexCount;
+
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
+
+	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
+	
 	//経度一つ分の角度
 	const float kLonEvery = pi * 2.0f / float(kSubDivision);
 	//緯度一つ分の角度
@@ -75,53 +123,6 @@ void Sphere::Draw(const Vector4& material, const Transform& transform, uint32_t 
 		}
 	}
 
-	*materialData_ = { material,true };
-	materialData_->uvTransform = uvtransformMtrix;
-	*wvpData_ = { wvpmatrix_,worldMatrix };
-	*directionalLight_ = light;
-	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
-	dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
-
-}
-
-
-void Sphere::Finalize()
-{
-	/*vertexResource->Release();
-	materialResource_->Release();
-	wvpResource_->Release();
-	directionalLightResource_->Release();*/
-	
-}
-
-void Sphere::CreateVartexData()
-{
-	vertexResource = dxCommon_->CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(VertexData) *vertexCount);
-
-
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * vertexCount;
-
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
-
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-
-	/*indexResource_ = dxCommon_->CreateBufferResource(dxCommon_->GetDevice(), sizeof(uint32_t) * 6);
-
-	indexBufferView.BufferLocation = indexResource_->GetGPUVirtualAddress();
-
-	indexBufferView.SizeInBytes = sizeof(uint32_t) * 6;
-
-	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
-	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));*/
 }
 
 
@@ -132,10 +133,11 @@ void Sphere::TransformMatrix()
 	wvpResource_->Map(0, NULL, reinterpret_cast<void**>(&wvpData_));
 	wvpData_->WVP = MakeIdentity4x4();
 }
-void Sphere::CreateDictionalLight()
+void Sphere::CreateDictionalLight( const DirectionalLight& light)
 {
 	directionalLightResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
+	*directionalLight_ = light;
 }
 void Sphere::SetColor() {
 	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(Material));

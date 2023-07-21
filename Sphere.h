@@ -5,10 +5,10 @@
 class Sphere
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, MyEngine* engine);
+	void Initialize(DirectXCommon* dxCommon, MyEngine* engine, const DirectionalLight& light);
 
 
-	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light);
+	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform);
 	void Finalize();
 private:
 	DirectXCommon* dxCommon_;
@@ -22,7 +22,7 @@ private:
 	Material* materialData_;
 	MyEngine* engine_;
 	const float pi = 3.14159265358979f;
-	uint32_t kSubDivision ;
+	uint32_t kSubDivision;
 	uint32_t vertexCount;
 	DirectionalLight* directionalLight_; 
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
@@ -33,6 +33,6 @@ private:
 	void CreateVartexData();
 	void SetColor();
 	void TransformMatrix();
-	void CreateDictionalLight();
+	void CreateDictionalLight(const DirectionalLight& light);
 };
 

@@ -7,15 +7,15 @@ class MyEngine;
 class Triangle
 {
 public:
-	void Initialize(DirectXCommon* direct,MyEngine* engine);
-	void Draw(const Vector4& a,const Vector4& b,const Vector4& c, const Vector4 & material ,const Transform& transform, const Transform& cameraTransform,  const DirectionalLight& light);
+	void Initialize(DirectXCommon* direct,MyEngine* engine, const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light);
+	void Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material);
 	void Finalize();
 	
 private:
-	void SettingVertex();
+	void SettingVertex(const Vector4& a, const Vector4& b, const Vector4& c);
 	void SetColor();
 	void TransformMatrix();
-	void CreateDictionalLight();
+	void CreateDictionalLight(const DirectionalLight& light);
 private:
 	MyEngine* Engine;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
