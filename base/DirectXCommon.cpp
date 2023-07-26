@@ -7,6 +7,16 @@
 
 
 
+DirectXCommon::~DirectXCommon()
+{
+}
+
+DirectXCommon* DirectXCommon::GetInstance()
+{
+	static DirectXCommon instance;
+	return &instance;
+}
+
 void DirectXCommon::Initialize(WinApp* win, int32_t backBufferWidth, int32_t backBufferHeight)
 {
 	//resourceLeak = new LeakCheck();

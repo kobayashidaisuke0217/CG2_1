@@ -226,6 +226,11 @@ void MyEngine::SettingDepth()
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
+MyEngine* MyEngine::GetInstance()
+{
+	static MyEngine instance;
+	return &instance;
+}
 void MyEngine::variableInitialize()
 {
 	
@@ -234,7 +239,7 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 	//resourceLeak = new LeakCheck();
 	win_ = win;
 	win_ = new WinApp();
-	direct_ = new DirectXCommon();
+	direct_ = DirectXCommon::GetInstance();
 	direct_->Initialize(win_, win_->kClientWidth, win->kClientHeight);
 	imguiManager_ = new ImGuiManger();
 	imguiManager_->Initialize(win_,direct_);
@@ -303,7 +308,7 @@ void MyEngine::Finalize()
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
-	delete direct_;
+	//delete direct_;
 	
 	
 }
@@ -319,6 +324,13 @@ void MyEngine::Draw()
 
 MyEngine::~MyEngine()
 {
+	/*Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
+		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+			debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+			debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+			debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+			debug->Release();
+		}*/
 	//delete resourceLeak;
 }
 

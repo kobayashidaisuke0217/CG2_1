@@ -1,10 +1,10 @@
 #include "gameScene.h"
 
-void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
+void GameScene::Initialize()
 {
-	engine_ = engine;
+	engine_ = MyEngine::GetInstance();
 	
-	directX_ = direct;
+	directX_ = DirectXCommon::GetInstance();
 	data1_[0] = { -0.5f,-0.5f,0.5f,1.0f };
 	data2_[0] = { 0.0f,0.0f,0.0f,1.0f };
 	data3_[0] = { 0.5f,-0.5f,-0.5f,1.0f };
@@ -70,6 +70,7 @@ void GameScene::Update()
 	ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
 	ImGui::InputInt("SphereResource", &monsterBallResourceNum);
+
 	ImGui::DragFloat4("LightColor", &directionalLight_.color.x, 1.0f);
 	ImGui::DragFloat3("lightDirection", &directionalLight_.direction.x, 0.1f);
 	ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
@@ -88,6 +89,11 @@ void GameScene::Draw3D()
 	sphere_->Draw(sphereMaterial_, sphereTransform_, 1, cameraTransform_);
 
 
+}
+void GameScene::Draw()
+{
+	Draw3D();
+	Draw2D();
 }
 void GameScene::Draw2D() {
 	

@@ -1,15 +1,22 @@
 #pragma once
 #include"Iscene.h"
-class SceneManager:public Iscene 
+#include "base/MyEngine.h"
+#include"gameScene.h"
+#include "TitleScene.h"
+class SceneManager
 {
 public:
-	enum Secene {
-		TITLESCENE,
-		GAMESCENE,
-	};
+	SceneManager();
+	~SceneManager();
 	
 	void Run();
-	
+	void Finalize();
+private:
+	MyEngine* Engine;
+	WinApp* win_ = nullptr;
+	std::unique_ptr<Iscene> sceneArr_[2];
+	int sceneNum_;
+	int preSceneNum_;
 
 };
 

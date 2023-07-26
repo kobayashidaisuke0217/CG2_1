@@ -1,13 +1,19 @@
 #pragma once
+enum Secene {
+	TITLE_SCENE,
+	GAME_SCENE,
+};
 class Iscene
 {
-	virtual void Init()=0;
+public:
+	virtual void Initialize()=0;
 
 	virtual void Update()=0;
 
 	virtual void Draw()=0;
+	 int GetSceneNum() { return sceneNum; }
 protected:
 
-	int stateNum;
+	static int sceneNum;
 };
 

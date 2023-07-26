@@ -7,6 +7,7 @@
 #include"externals/DirectXTex/DirectXTex.h"
 #include <wrl.h>
 #include <dxgidebug.h>
+#include<memory>
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -15,7 +16,8 @@
 class DirectXCommon
 {
 public:
-
+	~DirectXCommon();
+	static DirectXCommon* GetInstance();
 	void Initialize(
 		WinApp* win, int32_t backBufferWidth = WinApp::kClientWidth,
 		int32_t backBufferHeight = WinApp::kClientHeight);

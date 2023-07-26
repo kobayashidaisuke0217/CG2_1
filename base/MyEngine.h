@@ -10,6 +10,7 @@
 class MyEngine
 {
 public:
+	static MyEngine* GetInstance();
 	static const int maxtex = 3;
 	void variableInitialize();
 	void Initialize(WinApp* win, int32_t width, int32_t height);
@@ -35,6 +36,7 @@ private:
 	
 	 WinApp* win_;
 	DirectXCommon* direct_;
+
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
   ImGuiManger* imguiManager_;
   //TextureManager* textureManager_;

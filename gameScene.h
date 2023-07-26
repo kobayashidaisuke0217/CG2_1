@@ -3,16 +3,18 @@
 #include "base/Triangle.h"
 #include "base/MyEngine.h"
 #include "ImGuiManger.h"
+#include "Iscene.h"
 #include"Sprite.h"
 #include "Sphere.h"
 #include "Model.h"
-class GameScene
+class GameScene:public Iscene
 {
 public:
-	void Initialize(MyEngine*engine,DirectXCommon*direct);
-	void Update();
+	void Initialize()override;
+	void Update()override;
 	void Draw2D();
 	void Draw3D();
+	void Draw()override;
 	void Finalize();
 private:
 	MyEngine* engine_;
