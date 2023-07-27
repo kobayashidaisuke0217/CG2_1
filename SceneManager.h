@@ -10,7 +10,7 @@ public:
 	~SceneManager();
 	
 	void Run();
-	void Finalize();
+	void Init();
 private:
 	MyEngine* Engine;
 	WinApp* win_ = nullptr;

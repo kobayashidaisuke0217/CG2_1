@@ -293,18 +293,18 @@ void MyEngine::Finalize()
 	imguiManager_->Finalize();
 	/*for (int i = 0; i < maxtex; i++) {
 		intermediateResource[i]->Release();
-	}
-	for (int i = 0; i < maxtex; i++) {
+	}*/
+	/*for (int i = 0; i < maxtex; i++) {
 		textureResource[i]->Release();
 	}
-	
-	graphicsPipelineState_->Release();
+	*/
+	/*graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
 		errorBlob_->Release();
 	}
-	rootSignature_->Release();
 	*/
+	//rootSignature_->Release();
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
@@ -324,14 +324,8 @@ void MyEngine::Draw()
 
 MyEngine::~MyEngine()
 {
-	/*Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
-		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-			debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-			debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-			debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-			debug->Release();
-		}*/
-	//delete resourceLeak;
+	pixelShaderBlob_->Release();
+	vertexShaderBlob_->Release();
 }
 
 //テクスチャデータを読み込む

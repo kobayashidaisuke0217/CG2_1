@@ -10,6 +10,7 @@
 class GameScene:public Iscene
 {
 public:
+	~GameScene();
 	void Initialize()override;
 	void Update()override;
 	void Draw2D();
@@ -19,7 +20,8 @@ public:
 private:
 	MyEngine* engine_;
 	DirectXCommon* directX_;
-	Sprite* sprite_[2];
+	std::unique_ptr<Sprite>sprite_[2];
+	//Sprite* sprite_[2];
 	Vector4 spritedataLeftTop_[2];
 	Vector4 spritedataRightDown_[2];
 	Transform spriteTransform_[2];
@@ -29,10 +31,12 @@ private:
 	Vector4 data2_[2];
 	Vector4 data3_[2];
 	Vector4 material[2];
-	Triangle* triangle_[2];
+	std::unique_ptr<Triangle> triangle_[2];
+	//Triangle* triangle_[2];
 	Transform transform_;
 	Matrix4x4 worldMatrix_;
-	Sphere* sphere_;
+	std::unique_ptr<Sphere>sphere_;
+	//Sphere* sphere_;
 	Transform sphereTransform_;
 	Vector4 sphereMaterial_;
 	Matrix4x4 spherematrix_;
@@ -40,8 +44,9 @@ private:
 	Transform cameraTransform_;
 	//Light
 	DirectionalLight directionalLight_;
-	Model* model_;
+	std::unique_ptr<Model> model_;
+	//Model* model_;
 	uint32_t uvResourceNum;
 	int monsterBallResourceNum;
-};
+ };
 
