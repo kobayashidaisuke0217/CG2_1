@@ -16,3 +16,7 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 }
+
+void TitleScene::Finalize()
+{
+}

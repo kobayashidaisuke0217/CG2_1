@@ -1,18 +1,12 @@
 #include "gameScene.h"
 
+GameScene::GameScene()
+{
+}
+
 GameScene::~GameScene()
 {
-	//delete model_;
-	//delete sphere_;
-	///*model_->Finalize();*/
-	////sphere_->Finalize();
-
-	//for (int i = 0; i < 2; i++) {
-	//	delete triangle_[i];
-	//	delete  sprite_[i];
-	//	/*triangle_[i]->Finalize();
-	//	sprite_[i]->Finalize();*/
-	//}
+	
 }
 
 void GameScene::Initialize()
@@ -49,9 +43,9 @@ void GameScene::Initialize()
 		{0.0f,0.0f,0.0f},
 	};
 	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
-	sphere_ = std::make_unique<Sphere>();
+	sphere_ = new Sphere();
 	sphere_->Initialize(directX_, engine_, directionalLight_);
-	model_ = std::make_unique<Model>();
+	model_ = new Model();
 	model_->Initialize(directX_, engine_, "Resource", "axis.obj", 0, directionalLight_);
 	
 	/*uvResourceNum = 1;
@@ -64,9 +58,9 @@ void GameScene::Initialize()
 	
 	
 	for (int i = 0; i < 2; i++) {
-		triangle_[i] = std::make_unique<Triangle>();
+		triangle_[i] =new Triangle();
 		triangle_[i]->Initialize(directX_, engine_, data1_[i], data2_[i], data3_[i], directionalLight_);
-		sprite_[i] = std::make_unique<Sprite>();
+		sprite_[i] = new Sprite();
 		sprite_[i]->Initialize(directX_, engine_, spritedataLeftTop_[0], spritedataRightDown_[0], directionalLight_);
 	}
 
@@ -118,6 +112,13 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
+	delete model_;
+	delete sphere_;
 	
+
+	for (int i = 0; i < 2; i++) {
+		delete triangle_[i];
+		delete  sprite_[i];
 	
+	}
 }

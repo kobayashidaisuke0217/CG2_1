@@ -8,8 +8,8 @@ SceneManager::SceneManager()
 	Engine->Initialize(win_, 1280, 720);
 
 	
-	sceneArr_[TITLE_SCENE]=std::make_unique<TitleScene>();
-	sceneArr_[GAME_SCENE]= std::make_unique<GameScene>();
+	sceneArr_[TITLE_SCENE]=new TitleScene();
+	sceneArr_[GAME_SCENE]=new GameScene();
 }
 SceneManager::~SceneManager()
 {
@@ -31,7 +31,7 @@ void SceneManager::Run() {
 
 		if (sceneNum_ != preSceneNum_) {
 			sceneArr_[sceneNum_]->Initialize();
-			
+			sceneArr_[preSceneNum_]->Finalize();
 		}
 		sceneArr_[sceneNum_]->Update();
 
@@ -43,6 +43,7 @@ void SceneManager::Run() {
 	}
 	CoUninitialize();
 	Engine->Finalize();
+	sceneArr_[sceneNum_]->Finalize();
 	delete this;
 }
 

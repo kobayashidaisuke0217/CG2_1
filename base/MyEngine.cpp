@@ -306,24 +306,12 @@ void BlueMoon::Draw()
 BlueMoon::~BlueMoon()
 {
 	imguiManager_->Finalize();
-	/*for (int i = 0; i < maxtex; i++) {
-		intermediateResource[i]->Release();
-	}*/
-	/*for (int i = 0; i < maxtex; i++) {
-		textureResource[i]->Release();
-	}
-	*/
-	/*graphicsPipelineState_->Release();
-	signatureBlob_->Release();
-	if (errorBlob_) {
-		errorBlob_->Release();
-	}
-	*/
-	//rootSignature_->Release();
+	
+
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
-	//delete direct_;
+	
 
 }
 
