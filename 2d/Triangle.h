@@ -2,12 +2,12 @@
 #include<base/DirectXCommon.h>
 #include"Vector4.h"
 
-class MyEngine;
+class BlueMoon;
 
 class Triangle
 {
 public:
-	void Initialize(DirectXCommon* direct,MyEngine* engine, const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light);
+	void Initialize(DirectXCommon* direct,BlueMoon* engine, const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light);
 	void Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material);
 	void Finalize();
 	
@@ -17,7 +17,7 @@ private:
 	void TransformMatrix();
 	void CreateDictionalLight(const DirectionalLight& light);
 private:
-	MyEngine* Engine;
+	BlueMoon* Engine;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	DirectXCommon* direct_;
 	VertexData* vertexData_;

@@ -1,6 +1,6 @@
 #pragma once
 #include"Iscene.h"
-#include "base/MyEngine.h"
+#include "base/BlueMoon.h"
 #include"gameScene.h"
 #include "TitleScene.h"
 class SceneManager
@@ -12,7 +12,7 @@ public:
 	void Run();
 	void Init();
 private:
-	MyEngine* Engine;
+	BlueMoon* Engine;
 	WinApp* win_ = nullptr;
 	std::unique_ptr<Iscene> sceneArr_[2];
 	int sceneNum_;

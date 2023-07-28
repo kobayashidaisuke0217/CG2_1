@@ -1,7 +1,7 @@
-#include "MyEngine.h"
+#include "BlueMoon.h"
 #include <assert.h>
 
-IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
+IDxcBlob* BlueMoon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	//これからシェーダーをコンパイルする旨をログに出す
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n", filePath, profile)));
@@ -56,7 +56,7 @@ IDxcBlob* MyEngine::CompileShader(const std::wstring& filePath, const wchar_t* p
 	return shaderBlob;
 }
 
-void MyEngine::InitializeDxcCompiler()
+void BlueMoon::InitializeDxcCompiler()
 {
 	HRESULT hr;
 	dxcUtils_ = nullptr;
@@ -71,7 +71,7 @@ void MyEngine::InitializeDxcCompiler()
 	assert(SUCCEEDED(hr));
 
 }
-void MyEngine::CreateRootSignature() {
+void BlueMoon::CreateRootSignature() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags =
@@ -132,7 +132,7 @@ rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(hr));
 }
-void MyEngine::CreateInputlayOut() {
+void BlueMoon::CreateInputlayOut() {
 	//inputElementDescsをメンバ変数にすると治った
 	inputElementDescs_[0].SemanticName = "POSITION";
 	inputElementDescs_[0].SemanticIndex = 0;
@@ -152,13 +152,13 @@ void MyEngine::CreateInputlayOut() {
 	inputLayoutDesc_.pInputElementDescs = inputElementDescs_;
 	inputLayoutDesc_.NumElements = _countof(inputElementDescs_);
 }
-void MyEngine::SettingBlendState() {
+void BlueMoon::SettingBlendState() {
 
 	//すべての色要素を書き込む
 	blendDesc_.RenderTarget[0].RenderTargetWriteMask =
 		D3D12_COLOR_WRITE_ENABLE_ALL;
 }
-void MyEngine::SettingRasterizerState() {
+void BlueMoon::SettingRasterizerState() {
 
 	//裏面（時計回り）を表示しない
 	rasterizerDesc_.CullMode = D3D12_CULL_MODE_BACK;
@@ -175,7 +175,7 @@ void MyEngine::SettingRasterizerState() {
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
 }
-void MyEngine::InitializePSO() {
+void BlueMoon::InitializePSO() {
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 	graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();//RootSignature
@@ -204,7 +204,7 @@ void MyEngine::InitializePSO() {
 	assert(SUCCEEDED(hr));
 }
 
-void MyEngine::SettingViePort() {
+void BlueMoon::SettingViePort() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApp::kClientWidth;
 	viewport_.Height = WinApp::kClientHeight;
@@ -213,29 +213,29 @@ void MyEngine::SettingViePort() {
 	viewport_.MinDepth = 0.0f;
 	viewport_.MaxDepth = 1.0f;
 }
-void MyEngine::SettingScissor() {
+void BlueMoon::SettingScissor() {
 	//基本的にビューポートと同じく敬が構成されるようにする
 	scissorRect_.left = 0;
 	scissorRect_.right = WinApp::kClientWidth;
 	scissorRect_.top = 0;
 	scissorRect_.bottom = WinApp::kClientHeight;
 }
-void MyEngine::SettingDepth()
+void BlueMoon::SettingDepth()
 {
 	depthStencilDesc.DepthEnable = true;
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
-MyEngine* MyEngine::GetInstance()
+BlueMoon* BlueMoon::GetInstance()
 {
-	static MyEngine instance;
+	static BlueMoon instance;
 	return &instance;
 }
-void MyEngine::variableInitialize()
+void BlueMoon::variableInitialize()
 {
 	
 }
-void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
+void BlueMoon::Initialize(WinApp* win, int32_t width, int32_t height) {
 	//resourceLeak = new LeakCheck();
 	win_ = win;
 	win_ = new WinApp();
@@ -268,7 +268,7 @@ void MyEngine::Initialize(WinApp* win, int32_t width, int32_t height) {
 }
 
 
-void MyEngine::BeginFrame() {
+void BlueMoon::BeginFrame() {
 	imguiManager_->Begin();
 	
 	
@@ -280,7 +280,7 @@ void MyEngine::BeginFrame() {
 	direct_->PreDraw();
 
 }
-void MyEngine::EndFrame() {
+void BlueMoon::EndFrame() {
 	
 	imguiManager_->End();
 	
@@ -288,7 +288,22 @@ void MyEngine::EndFrame() {
 	direct_->PostDraw();
 }
 
-void MyEngine::Finalize()
+void BlueMoon::Finalize()
+{
+	
+	
+}
+void BlueMoon::Update()
+{
+
+}
+void BlueMoon::Draw()
+{
+	ImGui::ShowDemoWindow();
+
+}
+
+BlueMoon::~BlueMoon()
 {
 	imguiManager_->Finalize();
 	/*for (int i = 0; i < maxtex; i++) {
@@ -309,27 +324,11 @@ void MyEngine::Finalize()
 	vertexShaderBlob_->Release();
 	direct_->Finalize();
 	//delete direct_;
-	
-	
-}
-void MyEngine::Update()
-{
 
-}
-void MyEngine::Draw()
-{
-	ImGui::ShowDemoWindow();
-
-}
-
-MyEngine::~MyEngine()
-{
-	pixelShaderBlob_->Release();
-	vertexShaderBlob_->Release();
 }
 
 //テクスチャデータを読み込む
-DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
+DirectX::ScratchImage BlueMoon::LoadTexture(const std::string& filePath)
 {
 	
 	//テクスチャファイルを読んでうろグラムで扱えるようにする
@@ -345,7 +344,7 @@ DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
 	return mipImages;
 }
 //テクスチャリソースを作る
-Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
+Microsoft::WRL::ComPtr<ID3D12Resource> BlueMoon::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
 {
 	//メタデータをもとにResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -369,7 +368,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(ID3D12Dev
 }
 
 
-void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
+void BlueMoon::LoadTexture(const std::string& filePath,uint32_t index)
 {
 	assert(index < maxtex);
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
@@ -393,14 +392,14 @@ void MyEngine::LoadTexture(const std::string& filePath,uint32_t index)
 	
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index)
+D3D12_CPU_DESCRIPTOR_HANDLE BlueMoon::GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorheap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize * index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index)
+D3D12_GPU_DESCRIPTOR_HANDLE BlueMoon::GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorheap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
@@ -408,7 +407,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GettextureSrvHandleGPU(ID3D12DescriptorHea
 }
 
 [[nodiscard]]
-Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,uint32_t index) {
+Microsoft::WRL::ComPtr<ID3D12Resource> BlueMoon::UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,uint32_t index) {
 	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
 	DirectX::PrepareUpload(direct_->GetDevice().Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
 	uint64_t  intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
@@ -438,5 +437,5 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadtextureData(ID3D12Resourc
 //		debug->Release();
 //	}
 //}
-//WinApp* MyEngine::win_;
-//DirectXCommon* MyEngine::direct_;
+//WinApp* BlueMoon::win_;
+//DirectXCommon* BlueMoon::direct_;

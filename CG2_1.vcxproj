@@ -94,11 +94,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="2d\Sprite.cpp" />
+    <ClCompile Include="2d\Triangle.cpp" />
+    <ClCompile Include="3d\Model.cpp" />
+    <ClCompile Include="3d\Sphere.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
-    <ClCompile Include="base\Triangle.cpp" />
+    <ClCompile Include="base\ImGuiManger.cpp" />
     <ClCompile Include="base\MyEngine.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="combert.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -107,14 +110,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="gameScene.cpp" />
-    <ClCompile Include="ImGuiManger.cpp" />
     <ClCompile Include="Iscene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Mymath.cpp" />
+    <ClCompile Include="MyUtility\combert.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -134,11 +134,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2d\Sprite.h" />
+    <ClInclude Include="2d\Triangle.h" />
+    <ClInclude Include="3d\Model.h" />
+    <ClInclude Include="3d\Sphere.h" />
     <ClInclude Include="base\DirectXCommon.h" />
-    <ClInclude Include="base\Triangle.h" />
-    <ClInclude Include="base\MyEngine.h" />
+    <ClInclude Include="base\ImGuiManger.h" />
+    <ClInclude Include="base\BlueMoon.h" />
     <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="combert.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -148,12 +151,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="gameScene.h" />
-    <ClInclude Include="ImGuiManger.h" />
     <ClInclude Include="Iscene.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="MyUtility\combert.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Sprite.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "Model.h"
 #include<fstream>
 #include<sstream>
-void Model::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const std::string& directoryPath, const std::string& filename,uint32_t index, const DirectionalLight& light)
+void Model::Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const std::string& directoryPath, const std::string& filename,uint32_t index, const DirectionalLight& light)
 {
     dxCommon_ = dxCommon;
 	engine_ = engine;

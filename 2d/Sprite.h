@@ -1,11 +1,11 @@
 #pragma once
 #include "base/DirectXCommon.h"
 #include"Vector4.h"
-#include "base/MyEngine.h"
+#include "base/BlueMoon.h"
 class Sprite
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, MyEngine* engine,const Vector4& a, const Vector4& b,const DirectionalLight& light);
+	void Initialize(DirectXCommon* dxCommon, BlueMoon* engine,const Vector4& a, const Vector4& b,const DirectionalLight& light);
 
 
 	void Draw( const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );
@@ -19,7 +19,7 @@ private:
 	
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	Material* materialData_;
-	MyEngine* engine_;
+	BlueMoon* engine_;
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;

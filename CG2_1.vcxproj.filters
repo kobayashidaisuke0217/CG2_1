@@ -25,6 +25,24 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{cfd9c7c9-4710-42b3-aca1-f60d4c7600a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Utility">
+      <UniqueIdentifier>{86969972-6ffe-4743-8e37-188045140c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Utility">
+      <UniqueIdentifier>{2892a02b-bc45-4c29-a2cd-11d381cb3a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d">
+      <UniqueIdentifier>{d240ce5b-34da-4c87-9b1b-74dfb7b9f12c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d">
+      <UniqueIdentifier>{2f8d9060-1d52-4ee0-b919-0eb41b3bc5d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\3d">
+      <UniqueIdentifier>{eb8860ad-af2f-49f5-865e-93a3da41262f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\2d">
+      <UniqueIdentifier>{bbf892c2-50ce-42cf-9ff2-f21ac949b439}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,25 +51,16 @@
     <ClCompile Include="base\DirectXCommon.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
-    <ClCompile Include="base\Triangle.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
     <ClCompile Include="base\MyEngine.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
     <ClCompile Include="base\WinApp.cpp">
       <Filter>ソース ファイル\base</Filter>
     </ClCompile>
-    <ClCompile Include="combert.cpp">
-      <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
     <ClCompile Include="gameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Mymath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGuiManger.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -75,15 +84,6 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Iscene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -92,6 +92,24 @@
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MyUtility\combert.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\Sprite.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\Triangle.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Model.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\Sphere.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="base\ImGuiManger.cpp">
+      <Filter>ソース ファイル\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,22 +123,13 @@
     <ClInclude Include="base\WinApp.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="base\MyEngine.h">
-      <Filter>ヘッダー ファイル\base</Filter>
-    </ClInclude>
-    <ClInclude Include="base\Triangle.h">
+    <ClInclude Include="base\BlueMoon.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
     <ClInclude Include="base\DirectXCommon.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="combert.h">
-      <Filter>ヘッダー ファイル\base</Filter>
-    </ClInclude>
     <ClInclude Include="gameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGuiManger.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -147,15 +156,6 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Iscene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -164,6 +164,24 @@
     </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MyUtility\combert.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\Sprite.h">
+      <Filter>ヘッダー ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\Triangle.h">
+      <Filter>ヘッダー ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Model.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Sphere.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="base\ImGuiManger.h">
+      <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

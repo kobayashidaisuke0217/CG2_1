@@ -1,6 +1,6 @@
 #include "Sphere.h"
 #include<cmath>
-void Sphere::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const DirectionalLight& light)
+void Sphere::Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const DirectionalLight& light)
 {
 	dxCommon_ = dxCommon;
 	engine_ = engine;

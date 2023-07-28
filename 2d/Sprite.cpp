@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-void Sprite::Initialize(DirectXCommon* dxCommon, MyEngine* engine, const Vector4& a, const Vector4& b, const DirectionalLight& light)
+void Sprite::Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const Vector4& a, const Vector4& b, const DirectionalLight& light)
 {
 	dxCommon_ = dxCommon;
 	engine_ = engine;

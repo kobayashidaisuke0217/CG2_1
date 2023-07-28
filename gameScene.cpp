@@ -17,7 +17,7 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
-	engine_ = MyEngine::GetInstance();
+	engine_ = BlueMoon::GetInstance();
 	
 	directX_ = DirectXCommon::GetInstance();
 	data1_[0] = { -0.5f,-0.5f,0.5f,1.0f };

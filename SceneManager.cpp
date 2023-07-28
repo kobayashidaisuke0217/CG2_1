@@ -4,16 +4,16 @@ SceneManager::SceneManager()
 {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 	
-	 Engine = MyEngine::GetInstance();
+	 Engine = BlueMoon::GetInstance();
 	Engine->Initialize(win_, 1280, 720);
 
 	
 	sceneArr_[TITLE_SCENE]=std::make_unique<TitleScene>();
 	sceneArr_[GAME_SCENE]= std::make_unique<GameScene>();
-	sceneNum_ = TITLE_SCENE;
 }
 SceneManager::~SceneManager()
 {
+
 }
 void SceneManager::Run() {
 	Init();
@@ -43,14 +43,16 @@ void SceneManager::Run() {
 	}
 	CoUninitialize();
 	Engine->Finalize();
-	
+	delete this;
 }
 
 void SceneManager::Init()
 {
+	sceneNum_ = TITLE_SCENE;
+
 	/*CoInitializeEx(0, COINIT_MULTITHREADED);
 
-	Engine = MyEngine::GetInstance();
+	Engine = BlueMoon::GetInstance();
 	Engine->Initialize(win_, 1280, 720);
 
 
