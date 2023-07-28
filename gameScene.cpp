@@ -5,13 +5,13 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	engine_ = engine;
 	
 	directX_ = direct;
-	data1_[0] = { -0.5f,-0.5f,0.5f,1.0f };
-	data2_[0] = { 0.0f,0.0f,0.0f,1.0f };
-	data3_[0] = { 0.5f,-0.5f,-0.5f,1.0f };
+	triangleVertex[0].v1 = { -0.5f,-0.5f,0.5f,1.0f };
+	triangleVertex[0].v2 = { 0.0f,0.0f,0.0f,1.0f };
+	triangleVertex[0].v3 = { 0.5f,-0.5f,-0.5f,1.0f };
 
-	data1_[1] = { -0.5f,-0.5f,0.0f,1.0f };
-	data2_[1] = { 0.0f,0.5f,0.0f,1.0f };
-	data3_[1] = { 0.5f,-0.5f,0.0f,1.0f };
+	triangleVertex[1].v1 = { -0.5f,-0.5f,0.0f,1.0f };
+	triangleVertex[1].v2 = { 0.0f,0.5f,0.0f,1.0f };
+	triangleVertex[1].v3 = { 0.5f,-0.5f,0.0f,1.0f };
 	material[0] = { 1.0f,1.0f,1.0f,1.0f };
 	material[1] = { 1.0f,1.0f,1.0f,1.0f };
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
@@ -25,8 +25,10 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	spritedataRightDown_[1] = {1280.0f,720.0f,0.0f,1.0f};
 	spriteTransform_ [1] = {{1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
 	spriteMaterial[0] = {1.0f,1.0f,1.0f,1.0f};
-	sphereTransform_= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
+	sphereTransform_= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,-1.0f,0.0f} };
 	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
+	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,1.0f,0.0f} };
+	modelMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	SpriteuvTransform =
 	{ 
 		{1.0f,1.0f,1.0f},
@@ -50,7 +52,7 @@ void GameScene::Initialize(MyEngine*engine,DirectXCommon* direct)
 	
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] = new Triangle();
-		triangle_[i]->Initialize(directX_,engine_, data1_[i], data2_[i], data3_[i],   directionalLight_);
+		triangle_[i]->Initialize(directX_,engine_, triangleVertex[i].v1, triangleVertex[i].v2, triangleVertex[i].v3,   directionalLight_);
 		sprite_[i] = new Sprite();
 		sprite_[i]->Initialize(directX_,engine_, spritedataLeftTop_[0], spritedataRightDown_[0], directionalLight_);
 	}
@@ -69,12 +71,16 @@ void GameScene::Update()
 	ImGui::DragFloat3("spheretranslate", &sphereTransform_.translate.x, 0.1f);
 	ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
+	
 	ImGui::InputInt("SphereResource", &monsterBallResourceNum);
 	ImGui::DragFloat4("LightColor", &directionalLight_.color.x, 1.0f);
 	ImGui::DragFloat3("lightDirection", &directionalLight_.direction.x, 0.1f);
 	ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
 	ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
 	ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
+	ImGui::DragFloat3("modeltranslate", &modelTransform_.translate.x, 0.1f);
+	ImGui::DragFloat3("modelrotate", &modelTransform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("modelscale", &modelTransform_.scale.x, 0.1f);
 	ImGui::End();
 }
 
@@ -83,7 +89,7 @@ void GameScene::Draw3D()
 	for (int i = 0; i < 2; i++) {
 		triangle_[i]->Draw(transform_, cameraTransform_, material[i] );
 	}
-	model_->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_);
+	model_->Draw(modelMaterial_, modelTransform_, 0, cameraTransform_);
 
 	sphere_->Draw(sphereMaterial_, sphereTransform_, 1, cameraTransform_);
 

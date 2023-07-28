@@ -6,6 +6,11 @@
 #include"Sprite.h"
 #include "Sphere.h"
 #include "Model.h"
+struct TriangleVertex {
+	Vector4	v1;
+	Vector4	v2;
+	Vector4 v3;
+};
 class GameScene
 {
 public:
@@ -23,9 +28,10 @@ private:
 	Transform spriteTransform_[2];
 	Vector4 spriteMaterial[2];
 	Transform SpriteuvTransform;
-	Vector4 data1_[2];
+	/*Vector4 data1_[2];
 	Vector4 data2_[2];
-	Vector4 data3_[2];
+	Vector4 data3_[2];*/
+	TriangleVertex triangleVertex[2];
 	Vector4 material[2];
 	Triangle* triangle_[2];
 	Transform transform_;
@@ -33,6 +39,8 @@ private:
 	Sphere* sphere_;
 	Transform sphereTransform_;
 	Vector4 sphereMaterial_;
+	Transform modelTransform_;
+	Vector4 modelMaterial_;
 	Matrix4x4 spherematrix_;
 	//マトリックスデータ
 	Transform cameraTransform_;
