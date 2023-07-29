@@ -6,12 +6,12 @@
 #include "ImGuiManger.h"
 #include"externals/DirectXTex/d3dx12.h"
 #include<vector>
-
 class BlueMoon
 {
 public:
-	static BlueMoon* GetInstance();
 	static const int maxtex = 3;
+	static BlueMoon* GetInstance();
+
 	void variableInitialize();
 	void Initialize(WinApp* win, int32_t width, int32_t height);
 	void BeginFrame();

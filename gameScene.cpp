@@ -98,7 +98,7 @@ void GameScene::Draw3D()
 	}
 	model_->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_);
 
-	sphere_->Draw(sphereMaterial_, sphereTransform_, 1, cameraTransform_);
+	sphere_->Draw(sphereMaterial_, sphereTransform_, 0, cameraTransform_);
 
 
 }
