@@ -11,7 +11,7 @@ class BlueMoon
 {
 public:
 	static BlueMoon* GetInstance();
-	static const int maxtex = 4;
+	static const int maxtex = 3;
 	void variableInitialize();
 	void Initialize(WinApp* win, int32_t width, int32_t height);
 	void BeginFrame();
