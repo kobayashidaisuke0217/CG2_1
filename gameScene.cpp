@@ -48,10 +48,10 @@ void GameScene::Initialize()
 	model_ = new Model();
 	model_->Initialize(directX_, engine_, "Resource", "axis.obj", 0, directionalLight_);
 	
-	/*uvResourceNum = 1;
-	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);*/
-	monsterBallResourceNum = 1;
-	engine_->LoadTexture("Resource/monsterBall.png",monsterBallResourceNum);
+	uvResourceNum = 1;
+	engine_->LoadTexture("Resource/uvChecker.png",uvResourceNum);
+	monsterBallResourceNum = 2;
+	engine_->LoadTexture("Resource/monsterBall.png",2);
 	
 	
 	
