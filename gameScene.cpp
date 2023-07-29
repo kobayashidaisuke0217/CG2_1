@@ -70,8 +70,8 @@ void GameScene::Update()
 {
 	transform_.rotate.y += 0.01f;
 	directionalLight_.direction= Normalise(directionalLight_.direction);
-	material[0].y -= 0.1f;
-	material[0].x -= 0.1f;
+	/*material[0].y -= 0.1f;
+	material[0].x -= 0.1f;*/
 	ImGui::Begin("Window");
 	ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
 	ImGui::DragFloat3("spritetranslate", &spriteTransform_[0].translate.x, 0.1f);
@@ -85,6 +85,9 @@ void GameScene::Update()
 	ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
 	ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
 	ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
+
+	ImGui::ColorEdit3("triangleColor1",&material[0].x);
+	ImGui::ColorEdit3("triangleColor2", &material[1].x);
 	ImGui::End();
 }
 
