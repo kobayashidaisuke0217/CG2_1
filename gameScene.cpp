@@ -86,7 +86,7 @@ void GameScene::Update()
 	ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
 	ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
 
-	ImGui::ColorEdit3("triangleColor1",&material[0].x);
+	ImGui::ColorEdit4("triangleColor1",&material[0].x);
 	ImGui::ColorEdit3("triangleColor2", &material[1].x);
 	ImGui::End();
 }
