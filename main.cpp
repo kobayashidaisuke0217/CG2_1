@@ -1,5 +1,3 @@
-//#include "base/BlueMoon.h"
-//#include"gameScene.h"
 #include "SceneManager.h"
 
 //Windowsアプリでのエントリーポイント(main関数)
