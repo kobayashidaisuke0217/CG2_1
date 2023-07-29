@@ -1,6 +1,6 @@
 #include "Triangle.h"
-#include<assert.h>
-#include"base/BlueMoon.h"
+#include <assert.h>
+#include "base/BlueMoon.h"
 
 void Triangle::Initialize(DirectXCommon* direct,BlueMoon*engine ,const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light)
 {
