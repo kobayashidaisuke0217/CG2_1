@@ -11,6 +11,9 @@ void TitleScene::Update()
 	ImGui::Begin("SceneManager");
 	ImGui::InputInt("SceneNum", &sceneNum);
 	ImGui::End();
+	if (sceneNum < 0) {
+		sceneNum = 0;
+	}
 	/*if (count >= 60) {
 		sceneNum=GAME_SCENE;
 	}*/

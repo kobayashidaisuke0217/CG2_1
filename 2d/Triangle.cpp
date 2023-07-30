@@ -36,7 +36,7 @@ void Triangle::Draw(const Transform& transform, const Transform& cameraTransform
 
 	Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	*wvpData_ = { wvpmatrix_,worldMatrix };
-
+	
 	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 
 	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);

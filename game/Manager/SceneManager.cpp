@@ -51,7 +51,7 @@ void SceneManager::Run() {
 void SceneManager::Init()
 {
 	sceneNum_ = TITLE_SCENE;
-
+	sceneArr_[sceneNum_]->Initialize();
 	
 }
 

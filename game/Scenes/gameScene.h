@@ -7,6 +7,11 @@
 #include <2d/Sprite.h>
 #include<3d/Sphere.h>
 #include<3d/Model.h>
+struct TriangleVertex {
+	Vector4 v1;
+	Vector4 v2;
+	Vector4 v3;
+};
 class GameScene:public Iscene
 {
 public:
@@ -27,12 +32,10 @@ private:
 	Transform spriteTransform_;
 	Vector4 spriteMaterial;
 	Transform SpriteuvTransform;
-	Vector4 data1_[2];
-	Vector4 data2_[2];
-	Vector4 data3_[2];
+	TriangleVertex triangleVertex_[2];
 	Vector4 material[2];
 	Triangle* triangle_[2];
-	Transform transform_;
+	Transform triangleTransform_[2];
 	Matrix4x4 worldMatrix_;
 	Sphere* sphere_;
 	Transform sphereTransform_;

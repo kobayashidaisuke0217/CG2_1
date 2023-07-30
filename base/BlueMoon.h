@@ -9,7 +9,7 @@
 class BlueMoon
 {
 public:
-	static const int maxtex =  4;
+	static const int maxtex =  5;
 	static BlueMoon* GetInstance();
 
 	void variableInitialize();
