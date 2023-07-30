@@ -5,10 +5,10 @@
 class Sphere
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const DirectionalLight& light);
+	void Initialize(DirectXCommon* dxCommon, BlueMoon* engine);
 
 
-	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform);
+	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light);
 	void Finalize();
 private:
 	DirectXCommon* dxCommon_;
@@ -26,13 +26,12 @@ private:
 	uint32_t vertexCount;
 	DirectionalLight* directionalLight_; 
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
-	//D3D12_INDEX_BUFFER_VIEW indexBufferView{};
-	//uint32_t* indexData_;
-	//ID3D12Resource* indexResource_;
+	
+
 private:
 	void CreateVartexData();
 	void SetColor();
 	void TransformMatrix();
-	void CreateDictionalLight(const DirectionalLight& light);
+	void CreateDictionalLight();
 };
 

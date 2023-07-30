@@ -299,7 +299,7 @@ void BlueMoon::Update()
 }
 void BlueMoon::Draw()
 {
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 }
 

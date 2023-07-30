@@ -31,9 +31,6 @@
     <Filter Include="ソース ファイル\Utility">
       <UniqueIdentifier>{2892a02b-bc45-4c29-a2cd-11d381cb3a24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\3d">
-      <UniqueIdentifier>{d240ce5b-34da-4c87-9b1b-74dfb7b9f12c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\2d">
       <UniqueIdentifier>{2f8d9060-1d52-4ee0-b919-0eb41b3bc5d1}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Manager">
       <UniqueIdentifier>{3d5984d8-9123-4c3b-9d24-ddc6fe38736d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\3d">
+      <UniqueIdentifier>{d240ce5b-34da-4c87-9b1b-74dfb7b9f12c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -110,9 +110,6 @@
     </ClCompile>
     <ClCompile Include="base\ImGuiManger.cpp">
       <Filter>ソース ファイル\base</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="game\Scenes\TitleScene.cpp">
       <Filter>ソース ファイル\Scenes</Filter>
@@ -181,9 +178,6 @@
     </ClInclude>
     <ClInclude Include="base\ImGuiManger.h">
       <Filter>ヘッダー ファイル\base</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="game\Scenes\gameScene.h">
       <Filter>ヘッダー ファイル\Scenes</Filter>

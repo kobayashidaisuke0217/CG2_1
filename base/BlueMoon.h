@@ -9,7 +9,7 @@
 class BlueMoon
 {
 public:
-	static const int maxtex = 3;
+	static const int maxtex =  4;
 	static BlueMoon* GetInstance();
 
 	void variableInitialize();
@@ -60,7 +60,7 @@ private:
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[maxtex];
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[3];
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 

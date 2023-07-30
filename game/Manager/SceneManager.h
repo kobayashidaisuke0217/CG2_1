@@ -14,7 +14,7 @@ public:
 private:
 	BlueMoon* Engine;
 	WinApp* win_ = nullptr;
-	Iscene* sceneArr_[2];
+	std::unique_ptr<Iscene> sceneArr_[2];
 	int sceneNum_;
 	int preSceneNum_;
 

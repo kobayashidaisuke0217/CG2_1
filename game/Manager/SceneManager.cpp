@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-
+#include<base/ImGuiManger.h>
 SceneManager::SceneManager()
 {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
@@ -8,8 +8,8 @@ SceneManager::SceneManager()
 	Engine->Initialize(win_, 1280, 720);
 
 	
-	sceneArr_[TITLE_SCENE]=new TitleScene();
-	sceneArr_[GAME_SCENE]=new GameScene();
+	sceneArr_[TITLE_SCENE]=std::make_unique <TitleScene>();
+	sceneArr_[GAME_SCENE]=std::make_unique <GameScene>();
 }
 SceneManager::~SceneManager()
 {
@@ -35,6 +35,7 @@ void SceneManager::Run() {
 		}
 		sceneArr_[sceneNum_]->Update();
 
+		
 		sceneArr_[sceneNum_]->Draw();
 		
 
@@ -42,9 +43,9 @@ void SceneManager::Run() {
 		Engine->EndFrame();
 	}
 	CoUninitialize();
-	Engine->Finalize();
+	//Engine->Finalize();
 	sceneArr_[sceneNum_]->Finalize();
-	delete this;
+	
 }
 
 void SceneManager::Init()

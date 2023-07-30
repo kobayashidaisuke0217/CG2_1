@@ -21,11 +21,11 @@ public:
 private:
 	BlueMoon* engine_;
 	DirectXCommon* directX_;
-	Sprite* sprite_[2];
-	Vector4 spritedataLeftTop_[2];
-	Vector4 spritedataRightDown_[2];
-	Transform spriteTransform_[2];
-	Vector4 spriteMaterial[2];
+	Sprite* sprite_;
+	Vector4 spritedataLeftTop_;
+	Vector4 spritedataRightDown_;
+	Transform spriteTransform_;
+	Vector4 spriteMaterial;
 	Transform SpriteuvTransform;
 	Vector4 data1_[2];
 	Vector4 data2_[2];
@@ -42,7 +42,9 @@ private:
 	Transform cameraTransform_;
 	//Light
 	DirectionalLight directionalLight_;
-	Model* model_;
+	Model* model_[2];
+	Transform modelTransform_[2];
+	Vector4 modelMaterial_[2];
 	uint32_t uvResourceNum;
 	int monsterBallResourceNum;
  };

@@ -1,5 +1,5 @@
 #pragma once
-enum Secene {
+enum  Scene {
 	TITLE_SCENE,
 	GAME_SCENE,
 };

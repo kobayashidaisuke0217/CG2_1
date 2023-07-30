@@ -1,5 +1,5 @@
 #include "TitleScene.h"
-
+#include<base/ImGuiManger.h>
 void TitleScene::Initialize()
 {
 	count = 0;
@@ -8,9 +8,12 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 	count++;
-	if (count >= 60) {
+	ImGui::Begin("SceneManager");
+	ImGui::InputInt("SceneNum", &sceneNum);
+	ImGui::End();
+	/*if (count >= 60) {
 		sceneNum=GAME_SCENE;
-	}
+	}*/
 }
 
 void TitleScene::Draw()
