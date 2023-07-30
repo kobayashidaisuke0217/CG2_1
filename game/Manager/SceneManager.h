@@ -1,8 +1,8 @@
 #pragma once
-#include"Iscene.h"
-#include "base/BlueMoon.h"
-#include"gameScene.h"
-#include "TitleScene.h"
+#include <game/Scenes/Iscene.h>
+#include <base/BlueMoon.h>
+#include<game/Scenes/gameScene.h>
+#include <game/Scenes/TitleScene.h>
 class SceneManager
 {
 public:

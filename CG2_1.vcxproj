@@ -109,14 +109,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="gameScene.cpp" />
-    <ClCompile Include="Iscene.cpp" />
+    <ClCompile Include="game\Manager\SceneManager.cpp" />
+    <ClCompile Include="game\Scenes\gameScene.cpp" />
+    <ClCompile Include="game\Scenes\Iscene.cpp" />
+    <ClCompile Include="game\Scenes\TitleScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mymath.cpp" />
     <ClCompile Include="MyUtility\combert.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\Sprite.h" />
@@ -135,12 +135,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
-    <ClInclude Include="gameScene.h" />
-    <ClInclude Include="Iscene.h" />
+    <ClInclude Include="game\Manager\SceneManager.h" />
+    <ClInclude Include="game\Scenes\gameScene.h" />
+    <ClInclude Include="game\Scenes\Iscene.h" />
+    <ClInclude Include="game\Scenes\TitleScene.h" />
     <ClInclude Include="MyUtility\combert.h" />
-    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>

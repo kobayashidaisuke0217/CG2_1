@@ -358,7 +358,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> BlueMoon::CreateTextureResource(ID3D12Dev
 
 void BlueMoon::LoadTexture(const std::string& filePath,uint32_t index)
 {
-	assert(index < maxtex);
+
 	DirectX::ScratchImage mipImage = LoadTexture(filePath);
 	const DirectX::TexMetadata& metadata = mipImage.GetMetadata();
 	 textureResource[index] = CreateTextureResource(direct_->GetDevice().Get(), metadata);
