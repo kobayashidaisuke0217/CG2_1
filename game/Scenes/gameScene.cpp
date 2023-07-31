@@ -32,7 +32,7 @@ void GameScene::Initialize()
 	material[0] = { 1.0f,1.0f,1.0f,1.0f };
 	material[1] = { 1.0f,1.0f,1.0f,1.0f };
 	triangleTransform_[0] = {{1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
-	triangleTransform_[1] = { {1.0f,1.0f,1.0f},{0.0f,10.0f,.0f},{0.0f,0.0f,0.0f} };
+	triangleTransform_[1] = { {1.0f,1.0f,1.0f},{0.0f,5.0f,.0f},{0.0f,0.0f,0.0f} };
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-10.0f} };
 
 	spritedataLeftTop_ = {0.0f,0.0f,0.0f,1.0f};
@@ -73,6 +73,10 @@ void GameScene::Initialize()
 	}
 sprite_ = new Sprite();
 		sprite_->Initialize(directX_, engine_, spritedataLeftTop_, spritedataRightDown_, directionalLight_);
+		triangleIsAlive_ = false;
+		spriteIsAlive_ = false;
+		sphereIsAlive_ = false;
+		modelIsAlive_ = false;
 }
 
 void GameScene::Update()
@@ -83,6 +87,7 @@ void GameScene::Update()
 	
 	if (ImGui::BeginTabBar("TabBar")) {
 		if (ImGui::BeginTabItem("triangle1")) { 
+			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor1",&material[0].x);
 			ImGui::DragFloat3("triangletranslate", &triangleTransform_[0].translate.x, 0.1f);
 			ImGui::DragFloat3("trianglerotate", &triangleTransform_[0].rotate.x, 0.1f);
@@ -93,6 +98,7 @@ void GameScene::Update()
 		   ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("triangle2")) {
+			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor", &material[1].x);
 			ImGui::DragFloat3("triangletranslate", &triangleTransform_[1].translate.x, 0.1f);
 			ImGui::DragFloat3("trianglerotate", &triangleTransform_[1].rotate.x, 0.1f);
@@ -102,6 +108,7 @@ void GameScene::Update()
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Sphere")) {
+			ImGui::Checkbox("IsAlive", &sphereIsAlive_);
 		 ImGui::DragFloat3("spheretranslate", &sphereTransform_.translate.x, 0.1f);
 	     ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
 	     ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
@@ -109,6 +116,7 @@ void GameScene::Update()
 		 ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Texture")) {
+			ImGui::Checkbox("IsAlive", &spriteIsAlive_);
 			ImGui::DragFloat3("spritetranslate", &spriteTransform_.translate.x, 0.1f);
 			ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
 			ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
@@ -125,12 +133,14 @@ void GameScene::Update()
 		   ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Model")) {
+			ImGui::Checkbox("IsAlive", &modelIsAlive_);
 			ImGui::DragFloat3("modeltranslate", &modelTransform_[0].translate.x,0.01f);
 			ImGui::DragFloat3("modelrotate", &modelTransform_[0].rotate.x, 0.01f);
 			ImGui::DragFloat3("modelscale", &modelTransform_[0].scale.x, 0.01f);
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Model2")) {
+			ImGui::Checkbox("IsAlive", &modelIsAlive_);
 			ImGui::DragFloat3("modeltranslate", &modelTransform_[1].translate.x, 0.01f);
 			ImGui::DragFloat3("modelrotate", &modelTransform_[1].rotate.x, 0.01f);
 			ImGui::DragFloat3("modelscale", &modelTransform_[1].scale.x, 0.01f);
@@ -154,14 +164,19 @@ void GameScene::Update()
 
 void GameScene::Draw3D()
 {
-	for (int i = 0; i < 2; i++) {
-		triangle_[i]->Draw(triangleTransform_[i], cameraTransform_, material[i] );
+	if (triangleIsAlive_ == true) {
+		for (int i = 0; i < 2; i++) {
+			triangle_[i]->Draw(triangleTransform_[i], cameraTransform_, material[i]);
+		}
 	}
-	for (int i = 0; i < 2; i++) {
-		model_[i]->Draw(sphereMaterial_, modelTransform_[i], 3, cameraTransform_);
+	if (modelIsAlive_ == true) {
+		for (int i = 0; i < 2; i++) {
+			model_[i]->Draw(sphereMaterial_, modelTransform_[i], 3, cameraTransform_);
+		}
 	}
-	sphere_->Draw(sphereMaterial_, sphereTransform_, monsterBallResourceNum, cameraTransform_, directionalLight_);
-
+	if (sphereIsAlive_ == true) {
+		sphere_->Draw(sphereMaterial_, sphereTransform_, monsterBallResourceNum, cameraTransform_, directionalLight_);
+	}
 
 }
 void GameScene::Draw()
@@ -170,9 +185,9 @@ void GameScene::Draw()
 	Draw2D();
 }
 void GameScene::Draw2D() {
-	
-		sprite_->Draw( spriteTransform_,SpriteuvTransform,spriteMaterial,3);
-	
+	if (spriteIsAlive_ == true) {
+		sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
+	}
 	
 }
 void GameScene::Finalize()

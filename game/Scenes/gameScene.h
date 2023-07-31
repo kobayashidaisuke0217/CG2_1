@@ -27,6 +27,7 @@ private:
 	BlueMoon* engine_;
 	DirectXCommon* directX_;
 	Sprite* sprite_;
+	
 	Vector4 spritedataLeftTop_;
 	Vector4 spritedataRightDown_;
 	Transform spriteTransform_;
@@ -50,5 +51,9 @@ private:
 	Vector4 modelMaterial_[2];
 	uint32_t uvResourceNum;
 	int monsterBallResourceNum;
+	bool triangleIsAlive_;
+	bool spriteIsAlive_;
+	bool sphereIsAlive_;
+	bool modelIsAlive_;
  };
 
