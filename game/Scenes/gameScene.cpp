@@ -53,9 +53,9 @@ void GameScene::Initialize()
 	sphere_ = new Sphere();
 	sphere_->Initialize(directX_, engine_);
 	model_[0] = new Model();
-	model_[0]->Initialize(directX_, engine_, "Resource", "axis.obj", 2, directionalLight_);
+	model_[0]->Initialize(directX_, engine_, "Resource", "axis.obj", 2);
 	model_[1] = new Model();
-	model_[1]->Initialize(directX_, engine_, "Resource", "plane.obj", 3, directionalLight_);
+	model_[1]->Initialize(directX_, engine_, "Resource", "plane.obj", 3);
 	for (int i = 0; i < 2; i++) {
 		modelTransform_[i]= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
 		modelMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
@@ -171,7 +171,7 @@ void GameScene::Draw3D()
 	}
 	if (modelIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			model_[i]->Draw(sphereMaterial_, modelTransform_[i], 3, cameraTransform_);
+			model_[i]->Draw(sphereMaterial_, modelTransform_[i], 3, cameraTransform_, directionalLight_);
 		}
 	}
 	if (sphereIsAlive_ == true) {
