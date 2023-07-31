@@ -118,6 +118,8 @@ void GameScene::Update()
 		if (ImGui::BeginTabItem("Texture")) {
 			ImGui::Checkbox("IsAlive", &spriteIsAlive_);
 			ImGui::DragFloat3("spritetranslate", &spriteTransform_.translate.x, 0.1f);
+			ImGui::DragFloat3("spriterotate", &spriteTransform_.rotate.x, 0.1f);
+			ImGui::DragFloat3("spritescale", &spriteTransform_.scale.x, 0.1f);
 			ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
 			ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
 			ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
