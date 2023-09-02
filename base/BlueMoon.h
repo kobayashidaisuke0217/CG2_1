@@ -13,7 +13,7 @@ public:
 	static BlueMoon* GetInstance();
 
 	void variableInitialize();
-	void Initialize(WinApp* win, int32_t width, int32_t height);
+	void Initialize( int32_t width, int32_t height);
 	void BeginFrame();
 	void EndFrame();
 	void Finalize();

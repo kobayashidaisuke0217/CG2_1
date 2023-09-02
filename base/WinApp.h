@@ -15,9 +15,9 @@ public:
 
  static const int32_t kClientWidth = 1280;
  static const int32_t kClientHeight = 720;
-
+ static WinApp* GetInstance();
 	 inline HWND GetHwnd() { return hwnd_; }
-	//HINSTANCE GetHInstance()const { return wc_.hInstance; }
+	HINSTANCE GetHInstance()const { return wc_.hInstance; }
 		bool Procesmessage();
 	 void Finalize();
 	static LRESULT  WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);

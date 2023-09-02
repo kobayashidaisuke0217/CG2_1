@@ -2,14 +2,9 @@
 #include<base/ImGuiManger.h>
 SceneManager::SceneManager()
 {
-	CoInitializeEx(0, COINIT_MULTITHREADED);
 	
-	 Engine = BlueMoon::GetInstance();
-	Engine->Initialize(win_, 1280, 720);
-
 	
-	sceneArr_[TITLE_SCENE]=std::make_unique <TitleScene>();
-	sceneArr_[GAME_SCENE]=std::make_unique <GameScene>();
+	
 }
 SceneManager::~SceneManager()
 {
@@ -20,12 +15,13 @@ void SceneManager::Run() {
 
 	while (true) {
 		// メッセージ処理
-		if (win_->Procesmessage()) {
+		if (winApp_->Procesmessage()) {
 			break;
 		}
 
 		
 		Engine->BeginFrame();
+		input->Update();
 		preSceneNum_ = sceneNum_;
 		sceneNum_ = sceneArr_[sceneNum_]->GetSceneNum();
 
@@ -50,9 +46,17 @@ void SceneManager::Run() {
 
 void SceneManager::Init()
 {
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+	Engine = BlueMoon::GetInstance();
+	Engine->Initialize( 1280, 720);
+	winApp_ = WinApp::GetInstance();
+
+	sceneArr_[TITLE_SCENE] = std::make_unique <TitleScene>();
+	sceneArr_[GAME_SCENE] = std::make_unique <GameScene>();
 	sceneNum_ = TITLE_SCENE;
 	sceneArr_[sceneNum_]->Initialize();
-	
+	input=Input::GetInstance();
+	input->Initialize(winApp_);
 }
 
 

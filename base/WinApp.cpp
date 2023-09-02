@@ -50,6 +50,12 @@ void WinApp::CreateGameWindow(const wchar_t* title, int32_t clientWidth, int32_t
 	
 }
 
+WinApp* WinApp::GetInstance()
+{
+	static WinApp instance;
+	return &instance;
+}
+
 bool WinApp::Procesmessage() {
 	MSG msg{};
 

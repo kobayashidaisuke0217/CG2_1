@@ -259,7 +259,7 @@ void DirectXCommon::Finalize() {
 #endif // DEBUG
 	
 	CloseWindow(winApp_->GetHwnd());
-	delete winApp_;
+	
 
 	
 }

@@ -14,7 +14,7 @@ void GameScene::Initialize()
 	engine_ = BlueMoon::GetInstance();
 	
 	directX_ = DirectXCommon::GetInstance();
-	
+
 
 	uvResourceNum = 0;
 	engine_->LoadTexture("Resource/uvChecker.png", 0);
@@ -51,11 +51,11 @@ void GameScene::Initialize()
 	};
 	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
 	sphere_ = new Sphere();
-	sphere_->Initialize(directX_, engine_);
+	sphere_->Initialize();
 	model_[0] = new Model();
-	model_[0]->Initialize(directX_, engine_, "Resource", "axis.obj", 2);
+	model_[0]->Initialize( "Resource", "axis.obj", 2);
 	model_[1] = new Model();
-	model_[1]->Initialize(directX_, engine_, "Resource", "plane.obj", 3);
+	model_[1]->Initialize( "Resource", "plane.obj", 3);
 	for (int i = 0; i < 2; i++) {
 		modelTransform_[i]= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
 		modelMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
@@ -68,11 +68,11 @@ void GameScene::Initialize()
 	
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] =new Triangle();
-		triangle_[i]->Initialize(directX_, engine_, triangleVertex_[i].v1, triangleVertex_[i].v2, triangleVertex_[i].v3, directionalLight_);
+		triangle_[i]->Initialize( directionalLight_);
 		
 	}
 sprite_ = new Sprite();
-		sprite_->Initialize(directX_, engine_, spritedataLeftTop_, spritedataRightDown_, directionalLight_);
+		sprite_->Initialize( spritedataLeftTop_, spritedataRightDown_, directionalLight_);
 		triangleIsAlive_ = false;
 		spriteIsAlive_ = false;
 		sphereIsAlive_ = false;
@@ -175,6 +175,7 @@ void GameScene::Draw3D()
 		for (int i = 0; i < 2; i++) {
 			model_[i]->Draw(sphereMaterial_, modelTransform_[i], 3, cameraTransform_, directionalLight_);
 		}
+		
 	}
 	if (sphereIsAlive_ == true) {
 		sphere_->Draw(sphereMaterial_, sphereTransform_, monsterBallResourceNum, cameraTransform_, directionalLight_);

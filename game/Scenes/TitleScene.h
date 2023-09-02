@@ -1,5 +1,6 @@
 #pragma once
 #include "Iscene.h"
+#include "Input/Input.h"
 class TitleScene:public Iscene
 {
 private:
@@ -11,5 +12,7 @@ public:
 
 	 void Draw() override;
 	 void Finalize()override;
+private:
+	Input* input=nullptr;
 };
 

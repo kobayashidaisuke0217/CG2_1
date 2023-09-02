@@ -235,12 +235,11 @@ void BlueMoon::variableInitialize()
 {
 	
 }
-void BlueMoon::Initialize(WinApp* win, int32_t width, int32_t height) {
+void BlueMoon::Initialize( int32_t width, int32_t height) {
 	//resourceLeak = new LeakCheck();
-	win_ = win;
-	win_ = new WinApp();
+	win_ = WinApp::GetInstance();
 	direct_ = DirectXCommon::GetInstance();
-	direct_->Initialize(win_, win_->kClientWidth, win->kClientHeight);
+	direct_->Initialize(win_, win_->kClientWidth, win_->kClientHeight);
 	imguiManager_ = new ImGuiManger();
 	imguiManager_->Initialize(win_,direct_);
 	descriptorSizeDSV = direct_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
