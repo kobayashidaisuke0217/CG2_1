@@ -60,11 +60,10 @@ void GameScene::Initialize()
 		modelTransform_[i]= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
 		modelMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
 	}
-	worldTransformtriangle_.Initialize();
+	triangle_[0] =new Triangle();
+		triangle_[0]->Initialize( directionalLight_);
 	for (int i = 0; i < 2; i++) {
-		triangle_[i] =new Triangle();
-		triangle_[i]->Initialize( directionalLight_);
-		
+		worldTransformtriangle_[i].Initialize();
 	}
 sprite_ = new Sprite();
 		sprite_->Initialize( spritedataLeftTop_, spritedataRightDown_, directionalLight_);
@@ -84,9 +83,9 @@ void GameScene::Update()
 		if (ImGui::BeginTabItem("triangle1")) { 
 			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor1",&material[0].x);
-			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_.translation_.x, 0.1f);
-			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_.rotation_.x, 0.1f);
-			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_.scale_.x, 0.1f);
+			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_[0].translation_.x, 0.1f);
+			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_[0].rotation_.x, 0.1f);
+			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_[0].scale_.x, 0.1f);
           
 	      
 
@@ -95,9 +94,9 @@ void GameScene::Update()
 		if (ImGui::BeginTabItem("triangle2")) {
 			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor", &material[1].x);
-			ImGui::DragFloat3("triangletranslate", &triangleTransform_[1].translate.x, 0.1f);
-			ImGui::DragFloat3("trianglerotate", &triangleTransform_[1].rotate.x, 0.1f);
-			ImGui::DragFloat3("trianglescale", &triangleTransform_[1].scale.x, 0.1f);
+			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_[1].translation_.x, 0.1f);
+			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_[1].rotation_.x, 0.1f);
+			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_[1].scale_.x, 0.1f);
 
 
 			ImGui::EndTabItem();
@@ -147,7 +146,8 @@ void GameScene::Update()
 	}
 	
 	
-	worldTransformtriangle_.UpdateMatrix();
+	worldTransformtriangle_[0].UpdateMatrix();
+	worldTransformtriangle_[1].UpdateMatrix();
 
 	
 	
@@ -163,17 +163,17 @@ void GameScene::Draw3D()
 {
 	if (triangleIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			triangle_[i]->Draw(worldTransformtriangle_, cameraTransform_, material[i]);
+			triangle_[0]->Draw(worldTransformtriangle_[i], cameraTransform_, material[i]);
 		}
 	}
 	if (modelIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			model_[i]->Draw(worldTransformtriangle_, 3, cameraTransform_, directionalLight_);
+			model_[0]->Draw(worldTransformtriangle_[i], 3, cameraTransform_, directionalLight_);
 		}
 		
 	}
 	if (sphereIsAlive_ == true) {
-		sphere_->Draw(sphereMaterial_, worldTransformtriangle_, monsterBallResourceNum, cameraTransform_, directionalLight_);
+		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, cameraTransform_, directionalLight_);
 	}
 
 }
@@ -185,7 +185,7 @@ void GameScene::Draw()
 void GameScene::Draw2D() {
 	if (spriteIsAlive_ == true) {
 		//sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
-		sprite_->Draw(worldTransformtriangle_, SpriteuvTransform, spriteMaterial, 3);
+		sprite_->Draw(worldTransformtriangle_[0], SpriteuvTransform, spriteMaterial, 3);
 	}
 	
 }
@@ -194,10 +194,10 @@ void GameScene::Finalize()
 	
 	delete sphere_;
 	
-delete  sprite_;
+delete  sprite_;delete triangle_[0];
+		delete model_[0];
 	for (int i = 0; i < 2; i++) {
-		delete triangle_[i];
-		delete model_[i];
+		
 	
 	}
 }

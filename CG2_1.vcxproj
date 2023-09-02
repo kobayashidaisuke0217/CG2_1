@@ -117,6 +117,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mymath.cpp" />
     <ClCompile Include="MyUtility\combert.cpp" />
+    <ClCompile Include="ViewProjection.cpp" />
     <ClCompile Include="worldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="MyUtility\combert.h" />
     <ClInclude Include="Vector4.h" />
+    <ClInclude Include="ViewProjection.h" />
     <ClInclude Include="worldTransform.h" />
   </ItemGroup>
   <ItemGroup>

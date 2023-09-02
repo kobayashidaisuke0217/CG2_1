@@ -51,7 +51,7 @@ private:
 	Transform modelTransform_[2];
 	Vector4 modelMaterial_[2];
 	uint32_t uvResourceNum;
-	WorldTransform worldTransformtriangle_;
+	WorldTransform worldTransformtriangle_[2];
 	int monsterBallResourceNum;
 	bool triangleIsAlive_;
 	bool spriteIsAlive_;
