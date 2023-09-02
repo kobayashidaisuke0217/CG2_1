@@ -1,9 +1,9 @@
 #include "Sphere.h"
 #include<cmath>
-void Sphere::Initialize(DirectXCommon* dxCommon, BlueMoon* engine)
+void Sphere::Initialize()
 {
-	dxCommon_ = dxCommon;
-	engine_ = engine;
+	dxCommon_ =DirectXCommon::GetInstance();
+	engine_ = BlueMoon::GetInstance();
 	kSubDivision = 32;
 	vertexCount = kSubDivision*kSubDivision*6;
 	CreateVartexData();

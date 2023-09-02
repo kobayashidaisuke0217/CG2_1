@@ -2,11 +2,11 @@
 #include <assert.h>
 #include "base/BlueMoon.h"
 
-void Triangle::Initialize(DirectXCommon* direct,BlueMoon*engine ,const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light)
+void Triangle::Initialize( const DirectionalLight& light)
 {
-	Engine = engine;
-	direct_ = direct;
-	SettingVertex( a,  b,  c);
+	direct_ = DirectXCommon::GetInstance();
+	Engine = BlueMoon::GetInstance();
+	SettingVertex( );
 	SetColor();
 	TransformMatrix();
 	CreateDictionalLight(light);
@@ -74,7 +74,7 @@ void Triangle::CreateDictionalLight(const DirectionalLight& light)
 	directionalLightResource_->Map(0, NULL, reinterpret_cast<void**>(&directionalLight_));
 	*directionalLight_ = light;
 }
-void Triangle::SettingVertex(const Vector4& a, const Vector4& b, const Vector4& c) {
+void Triangle::SettingVertex() {
 
 	vertexResource_ = DirectXCommon::CreateBufferResource(direct_->GetDevice().Get(), sizeof(VertexData) * 3);
 	//リソースの先頭のアドレスから使う
@@ -85,14 +85,14 @@ void Triangle::SettingVertex(const Vector4& a, const Vector4& b, const Vector4& 
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	vertexData_[0].position = a;
+	vertexData_[0].position = { -0.5f,0.0f,0.0f,1.0f };
 	vertexData_[0].texcoord = { 0.0f,1.0f };
 
 	//上
-	vertexData_[1].position = b;
+	vertexData_[1].position = { 0.0f,1.0f,0.0f,1.0f };
 	vertexData_[1].texcoord = { 0.5f,0.0f };
 
 	//右下
-	vertexData_[2].position = c;
+	vertexData_[2].position = { 0.5f,0.0f,0.0f,1.0f };
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 }

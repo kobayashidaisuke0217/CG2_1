@@ -5,7 +5,7 @@
 class Sprite
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, BlueMoon* engine,const Vector4& a, const Vector4& b,const DirectionalLight& light);
+	void Initialize(const Vector4& a, const Vector4& b,const DirectionalLight& light);
 
 
 	void Draw( const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );

@@ -7,12 +7,12 @@ class BlueMoon;
 class Triangle
 {
 public:
-	void Initialize(DirectXCommon* direct,BlueMoon* engine, const Vector4& a, const Vector4& b, const Vector4& c,  const DirectionalLight& light);
+	void Initialize(  const DirectionalLight& light);
 	void Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material);
 	void Finalize();
 	
 private:
-	void SettingVertex(const Vector4& a, const Vector4& b, const Vector4& c);
+	void SettingVertex();
 	void SetColor();
 	void TransformMatrix();
 	void CreateDictionalLight(const DirectionalLight& light);

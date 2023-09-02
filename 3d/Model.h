@@ -6,7 +6,7 @@
 class Model
 {
 public:
-	void Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const std::string& directoryPath, const std::string& filename, uint32_t index);
+	void Initialize( const std::string& directoryPath, const std::string& filename, uint32_t index);
 
 
 	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);

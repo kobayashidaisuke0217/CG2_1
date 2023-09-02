@@ -1,9 +1,9 @@
 #include "Sprite.h"
 
-void Sprite::Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const Vector4& a, const Vector4& b, const DirectionalLight& light)
+void Sprite::Initialize( const Vector4& a, const Vector4& b, const DirectionalLight& light)
 {
-	dxCommon_ = dxCommon;
-	engine_ = engine;
+	dxCommon_ = DirectXCommon::GetInstance();
+	engine_ = BlueMoon::GetInstance();
 	CreateVartexData(a,b);
 	SetColor();
 	CreateTransform();

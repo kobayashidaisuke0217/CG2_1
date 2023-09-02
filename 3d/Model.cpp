@@ -1,10 +1,10 @@
 #include "Model.h"
 #include<fstream>
 #include<sstream>
-void Model::Initialize(DirectXCommon* dxCommon, BlueMoon* engine, const std::string& directoryPath, const std::string& filename,uint32_t index)
+void Model::Initialize( const std::string& directoryPath, const std::string& filename,uint32_t index)
 {
-    dxCommon_ = dxCommon;
-	engine_ = engine;
+    dxCommon_ = DirectXCommon::GetInstance();
+	engine_ = BlueMoon::GetInstance();
 	
     modelData_ = LoadObjFile(directoryPath, filename);
     
