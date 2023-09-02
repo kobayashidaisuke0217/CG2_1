@@ -1,6 +1,7 @@
 #pragma once
 #include<base/DirectXCommon.h>
 #include"Vector4.h"
+#include "worldTransform.h"
 
 class BlueMoon;
 
@@ -8,7 +9,8 @@ class Triangle
 {
 public:
 	void Initialize(  const DirectionalLight& light);
-	void Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material);
+	//void Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material);
+	void Draw(const WorldTransform& transform, const Transform& cameratransform, const Vector4& material);
 	void Finalize();
 	
 private:

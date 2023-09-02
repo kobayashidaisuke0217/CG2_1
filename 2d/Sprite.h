@@ -2,13 +2,15 @@
 #include "base/DirectXCommon.h"
 #include"Vector4.h"
 #include "base/BlueMoon.h"
+#include "worldTransform.h"
 class Sprite
 {
 public:
 	void Initialize(const Vector4& a, const Vector4& b,const DirectionalLight& light);
 
 
-	void Draw( const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );
+	//void Draw( const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );
+	void Draw(const WorldTransform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex);
 	void Finalize();
 private:
 	

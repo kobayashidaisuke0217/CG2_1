@@ -8,7 +8,7 @@ void Triangle::Initialize( const DirectionalLight& light)
 	Engine = BlueMoon::GetInstance();
 	SettingVertex( );
 	SetColor();
-	TransformMatrix();
+	//TransformMatrix();
 	CreateDictionalLight(light);
 }
 void Triangle::TransformMatrix()
@@ -25,41 +25,76 @@ void Triangle::SetColor() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	
 }
-void Triangle::Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material)
+//void Triangle::Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material)
+//{
+//	
+//
+//	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+//	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+//	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+//	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(direct_->GetWin()->kClientWidth) / float(direct_->GetWin()->kClientHeight), 0.1f, 100.0f);
+//
+//	Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+//	*wvpData_ = { wvpmatrix_,worldMatrix };
+//	
+//	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
+//
+//	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
+//	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
+//	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
+//
+//
+//
+//	*materialData_ = { material,false };
+//	materialData_->uvTransform = uvtransformMtrix;
+//	
+//	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
+//	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+//	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//    direct_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+//	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+//	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+//	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2,Engine->textureSrvHandleGPU_[0]);
+//	
+//
+//	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
+//	direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+//
+//}
+void Triangle::Draw(const WorldTransform& transform, const Transform& cameratransform, const Vector4& material)
 {
+
+		Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale_, transform.rotation_, transform.translation_);
+		Matrix4x4 cameraMatrix = MakeAffineMatrix(cameratransform.scale, cameratransform.rotate, cameratransform.translate);
+		Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(direct_->GetWin()->kClientWidth) / float(direct_->GetWin()->kClientHeight), 0.1f, 100.0f);
 	
-
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
-	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(direct_->GetWin()->kClientWidth) / float(direct_->GetWin()->kClientHeight), 0.1f, 100.0f);
-
-	Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
-	*wvpData_ = { wvpmatrix_,worldMatrix };
+		Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+		//*wvpData_ = { wvpmatrix_,worldMatrix };
+		
+		Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 	
-	Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
-
-	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
-	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
-	uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
-
-
-
-	*materialData_ = { material,false };
-	materialData_->uvTransform = uvtransformMtrix;
+		Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
+		uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
+		uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
 	
-	direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
-	//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
-	direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    direct_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2,Engine->textureSrvHandleGPU_[0]);
 	
-
-	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
-	direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
-
+	
+		*materialData_ = { material,false };
+		materialData_->uvTransform = uvtransformMtrix;
+		
+		direct_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
+		//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+		direct_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	    direct_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+		direct_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		direct_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
+		direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2,Engine->textureSrvHandleGPU_[0]);
+		
+	
+		//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後
+		direct_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	
 }
 void Triangle::Finalize()
 {

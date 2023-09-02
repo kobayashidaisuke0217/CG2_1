@@ -7,6 +7,7 @@
 #include <2d/Sprite.h>
 #include<3d/Sphere.h>
 #include<3d/Model.h>
+#include "worldTransform.h"
 struct TriangleVertex {
 	Vector4 v1;
 	Vector4 v2;
@@ -50,6 +51,7 @@ private:
 	Transform modelTransform_[2];
 	Vector4 modelMaterial_[2];
 	uint32_t uvResourceNum;
+	WorldTransform worldTransformtriangle_;
 	int monsterBallResourceNum;
 	bool triangleIsAlive_;
 	bool spriteIsAlive_;

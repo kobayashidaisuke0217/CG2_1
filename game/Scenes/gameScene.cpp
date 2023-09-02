@@ -60,12 +60,7 @@ void GameScene::Initialize()
 		modelTransform_[i]= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
 		modelMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
 	}
-	
-	
-	
-	
-	
-	
+	worldTransformtriangle_.Initialize();
 	for (int i = 0; i < 2; i++) {
 		triangle_[i] =new Triangle();
 		triangle_[i]->Initialize( directionalLight_);
@@ -89,9 +84,9 @@ void GameScene::Update()
 		if (ImGui::BeginTabItem("triangle1")) { 
 			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor1",&material[0].x);
-			ImGui::DragFloat3("triangletranslate", &triangleTransform_[0].translate.x, 0.1f);
-			ImGui::DragFloat3("trianglerotate", &triangleTransform_[0].rotate.x, 0.1f);
-			ImGui::DragFloat3("trianglescale", &triangleTransform_[0].scale.x, 0.1f);
+			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_.translation_.x, 0.1f);
+			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_.rotation_.x, 0.1f);
+			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_.scale_.x, 0.1f);
           
 	      
 
@@ -152,7 +147,7 @@ void GameScene::Update()
 	}
 	
 	
-	
+	worldTransformtriangle_.UpdateMatrix();
 
 	
 	
@@ -168,17 +163,17 @@ void GameScene::Draw3D()
 {
 	if (triangleIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			triangle_[i]->Draw(triangleTransform_[i], cameraTransform_, material[i]);
+			triangle_[i]->Draw(worldTransformtriangle_, cameraTransform_, material[i]);
 		}
 	}
 	if (modelIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			model_[i]->Draw(sphereMaterial_, modelTransform_[i], 3, cameraTransform_, directionalLight_);
+			model_[i]->Draw(worldTransformtriangle_, 3, cameraTransform_, directionalLight_);
 		}
 		
 	}
 	if (sphereIsAlive_ == true) {
-		sphere_->Draw(sphereMaterial_, sphereTransform_, monsterBallResourceNum, cameraTransform_, directionalLight_);
+		sphere_->Draw(sphereMaterial_, worldTransformtriangle_, monsterBallResourceNum, cameraTransform_, directionalLight_);
 	}
 
 }
@@ -189,7 +184,8 @@ void GameScene::Draw()
 }
 void GameScene::Draw2D() {
 	if (spriteIsAlive_ == true) {
-		sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
+		//sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
+		sprite_->Draw(worldTransformtriangle_, SpriteuvTransform, spriteMaterial, 3);
 	}
 	
 }

@@ -9,8 +9,9 @@ struct Material {
 	float32_t4x4 uvTransform;
 };
 struct TransformationMatrix {
-	float32_t4x4 WVP;
-	float32_t4x4 World;
+	/*float32_t4x4 WVP;
+	float32_t4x4 World;*/
+	float32_t4x4 matWorld;
 };
 struct PixelShaderOutput {
 	float32_t4 color : SV_TARGET0;

@@ -3,14 +3,17 @@
 #include"Vector4.h"
 #include "base/BlueMoon.h"
 #include <string>
+#include "worldTransform.h"
 class Model
 {
 public:
 	void Initialize( const std::string& directoryPath, const std::string& filename, uint32_t index);
 
 
-	void Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);
-     ModelData modelData_;
+	void Draw( const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);
+	void Draw(const WorldTransform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light);
+
+	ModelData modelData_;
 	void Finalize();
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);

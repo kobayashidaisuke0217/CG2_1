@@ -11,10 +11,10 @@ void Model::Initialize( const std::string& directoryPath, const std::string& fil
     engine_->LoadTexture(modelData_.material.textureFilePath, index);
 	CreateVartexData();
 	SetColor();
-	TransformMatrix();
+	//TransformMatrix();
 	CreateDictionalLight();
 }
-void Model::Draw(const Vector4& material, const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
+void Model::Draw( const Transform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
 {Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);
@@ -31,7 +31,7 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
 	
 	
     *directionalLight_ = light;
-		*material_ = { material,true };
+    *material_ = { {1.0f,1.0f,1.0f,1.0f},true };
 		material_->uvTransform = uvtransformMtrix;
 			*wvpData_ = { wvpmatrix_,worldMatrix };
 			
@@ -44,6 +44,40 @@ void Model::Draw(const Vector4& material, const Transform& transform, uint32_t t
 			
 			dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
 			dxCommon_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+
+}
+void Model::Draw(const WorldTransform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
+{
+    Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale_, transform.rotation_, transform.translation_);
+    Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+    Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+    Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(dxCommon_->GetWin()->kClientWidth) / float(dxCommon_->GetWin()->kClientHeight), 0.1f, 100.0f);
+
+    Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
+
+    Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
+
+    Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
+    uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
+    uvtransformMtrix = Multiply(uvtransformMtrix, MakeTranslateMatrix(uvTransform.translate));
+
+
+
+    *directionalLight_ = light;
+    *material_ = { {1.0f,1.0f,1.0f,1.0f},true };
+    material_->uvTransform = uvtransformMtrix;
+   // *wvpData_ = { wvpmatrix_,worldMatrix };
+
+    dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+    //形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
+    dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+    dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+    dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
+
+    dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
+    dxCommon_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+
 
 }
 void Model::Finalize()
