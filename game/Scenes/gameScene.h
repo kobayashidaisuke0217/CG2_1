@@ -8,6 +8,7 @@
 #include<3d/Sphere.h>
 #include<3d/Model.h>
 #include "worldTransform.h"
+#include "ViewProjection.h"
 struct TriangleVertex {
 	Vector4 v1;
 	Vector4 v2;
@@ -52,6 +53,7 @@ private:
 	Vector4 modelMaterial_[2];
 	uint32_t uvResourceNum;
 	WorldTransform worldTransformtriangle_[2];
+	ViewProjection viewProjection_;
 	int monsterBallResourceNum;
 	bool triangleIsAlive_;
 	bool spriteIsAlive_;

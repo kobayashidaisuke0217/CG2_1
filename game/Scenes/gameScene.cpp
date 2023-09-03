@@ -15,7 +15,7 @@ void GameScene::Initialize()
 	
 	directX_ = DirectXCommon::GetInstance();
 
-
+	viewProjection_.Initialize();
 	uvResourceNum = 0;
 	engine_->LoadTexture("Resource/uvChecker.png", 0);
 	monsterBallResourceNum = 1;
@@ -144,7 +144,7 @@ void GameScene::Update()
 		}
 		ImGui::EndTabBar();
 	}
-	
+	viewProjection_.UpdateMatrix();
 	
 	worldTransformtriangle_[0].UpdateMatrix();
 	worldTransformtriangle_[1].UpdateMatrix();

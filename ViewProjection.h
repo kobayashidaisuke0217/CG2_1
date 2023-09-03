@@ -11,7 +11,7 @@ struct ConstBufferDataViewProjection {
 	Vector3 cameraPos;    // カメラ座標（ワールド座標）
 };
 
-class ViewProjection
+struct ViewProjection
 {
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
