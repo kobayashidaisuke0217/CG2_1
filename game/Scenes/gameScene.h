@@ -27,6 +27,7 @@ public:
 	void Draw()override;
 	void Finalize()override;
 private:
+
 	BlueMoon* engine_;
 	DirectXCommon* directX_;
 	Sprite* sprite_;
@@ -38,7 +39,7 @@ private:
 	Vector4 spriteMaterial;
 	Transform SpriteuvTransform;
 	Vector4 material[2];
-	Triangle* triangle_[2];
+	Triangle* triangle_;
 	Matrix4x4 worldMatrix_;
 	Sphere* sphere_;
 	Vector4 sphereMaterial_;

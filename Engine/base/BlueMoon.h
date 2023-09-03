@@ -9,50 +9,50 @@
 class BlueMoon
 {
 public:
-	
+
 	static BlueMoon* GetInstance();
 
 	void variableInitialize();
-	void Initialize( int32_t width, int32_t height);
+	void Initialize(int32_t width, int32_t height);
 	void BeginFrame();
 	void EndFrame();
 	void Finalize();
 	void Update();
 	void Draw();
 	~BlueMoon();
- 
+
 	DirectXCommon* GetDirectXCommon() { return direct_; }
-	
-	
-	
-	
+
+
+
+
 
 private:
 
-	
-	 WinApp* win_;
+
+	WinApp* win_;
 	DirectXCommon* direct_;
 
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
-  ImGuiManger* imguiManager_;
-  
- 
- 
+	ImGuiManger* imguiManager_;
+
+
+
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
-	
+
 	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob_;
-	
+
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
-	
+
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature_;
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_{};
 	D3D12_BLEND_DESC blendDesc_{};
 	IDxcBlob* vertexShaderBlob_;
 	IDxcBlob* pixelShaderBlob_;
 	D3D12_RASTERIZER_DESC rasterizerDesc_{};
-	
+
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
 
 	D3D12_VIEWPORT viewport_{};
@@ -61,7 +61,7 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	
+
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
@@ -83,8 +83,8 @@ private:
 	void SettingScissor();
 	void SettingDepth();
 
-	
+
 };
- 
+
 
 
