@@ -4,14 +4,15 @@
 #include "base/BlueMoon.h"
 #include <string>
 #include "worldTransform.h"
+#include "ViewProjection.h"
 class Model
 {
 public:
 	void Initialize( const std::string& directoryPath, const std::string& filename, uint32_t index);
 
 
-	void Draw( const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);
-	void Draw(const WorldTransform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light);
+	//void Draw( const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);
+	void Draw(const WorldTransform& transform, uint32_t texIndex, const ViewProjection& viewProjection, const DirectionalLight& light);
 
 	ModelData modelData_;
 	void Finalize();

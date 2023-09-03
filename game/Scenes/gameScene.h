@@ -35,21 +35,15 @@ private:
 	Transform spriteTransform_;
 	Vector4 spriteMaterial;
 	Transform SpriteuvTransform;
-	TriangleVertex triangleVertex_[2];
 	Vector4 material[2];
 	Triangle* triangle_[2];
-	Transform triangleTransform_[2];
 	Matrix4x4 worldMatrix_;
 	Sphere* sphere_;
-	Transform sphereTransform_;
 	Vector4 sphereMaterial_;
 	Matrix4x4 spherematrix_;
-	//マトリックスデータ
-	Transform cameraTransform_;
 	//Light
 	DirectionalLight directionalLight_;
 	Model* model_[2];
-	Transform modelTransform_[2];
 	Vector4 modelMaterial_[2];
 	uint32_t uvResourceNum;
 	WorldTransform worldTransformtriangle_[2];

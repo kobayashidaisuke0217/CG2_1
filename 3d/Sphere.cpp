@@ -7,22 +7,16 @@ void Sphere::Initialize()
 	kSubDivision = 32;
 	vertexCount = kSubDivision*kSubDivision*6;
 	CreateVartexData();
-	//TransformMatrix();
+	
 	SetColor();
 	CreateDictionalLight();
 }
 
 
 
-void Sphere::Draw(const Vector4& material, const WorldTransform& transform, uint32_t texIndex, const Transform& cameraTransform, const DirectionalLight& light)
+void Sphere::Draw(const Vector4& material, const WorldTransform& transform, uint32_t texIndex, const ViewProjection& viewProjection, const DirectionalLight& light)
 {
 
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale_, transform.rotation_, transform.translation_);
-		Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-		Matrix4x4 viewMatrix = Inverse(cameraMatrix);
-		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(dxCommon_->GetWin()->kClientWidth) / float(dxCommon_->GetWin()->kClientHeight), 0.1f, 100.0f);
-	
-		Matrix4x4 wvpmatrix_ = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 	
 		Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 	
@@ -34,16 +28,22 @@ void Sphere::Draw(const Vector4& material, const WorldTransform& transform, uint
 		
 		*materialData_ = { material,true };
 		materialData_->uvTransform = uvtransformMtrix;
-		//*wvpData_ = { wvpmatrix_,worldMatrix };
+		
 		*directionalLight_ = light;
 		dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 		//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 		dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+		//material
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+		//worldTransform
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
-	
+		//viewProjection
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
+		//Light
+		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+		//texture
 		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
+		//Draw
 		dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
 	
 	
@@ -51,11 +51,7 @@ void Sphere::Draw(const Vector4& material, const WorldTransform& transform, uint
 
 void Sphere::Finalize()
 {
-	/*vertexResource->Release();
-	materialResource_->Release();
-	wvpResource_->Release();
-	directionalLightResource_->Release();*/
-	
+
 }
 
 void Sphere::CreateVartexData()

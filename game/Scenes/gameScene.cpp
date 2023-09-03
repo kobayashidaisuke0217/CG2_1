@@ -16,24 +16,18 @@ void GameScene::Initialize()
 	directX_ = DirectXCommon::GetInstance();
 
 	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0.0f,0.0f,-5.0f };
 	uvResourceNum = 0;
 	engine_->LoadTexture("Resource/uvChecker.png", 0);
 	monsterBallResourceNum = 1;
 	engine_->LoadTexture("Resource/monsterBall.png", 1);
 
 	
-	triangleVertex_[0].v1= { -0.5f,-0.5f,0.5f,1.0f };
-	triangleVertex_[0].v2= { 0.0f,0.0f,0.0f,1.0f };
-	triangleVertex_[0].v3= { 0.5f,-0.5f,-0.5f,1.0f };
-	triangleVertex_[1].v1 = { -0.5f,-0.5f,0.0f,1.0f };
-	triangleVertex_[1].v2 = { 0.0f,0.5f,0.0f,1.0f };
-	triangleVertex_[1].v3 = { 0.5f,-0.5f,0.0f,1.0f };
+	
 
 	material[0] = { 1.0f,1.0f,1.0f,1.0f };
 	material[1] = { 1.0f,1.0f,1.0f,1.0f };
-	triangleTransform_[0] = {{1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
-	triangleTransform_[1] = { {1.0f,1.0f,1.0f},{0.0f,5.0f,.0f},{0.0f,0.0f,0.0f} };
-	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-10.0f} };
+	
 
 	spritedataLeftTop_ = {0.0f,0.0f,0.0f,1.0f};
 	spritedataRightDown_ = {320.0f,180.0f,0.0f,1.0f};
@@ -41,7 +35,7 @@ void GameScene::Initialize()
 
 	
 	spriteMaterial = {1.0f,1.0f,1.0f,1.0f};
-	sphereTransform_= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
+	
 	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	SpriteuvTransform =
 	{ 
@@ -57,7 +51,6 @@ void GameScene::Initialize()
 	model_[1] = new Model();
 	model_[1]->Initialize( "Resource", "plane.obj", 3);
 	for (int i = 0; i < 2; i++) {
-		modelTransform_[i]= { {1.0f,1.0f,1.0f},{0.0f,1.6f,0.0f},{0.0f,0.0f,0.0f} };
 		modelMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
 	}
 	triangle_[0] =new Triangle();
@@ -103,9 +96,7 @@ void GameScene::Update()
 		}
 		if (ImGui::BeginTabItem("Sphere")) {
 			ImGui::Checkbox("IsAlive", &sphereIsAlive_);
-		 ImGui::DragFloat3("spheretranslate", &sphereTransform_.translate.x, 0.1f);
-	     ImGui::DragFloat3("sphererotate", &sphereTransform_.rotate.x, 0.1f);
-	     ImGui::DragFloat3("spherescale", &sphereTransform_.scale.x, 0.1f);
+	
 	     ImGui::InputInt("SphereResource", &monsterBallResourceNum);
 		 ImGui::EndTabItem();
 		}
@@ -120,7 +111,8 @@ void GameScene::Update()
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Camera")) {
-			ImGui::DragFloat3("CameraTranslate", &cameraTransform_.translate.x, 0.01f);
+			ImGui::DragFloat3("CameraTranslate", &viewProjection_.translation_.x, 0.01f);
+			ImGui::DragFloat3("CameraRotate", &viewProjection_.rotation_.x, 0.01f);
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Light")) {
@@ -130,26 +122,22 @@ void GameScene::Update()
 		}
 		if (ImGui::BeginTabItem("Model")) {
 			ImGui::Checkbox("IsAlive", &modelIsAlive_);
-			ImGui::DragFloat3("modeltranslate", &modelTransform_[0].translate.x,0.01f);
-			ImGui::DragFloat3("modelrotate", &modelTransform_[0].rotate.x, 0.01f);
-			ImGui::DragFloat3("modelscale", &modelTransform_[0].scale.x, 0.01f);
+			
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Model2")) {
 			ImGui::Checkbox("IsAlive", &modelIsAlive_);
-			ImGui::DragFloat3("modeltranslate", &modelTransform_[1].translate.x, 0.01f);
-			ImGui::DragFloat3("modelrotate", &modelTransform_[1].rotate.x, 0.01f);
-			ImGui::DragFloat3("modelscale", &modelTransform_[1].scale.x, 0.01f);
+			
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
 	}
-	viewProjection_.UpdateMatrix();
 	
 	worldTransformtriangle_[0].UpdateMatrix();
 	worldTransformtriangle_[1].UpdateMatrix();
 
-	
+	viewProjection_.UpdateMatrix();
+	viewProjection_.TransferMatrix();
 	
 	ImGui::Begin("Scene");
 	ImGui::InputInt("SceneNum", &sceneNum);
@@ -163,17 +151,17 @@ void GameScene::Draw3D()
 {
 	if (triangleIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			triangle_[0]->Draw(worldTransformtriangle_[i], cameraTransform_, material[i]);
+			triangle_[0]->Draw(worldTransformtriangle_[i], viewProjection_, material[i]);
 		}
 	}
 	if (modelIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			model_[0]->Draw(worldTransformtriangle_[i], 3, cameraTransform_, directionalLight_);
+			model_[0]->Draw(worldTransformtriangle_[i], 3, viewProjection_, directionalLight_);
 		}
 		
 	}
 	if (sphereIsAlive_ == true) {
-		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, cameraTransform_, directionalLight_);
+		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
 
 }

@@ -2,7 +2,7 @@
 #include<base/DirectXCommon.h>
 #include"Vector4.h"
 #include "worldTransform.h"
-
+#include "ViewProjection.h"
 class BlueMoon;
 
 class Triangle
@@ -10,7 +10,8 @@ class Triangle
 public:
 	void Initialize(  const DirectionalLight& light);
 	//void Draw(const Transform& transform, const Transform& cameraTransform, const Vector4& material);
-	void Draw(const WorldTransform& transform, const Transform& cameratransform, const Vector4& material);
+	//void Draw(const WorldTransform& transform, const Transform& cameratransform, const Vector4& material);
+	void Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const Vector4& material);
 	void Finalize();
 	
 private:
