@@ -5,20 +5,22 @@
 #include <string>
 #include "worldTransform.h"
 #include "ViewProjection.h"
+#include "Texturemanager.h"
 class Model
 {
 public:
-	void Initialize( const std::string& directoryPath, const std::string& filename, uint32_t index);
+	void Initialize( const std::string& directoryPath, const std::string& filename);
 
 
 	//void Draw( const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);
-	void Draw(const WorldTransform& transform, uint32_t texIndex, const ViewProjection& viewProjection, const DirectionalLight& light);
+	void Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const DirectionalLight& light);
 
 	ModelData modelData_;
 	void Finalize();
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);
 private:
+	Texturemanager* textureManager_;
 	DirectXCommon* dxCommon_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
@@ -29,7 +31,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	Material* material_;
 	BlueMoon* engine_;
-	
+	uint32_t texture_;
 	
 	DirectionalLight* directionalLight_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;

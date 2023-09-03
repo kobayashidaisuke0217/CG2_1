@@ -4,6 +4,7 @@ void Sphere::Initialize()
 {
 	dxCommon_ =DirectXCommon::GetInstance();
 	engine_ = BlueMoon::GetInstance();
+	textureManager_ = Texturemanager::GetInstance();
 	kSubDivision = 32;
 	vertexCount = kSubDivision*kSubDivision*6;
 	CreateVartexData();
@@ -42,7 +43,7 @@ void Sphere::Draw(const Vector4& material, const WorldTransform& transform, uint
 		//Light
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 		//texture
-		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
+		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(texIndex));
 		//Draw
 		dxCommon_->GetCommandList()->DrawInstanced(vertexCount, 1, 0, 0);
 	

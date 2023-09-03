@@ -6,6 +6,7 @@ void Triangle::Initialize( const DirectionalLight& light)
 {
 	direct_ = DirectXCommon::GetInstance();
 	Engine = BlueMoon::GetInstance();
+	textureManager_ = Texturemanager::GetInstance();
 	SettingVertex( );
 	SetColor();
 	//TransformMatrix();
@@ -52,7 +53,7 @@ void Triangle::Draw(const WorldTransform& transform, const ViewProjection& viewP
 	direct_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 	
 	//texture
-	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2, Engine->textureSrvHandleGPU_[0]);
+	direct_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(0));
 
 
 	//描画！(DrawCall/ドローコール)・3頂点で1つのインスタンス。インスタンスについては今後

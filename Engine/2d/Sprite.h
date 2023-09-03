@@ -3,6 +3,7 @@
 #include"Vector4.h"
 #include "BlueMoon.h"
 #include "worldTransform.h"
+#include "Texturemanager.h"
 class Sprite
 {
 public:
@@ -15,6 +16,7 @@ public:
 private:
 	
 	DirectXCommon* dxCommon_;
+	Texturemanager* textureManager_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 	VertexData* vertexData_;

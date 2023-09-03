@@ -4,6 +4,7 @@ void Sprite::Initialize( const Vector4& a, const Vector4& b, const DirectionalLi
 {
 	dxCommon_ = DirectXCommon::GetInstance();
 	engine_ = BlueMoon::GetInstance();
+	textureManager_ = Texturemanager::GetInstance();
 	CreateVartexData(a,b);
 	SetColor();
 	CreateTransform();
@@ -75,7 +76,7 @@ void Sprite::Draw(const WorldTransform& transform, const Transform& uvTransform,
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 		dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
-		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[ texIndex]);
+		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(texIndex));
 		dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 		
 	//

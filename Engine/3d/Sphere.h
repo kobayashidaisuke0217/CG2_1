@@ -4,6 +4,7 @@
 #include "BlueMoon.h"
 #include "worldTransform.h"
 #include "ViewProjection.h"
+#include "Texturemanager.h"
 class Sphere
 {
 public:
@@ -14,6 +15,7 @@ public:
 	void Draw(const Vector4& material, const WorldTransform& transform, uint32_t texIndex, const ViewProjection& viewProjection, const DirectionalLight& light);
 	void Finalize();
 private:
+	Texturemanager* textureManager_;
 	DirectXCommon* dxCommon_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;

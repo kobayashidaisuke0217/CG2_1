@@ -1,20 +1,20 @@
 #include "Model.h"
 #include<fstream>
 #include<sstream>
-void Model::Initialize( const std::string& directoryPath, const std::string& filename,uint32_t index)
+void Model::Initialize( const std::string& directoryPath, const std::string& filename)
 {
     dxCommon_ = DirectXCommon::GetInstance();
 	engine_ = BlueMoon::GetInstance();
-	
+    textureManager_ = Texturemanager::GetInstance();
     modelData_ = LoadObjFile(directoryPath, filename);
-    
-    engine_->LoadTexture(modelData_.material.textureFilePath, index);
+    texture_ = textureManager_->Load(modelData_.material.textureFilePath);
+  
 	CreateVartexData();
 	SetColor();
 	CreateDictionalLight();
 }
 
-void Model::Draw(const WorldTransform& transform, uint32_t texIndex, const ViewProjection& viewProjection, const DirectionalLight& light)
+void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const DirectionalLight& light)
 {
     Transform uvTransform = { { 1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f}, {0.0f,0.0f,0.0f} };
 
@@ -38,7 +38,7 @@ void Model::Draw(const WorldTransform& transform, uint32_t texIndex, const ViewP
     //Light
     dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
     //texture
-    dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, engine_->textureSrvHandleGPU_[texIndex]);
+    dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(texture_));
     //Draw
     dxCommon_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 

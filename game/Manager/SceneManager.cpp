@@ -57,6 +57,8 @@ void SceneManager::Init()
 	sceneArr_[sceneNum_]->Initialize();
 	input=Input::GetInstance();
 	input->Initialize(winApp_);
+	textureManager_ = Texturemanager::GetInstance();
+	textureManager_->Initialize();
 }
 
 

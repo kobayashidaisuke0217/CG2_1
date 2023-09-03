@@ -9,6 +9,7 @@
 #include "model.h"
 #include "worldTransform.h"
 #include "ViewProjection.h"
+#include "Texturemanager.h"
 struct TriangleVertex {
 	Vector4 v1;
 	Vector4 v2;
@@ -29,7 +30,8 @@ private:
 	BlueMoon* engine_;
 	DirectXCommon* directX_;
 	Sprite* sprite_;
-	
+	Texturemanager* textureManager_;
+
 	Vector4 spritedataLeftTop_;
 	Vector4 spritedataRightDown_;
 	Transform spriteTransform_;

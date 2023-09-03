@@ -4,12 +4,12 @@
 #include"Vector4.h"
 #pragma comment(lib,"dxcompiler.lib")
 #include "ImGuiManger.h"
-#include"externals/DirectXTex/d3dx12.h"
+
 #include<vector>
 class BlueMoon
 {
 public:
-	static const int maxtex =  5;
+	
 	static BlueMoon* GetInstance();
 
 	void variableInitialize();
@@ -22,14 +22,11 @@ public:
 	~BlueMoon();
  
 	DirectXCommon* GetDirectXCommon() { return direct_; }
-	void LoadTexture(const std::string& filePath,uint32_t index);
 	
 	
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[maxtex];
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[maxtex];
+	
+	
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GettextureSrvHandleCPU(ID3D12DescriptorHeap* descriptorheap,uint32_t descriptorSize,uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GettextureSrvHandleGPU(ID3D12DescriptorHeap* descriptorheap, uint32_t descriptorSize, uint32_t index);
 private:
 
 	
@@ -64,12 +61,7 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource>intermediateResource[maxtex];
-	Microsoft::WRL::ComPtr<ID3D12Resource>textureResource[maxtex];
-	uint32_t descriptorSizeSRV;
-	uint32_t descriptorSizeRTV;
-	uint32_t descriptorSizeDSV;
-
+	
 
 	IDxcBlob* CompileShader(
 		//CompileShaderするShaderファイルへのパス
@@ -91,9 +83,7 @@ private:
 	void SettingScissor();
 	void SettingDepth();
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
-	Microsoft::WRL::ComPtr<ID3D12Resource> UploadtextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages, uint32_t index);
-	DirectX::ScratchImage  LoadTexture(const std::string& filePath);
+	
 };
  
 

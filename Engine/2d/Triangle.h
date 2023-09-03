@@ -3,6 +3,7 @@
 #include"Vector4.h"
 #include "Worldtransform.h"
 #include "ViewProjection.h"
+#include "Texturemanager.h"
 class BlueMoon;
 
 class Triangle
@@ -20,6 +21,7 @@ private:
 	void TransformMatrix();
 	void CreateDictionalLight(const DirectionalLight& light);
 private:
+	Texturemanager* textureManager_;
 	BlueMoon* Engine;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 	DirectXCommon* direct_;

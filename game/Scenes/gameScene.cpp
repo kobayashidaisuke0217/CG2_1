@@ -15,12 +15,12 @@ void GameScene::Initialize()
 	
 	directX_ = DirectXCommon::GetInstance();
 
+	textureManager_ = Texturemanager::GetInstance();
+
 	viewProjection_.Initialize();
 	viewProjection_.translation_ = { 0.0f,0.0f,-5.0f };
-	uvResourceNum = 0;
-	engine_->LoadTexture("Resource/uvChecker.png", 0);
-	monsterBallResourceNum = 1;
-	engine_->LoadTexture("Resource/monsterBall.png", 1);
+	uvResourceNum = textureManager_->Load("Resource/uvChecker.png");
+	monsterBallResourceNum = textureManager_->Load("Resource/monsterBall.png");
 
 	
 	
@@ -47,9 +47,9 @@ void GameScene::Initialize()
 	sphere_ = new Sphere();
 	sphere_->Initialize();
 	model_[0] = new Model();
-	model_[0]->Initialize( "Resource", "axis.obj", 2);
+	model_[0]->Initialize( "Resource", "axis.obj");
 	model_[1] = new Model();
-	model_[1]->Initialize( "Resource", "plane.obj", 3);
+	model_[1]->Initialize( "Resource", "plane.obj");
 	for (int i = 0; i < 2; i++) {
 		modelMaterial_[i] = { 1.0f,1.0f,1.0f,1.0f };
 	}
@@ -156,7 +156,7 @@ void GameScene::Draw3D()
 	}
 	if (modelIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
-			model_[0]->Draw(worldTransformtriangle_[i], 3, viewProjection_, directionalLight_);
+			model_[0]->Draw(worldTransformtriangle_[i],  viewProjection_, directionalLight_);
 		}
 		
 	}
@@ -173,7 +173,7 @@ void GameScene::Draw()
 void GameScene::Draw2D() {
 	if (spriteIsAlive_ == true) {
 		//sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
-		sprite_->Draw(worldTransformtriangle_[0], SpriteuvTransform, spriteMaterial, 3);
+		sprite_->Draw(worldTransformtriangle_[0], SpriteuvTransform, spriteMaterial, uvResourceNum);
 	}
 	
 }
