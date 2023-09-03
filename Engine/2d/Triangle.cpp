@@ -1,6 +1,6 @@
 #include "Triangle.h"
 #include <assert.h>
-#include "base/BlueMoon.h"
+#include "BlueMoon.h"
 
 void Triangle::Initialize( const DirectionalLight& light)
 {

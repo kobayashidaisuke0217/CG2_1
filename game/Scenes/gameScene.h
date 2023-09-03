@@ -1,12 +1,12 @@
 #pragma once
 #include "Vector4.h"
-#include<2d/Triangle.h>
-#include "base/BlueMoon.h"
-#include <base/ImGuiManger.h>
+#include "triangle.h"
+#include "BlueMoon.h"
+#include "ImGuiManger.h"
 #include "Iscene.h"
-#include <2d/Sprite.h>
-#include<3d/Sphere.h>
-#include<3d/Model.h>
+#include "Sprite.h"
+#include "Sphere.h"
+#include "model.h"
 #include "worldTransform.h"
 #include "ViewProjection.h"
 struct TriangleVertex {

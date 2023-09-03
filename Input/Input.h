@@ -5,7 +5,7 @@
 #pragma comment(lib,"dxguid.lib")
 #include <array>
 #include <wrl.h>
-#include "base/WinApp.h"
+#include "WinApp.h"
 class Input
 {
 public:

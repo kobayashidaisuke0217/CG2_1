@@ -1,6 +1,6 @@
 #pragma once
 #include <game/Scenes/Iscene.h>
-#include <base/BlueMoon.h>
+#include "BlueMoon.h"
 #include<game/Scenes/gameScene.h>
 #include <game/Scenes/TitleScene.h>
 #include "Input/Input.h"

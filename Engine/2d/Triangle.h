@@ -1,7 +1,7 @@
 #pragma once
-#include<base/DirectXCommon.h>
+#include"DirectXCommon.h"
 #include"Vector4.h"
-#include "worldTransform.h"
+#include "Worldtransform.h"
 #include "ViewProjection.h"
 class BlueMoon;
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector4.h"
 #include <wrl.h>
-#include "base/DirectXCommon.h"
+#include "DirectXCommon.h"
 #include <d3d12.h>
 
 // 定数バッファ用データ構造体

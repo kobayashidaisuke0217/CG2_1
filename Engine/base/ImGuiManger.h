@@ -1,5 +1,5 @@
 #pragma once
-#include "base/DirectXCommon.h"
+#include "DirectXCommon.h"
 class ImGuiManger
 {
 public:

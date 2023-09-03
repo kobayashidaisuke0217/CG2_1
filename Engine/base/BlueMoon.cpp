@@ -279,9 +279,12 @@ void BlueMoon::BeginFrame() {
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
+	direct_->PreDraw();
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());//PS0を設定
-	direct_->PreDraw();
+	
+	
+
 
 }
 void BlueMoon::EndFrame() {

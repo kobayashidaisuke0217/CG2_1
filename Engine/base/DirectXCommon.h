@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <dxgi1_6.h>
 #include "WinApp.h"
-#include <MyUtility/combert.h>
+#include "combert.h"
 #include"externals/DirectXTex/DirectXTex.h"
 #include <wrl.h>
 #include <dxgidebug.h>
