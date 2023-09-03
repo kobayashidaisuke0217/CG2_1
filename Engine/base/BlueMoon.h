@@ -40,7 +40,7 @@ private:
   ImGuiManger* imguiManager_;
   
  
-  Microsoft::WRL::ComPtr<ID3D12Resource>intermediateResource[maxtex];
+ 
 	IDxcUtils* dxcUtils_;
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
@@ -64,7 +64,7 @@ private:
 	//頂点リソースにデータを書き込む
 	Vector4* vertexData_;
 
-	
+	Microsoft::WRL::ComPtr<ID3D12Resource>intermediateResource[maxtex];
 	Microsoft::WRL::ComPtr<ID3D12Resource>textureResource[maxtex];
 	uint32_t descriptorSizeSRV;
 	uint32_t descriptorSizeRTV;

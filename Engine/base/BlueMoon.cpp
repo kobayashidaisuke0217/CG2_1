@@ -279,11 +279,11 @@ void BlueMoon::BeginFrame() {
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
-	direct_->PreDraw();
+	
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());//PS0を設定
 	
-	
+	direct_->PreDraw();
 
 
 }
@@ -421,16 +421,3 @@ Microsoft::WRL::ComPtr<ID3D12Resource> BlueMoon::UploadtextureData(ID3D12Resourc
 	
 
 }
-//LeakCheck::~LeakCheck()
-//{
-//	////リソースリークチェック
-//	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
-//	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-//		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-//		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-//		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-//		debug->Release();
-//	}
-//}
-//WinApp* BlueMoon::win_;
-//DirectXCommon* BlueMoon::direct_;
