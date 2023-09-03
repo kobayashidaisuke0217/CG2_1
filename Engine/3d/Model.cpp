@@ -11,7 +11,6 @@ void Model::Initialize( const std::string& directoryPath, const std::string& fil
     engine_->LoadTexture(modelData_.material.textureFilePath, index);
 	CreateVartexData();
 	SetColor();
-	//TransformMatrix();
 	CreateDictionalLight();
 }
 
