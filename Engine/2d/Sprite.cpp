@@ -40,8 +40,8 @@ void Sprite::Draw( const Transform& uvTransform, const Vector4& material,uint32_
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, directionalLightResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, textureManager_->GetGPUHandle(texIndex));
-	dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-	
+	//dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	dxCommon_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 }
 void Sprite::CreateDictionalLight(const DirectionalLight& light)
