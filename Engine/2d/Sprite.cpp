@@ -16,13 +16,13 @@ void Sprite::SetColor() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->uvTransform = MakeIdentity4x4();
 }
-void Sprite::Draw(const Transform& transform, const Transform& uvTransform, const Vector4& material,uint32_t texIndex)
+void Sprite::Draw( const Transform& uvTransform, const Vector4& material,uint32_t texIndex)
 {
 	
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	/*Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	Matrix4x4 projectionmatrix = MakeOrthographicMatrix(0.0f, 0.0f, (float)dxCommon_->GetWin()->kClientWidth, (float)dxCommon_->GetWin()->kClientHeight, 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionmatrix));
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionmatrix));*/
 
 	Matrix4x4 uvtransformMtrix = MakeScaleMatrix(uvTransform.scale);
 	uvtransformMtrix = Multiply(uvtransformMtrix, MakeRotateZMatrix(uvTransform.rotate.z));
@@ -31,16 +31,15 @@ void Sprite::Draw(const Transform& transform, const Transform& uvTransform, cons
 
 	*materialData_ = { material,false};
 	materialData_->uvTransform = uvtransformMtrix;
-	*wvpData_ = { worldViewProjectionMatrix,worldMatrix };
+	/**wvpData_ = { worldViewProjectionMatrix,worldMatrix };*/
 		//形状を設定。PS0にせっていしているものとはまた別。同じものを設定すると考えておけばいい
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView);
 
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, directionalLightResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(texIndex));
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, textureManager_->GetGPUHandle(texIndex));
 	dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 	
 

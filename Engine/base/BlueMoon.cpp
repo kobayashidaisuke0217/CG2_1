@@ -1,6 +1,39 @@
 #include "BlueMoon.h"
 #include <assert.h>
 
+void BlueMoon::Initialize(int32_t width, int32_t height) {
+	win_ = WinApp::GetInstance();
+	direct_ = DirectXCommon::GetInstance();
+	direct_->Initialize(win_, win_->kClientWidth, win_->kClientHeight);
+	imguiManager_ = new ImGuiManger();
+	imguiManager_->Initialize(win_, direct_);
+
+
+	InitializeDxcCompiler();
+
+
+	CreateRootSignature3D();
+	CreateRootSignature2D();
+	CreateInputlayOut();
+
+
+	SettingBlendState();
+
+	SettingRasterizerState3D();
+	SettingRasterizerState2D();
+	SettingDepth();
+	InitializePSO3D();
+	InitializePSO3DWireFrame();
+	InitializePSO2D();
+
+	SettingViePort();
+
+	SettingScissor();
+
+}
+
+
+
 IDxcBlob* BlueMoon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	//これからシェーダーをコンパイルする旨をログに出す
@@ -166,9 +199,13 @@ void BlueMoon::SettingBlendState() {
 void BlueMoon::SettingRasterizerState3D() {
 
 	//裏面（時計回り）を表示しない
-	rasterizerDesc_.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc3D_.CullMode = D3D12_CULL_MODE_BACK;
 	//三角形の中を塗りつぶす
-	rasterizerDesc_.FillMode = D3D12_FILL_MODE_SOLID;
+	rasterizerDesc3D_.FillMode = D3D12_FILL_MODE_SOLID;
+	//裏面（時計回り）を表示しない
+	rasterizerDesc3DWireFrame_.CullMode = D3D12_CULL_MODE_BACK;
+	//三角形の中を塗りつぶす
+	rasterizerDesc3DWireFrame_.FillMode = D3D12_FILL_MODE_WIREFRAME;
 
 	//Shaderをコンパイルする
 	vertexShaderBlob3D_ = CompileShader(L"hlsl/Object3d.VS.hlsl",
@@ -190,7 +227,7 @@ void BlueMoon::InitializePSO3D() {
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob3D_->GetBufferPointer(),
 		pixelShaderBlob3D_->GetBufferSize() };//pixcelShader
 	graphicsPipelineStateDesc.BlendState = blendDesc_;//BlendState
-	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc_;//rasterizerState
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc3D_;//rasterizerState
 	//書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
@@ -206,6 +243,35 @@ void BlueMoon::InitializePSO3D() {
 	
 	HRESULT hr = direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState3D_));
+	assert(SUCCEEDED(hr));
+}
+
+void BlueMoon::InitializePSO3DWireFrame()
+{
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
+	graphicsPipelineStateDesc.pRootSignature = rootSignature3D_.Get();//RootSignature
+	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;//Inputlayout
+	graphicsPipelineStateDesc.VS = { vertexShaderBlob3D_->GetBufferPointer(),
+		vertexShaderBlob3D_->GetBufferSize() };//vertexShader
+	graphicsPipelineStateDesc.PS = { pixelShaderBlob3D_->GetBufferPointer(),
+		pixelShaderBlob3D_->GetBufferSize() };//pixcelShader
+	graphicsPipelineStateDesc.BlendState = blendDesc_;//BlendState
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc3DWireFrame_;//rasterizerState
+	//書き込むRTVの情報
+	graphicsPipelineStateDesc.NumRenderTargets = 1;
+	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	//利用するトポロジ（形状）のタイプ。三角形
+	graphicsPipelineStateDesc.PrimitiveTopologyType =
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	//どのように画面に色を打ち込むのかの設定（気にしなく良い）
+	graphicsPipelineStateDesc.SampleDesc.Count = 1;
+	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
+	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//実際に生成
+
+	HRESULT hr = direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+		IID_PPV_ARGS(&graphicsPipelineState3DWireFrame_));
 	assert(SUCCEEDED(hr));
 }
 
@@ -240,36 +306,7 @@ void BlueMoon::variableInitialize()
 {
 	
 }
-void BlueMoon::Initialize( int32_t width, int32_t height) {
-	//resourceLeak = new LeakCheck();
-	win_ = WinApp::GetInstance();
-	direct_ = DirectXCommon::GetInstance();
-	direct_->Initialize(win_, win_->kClientWidth, win_->kClientHeight);
-	imguiManager_ = new ImGuiManger();
-	imguiManager_->Initialize(win_,direct_);
-	
-	
-	InitializeDxcCompiler();
 
-
-	CreateRootSignature3D();
-	CreateRootSignature2D();
-	CreateInputlayOut();
-
-
-	SettingBlendState();
-
-	SettingRasterizerState3D();
-	SettingRasterizerState2D();
-	SettingDepth();
-	InitializePSO3D();
-	InitializePSO2D();
-
-	SettingViePort();
-
-	SettingScissor();
-
-}
 
 
 void BlueMoon::BeginFrame() {
@@ -330,6 +367,12 @@ void BlueMoon::ModelPreDraw()
 	
 }
 
+void BlueMoon::ModelPreDrawWireFrame()
+{
+	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature3D_.Get());
+	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState3DWireFrame_.Get());//PS0を設定
+}
+
 void BlueMoon::SpritePreDraw()
 {
 	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature2D_.Get());
@@ -346,7 +389,7 @@ void BlueMoon::InitializePSO2D() {
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob2D_->GetBufferPointer(),
 		pixelShaderBlob2D_->GetBufferSize() };//pixcelShader
 	graphicsPipelineStateDesc.BlendState = blendDesc_;//BlendState
-	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc_;//rasterizerState
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc2D_;//rasterizerState
 	//書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
@@ -367,9 +410,9 @@ void BlueMoon::InitializePSO2D() {
 void BlueMoon::SettingRasterizerState2D() {
 
 	//裏面（時計回り）を表示しない
-	rasterizerDesc_.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc2D_.CullMode = D3D12_CULL_MODE_NONE;
 	//三角形の中を塗りつぶす
-	rasterizerDesc_.FillMode = D3D12_FILL_MODE_SOLID;
+	rasterizerDesc2D_.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
 	vertexShaderBlob2D_ = CompileShader(L"hlsl/Object2d.VS.hlsl",
@@ -387,27 +430,27 @@ void BlueMoon::CreateRootSignature2D() {
 	descriptionRootSignature.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	//RootParameter作成。複数設定できるので配列。今回は結果1つだけなので長さ１の配列
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
+	D3D12_ROOT_PARAMETER rootParameters[3] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//pixelShaderを使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
-	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//vertexShaderを使う
-	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
+	//rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	//rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//vertexShaderを使う
+	//rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインド
 
 	D3D12_DESCRIPTOR_RANGE descriptoraRange[1] = {};
 	descriptoraRange[0].BaseShaderRegister = 0;
 	descriptoraRange[0].NumDescriptors = 1;
 	descriptoraRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使用
 	descriptoraRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//Descriptortableを使う
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixcelShaderを使う
-	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptoraRange;//tableの中身の配列を指定
-	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptoraRange);
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//Descriptortableを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixcelShaderを使う
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptoraRange;//tableの中身の配列を指定
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptoraRange);
 
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//pixcelShaderを使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号1
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//pixcelShaderを使う
+	rootParameters[2].Descriptor.ShaderRegister = 1;//レジスタ番号1
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
 	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//バイリニアフィルタ

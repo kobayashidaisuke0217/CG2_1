@@ -10,7 +10,7 @@ public:
 	void Initialize(const Vector4& a, const Vector4& b,const DirectionalLight& light);
 
 
-	void Draw( const Transform& transform, const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );
+	void Draw( /*const Transform& transform,*/ const Transform& uvTransform, const  Vector4& material, uint32_t texIndex );
 	
 	void Finalize();
 private:

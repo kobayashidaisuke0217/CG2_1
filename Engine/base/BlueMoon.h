@@ -25,6 +25,7 @@ public:
 
 
 	void ModelPreDraw();
+	void ModelPreDrawWireFrame();
 	void SpritePreDraw();
 
 private:
@@ -51,6 +52,8 @@ private:
 	IDxcBlob* vertexShaderBlob3D_;
 	IDxcBlob* pixelShaderBlob3D_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState3D_;
+	//3Dパイプラインワイヤーフレーム
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState3DWireFrame_;
 	//2Dパイプライン
 	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob2D_;
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob2D_;
@@ -58,7 +61,9 @@ private:
 	IDxcBlob* vertexShaderBlob2D_;
 	IDxcBlob* pixelShaderBlob2D_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState2D_;
-D3D12_RASTERIZER_DESC rasterizerDesc_{};
+D3D12_RASTERIZER_DESC rasterizerDesc2D_{};
+D3D12_RASTERIZER_DESC rasterizerDesc3D_{};
+D3D12_RASTERIZER_DESC rasterizerDesc3DWireFrame_{};
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[3];
@@ -83,6 +88,7 @@ D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	void SettingBlendState();
 	void SettingRasterizerState3D();
 	void InitializePSO3D();
+	void InitializePSO3DWireFrame();
 	void SettingViePort();
 	void SettingScissor();
 	void SettingDepth();
