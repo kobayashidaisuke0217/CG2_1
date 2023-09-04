@@ -6,6 +6,7 @@ enum  Scene {
 class Iscene
 {
 public:
+	virtual ~Iscene() {};
 	virtual void Initialize()=0;
 
 	virtual void Update()=0;
@@ -14,6 +15,7 @@ public:
 
 	virtual void Finalize() = 0;
 	 int GetSceneNum() { return sceneNum; }
+
 protected:
 
 	static int sceneNum;

@@ -1,5 +1,8 @@
 #include "TitleScene.h"
 #include "ImGuiManger.h"
+TitleScene::~TitleScene()
+{
+}
 void TitleScene::Initialize()
 {	
 	input = Input::GetInstance();

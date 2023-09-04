@@ -6,6 +6,7 @@ class TitleScene:public Iscene
 private:
 	int count;
 public:
+	~TitleScene()override;
 	 void Initialize() override;
 
 	 void Update() override;

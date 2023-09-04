@@ -15,8 +15,11 @@ public:
 	//void Draw( const Transform& transform, uint32_t texIndex, const Transform& cameraTransform,const DirectionalLight& light);
 	void Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const DirectionalLight& light);
 
-	ModelData modelData_;
+	
 	void Finalize();
+
+	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
+	ModelData modelData_;
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);
 private:

@@ -1,12 +1,9 @@
 #include "gameScene.h"
 
-GameScene::GameScene()
-{
-}
 
 GameScene::~GameScene()
 {
-
+	
 }
 
 void GameScene::Initialize()
@@ -17,8 +14,8 @@ void GameScene::Initialize()
 
 	textureManager_ = Texturemanager::GetInstance();
 
-	/*viewProjection_.Initialize();
-	viewProjection_.translation_ = { 0.0f,0.0f,-5.0f };*/
+	viewProjection_.Initialize();
+	viewProjection_.translation_ = { 0.0f,0.0f,-5.0f };
 	uvResourceNum = textureManager_->Load("Resource/uvChecker.png");
 	monsterBallResourceNum = textureManager_->Load("Resource/monsterBall.png");
 
@@ -46,8 +43,9 @@ void GameScene::Initialize()
 	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
 	sphere_ = new Sphere();
 	sphere_->Initialize();
-	model_[0] = new Model();
-	model_[0]->Initialize("Resource", "axis.obj");
+	/*model_[0] = new Model();
+	model_[0]->Initialize("Resource", "axis.obj");*/
+	model_[0] = Model::CreateModelFromObj("Resource", "axis.obj");
 	model_[1] = new Model();
 	model_[1]->Initialize("Resource", "plane.obj");
 	for (int i = 0; i < 2; i++) {
@@ -55,9 +53,9 @@ void GameScene::Initialize()
 	}
 	triangle_ = new Triangle();
 	triangle_->Initialize(directionalLight_);
-	/*for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		worldTransformtriangle_[i].Initialize();
-	}*/
+	}
 	sprite_ = new Sprite();
 	sprite_->Initialize(spritedataLeftTop_, spritedataRightDown_, directionalLight_);
 	triangleIsAlive_ = false;
@@ -69,10 +67,10 @@ void GameScene::Initialize()
 void GameScene::Update()
 {
 
-	//directionalLight_.direction = Normalise(directionalLight_.direction);
+	directionalLight_.direction = Normalise(directionalLight_.direction);
 
 
-	/*if (ImGui::BeginTabBar("TabBar")) {
+	if (ImGui::BeginTabBar("TabBar")) {
 		if (ImGui::BeginTabItem("triangle1")) {
 			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor1", &material[0].x);
@@ -144,7 +142,7 @@ void GameScene::Update()
 	if (sceneNum > 1) {
 		sceneNum = 1;
 	}
-	ImGui::End();*/
+	ImGui::End();
 }
 
 void GameScene::Draw3D()
@@ -167,8 +165,8 @@ void GameScene::Draw3D()
 }
 void GameScene::Draw()
 {
-	/*Draw3D();
-	Draw2D();*/
+	Draw3D();
+	Draw2D();
 }
 void GameScene::Draw2D() {
 	if (spriteIsAlive_ == true) {
@@ -179,7 +177,10 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
-	
+	for (int i = 0; i < 2; i++) {
+		worldTransformtriangle_[i].constBuff_.ReleaseAndGetAddressOf();
+	}
+	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 	delete sphere_;
 	delete  sprite_;
 	delete triangle_;
@@ -187,4 +188,6 @@ void GameScene::Finalize()
 		delete model_[i];
 
 	}
+	
 }
+

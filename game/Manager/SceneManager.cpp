@@ -40,7 +40,7 @@ void SceneManager::Run() {
 		Engine->EndFrame();
 	}
 	CoUninitialize();
-	//Engine->Finalize();
+	Engine->Finalize();
 	sceneArr_[sceneNum_]->Finalize();
 	
 }

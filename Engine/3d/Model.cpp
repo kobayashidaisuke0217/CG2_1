@@ -51,6 +51,13 @@ void Model::Finalize()
     wvpResource_->Release();
     directionalLightResource_->Release();*/
 }
+
+Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)
+{
+    Model* model = new Model();
+    model->Initialize(directoryPath, filename);
+    return model;
+}
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
     ModelData modelData;//構築するモデルデータ

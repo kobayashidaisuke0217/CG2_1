@@ -2,7 +2,7 @@
 #include "Vector4.h"
 #include "triangle.h"
 #include "BlueMoon.h"
-#include "ImGuiManger.h"
+//#include "ImGuiManger.h"
 #include "Iscene.h"
 #include "Sprite.h"
 #include "Sphere.h"
@@ -10,20 +10,14 @@
 #include "worldTransform.h"
 #include "ViewProjection.h"
 #include "Texturemanager.h"
-struct TriangleVertex {
-	Vector4 v1;
-	Vector4 v2;
-	Vector4 v3;
-};
+
 class GameScene:public Iscene
 {
 public:
-	GameScene();
 	~GameScene();
 	void Initialize()override;
 	void Update()override;
-	void Draw2D();
-	void Draw3D();
+	
 	void Draw()override;
 	void Finalize()override;
 private:
@@ -56,5 +50,9 @@ private:
 	bool spriteIsAlive_;
 	bool sphereIsAlive_;
 	bool modelIsAlive_;
- };
+
+	void Draw2D();
+	void Draw3D();
+ 
+};
 
