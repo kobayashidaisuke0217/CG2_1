@@ -27,7 +27,7 @@ void GameScene::Initialize()
 
 
 	spritedataLeftTop_ = { 0.0f,0.0f,0.0f,1.0f };
-	spritedataRightDown_ = { 320.0f,180.0f,0.0f,1.0f };
+	spritedataRightDown_ = { 1280.0f,720.0f,0.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 
@@ -147,7 +147,8 @@ void GameScene::Update()
 
 void GameScene::Draw3D()
 {
-	engine_->ModelPreDraw();
+	
+	
 	if (triangleIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
 			triangle_->Draw(worldTransformtriangle_[i], viewProjection_, material[i]);
@@ -166,14 +167,19 @@ void GameScene::Draw3D()
 }
 void GameScene::Draw()
 {
+	//3D描画準備
+	engine_->ModelPreDraw();
 	Draw3D();
+	//2D描画準備
+	engine_->SpritePreDraw();
 	Draw2D();
 }
 void GameScene::Draw2D() {
-	//if (spriteIsAlive_ == true) {
-	//	//sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
-	//	sprite_->Draw(worldTransformtriangle_[0], SpriteuvTransform, spriteMaterial, uvResourceNum);
-	//}
+
+	if (spriteIsAlive_ == true) {
+		sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, uvResourceNum);
+	
+	}
 
 }
 void GameScene::Finalize()

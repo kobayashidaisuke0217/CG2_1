@@ -25,7 +25,7 @@ public:
 
 
 	void ModelPreDraw();
-
+	void SpritePreDraw();
 
 private:
 
@@ -42,19 +42,23 @@ private:
 	IDxcCompiler3* dxcCompiler_;
 	IDxcIncludeHandler* includeHandler_;
 
-	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob_;
-
-	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
-
-	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature3D_;
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_{};
 	D3D12_BLEND_DESC blendDesc_{};
-	IDxcBlob* vertexShaderBlob_;
-	IDxcBlob* pixelShaderBlob_;
-	D3D12_RASTERIZER_DESC rasterizerDesc_{};
-
+	//3Dパイプライン
+	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob3D_;
+	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob3D_;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature3D_;
+	IDxcBlob* vertexShaderBlob3D_;
+	IDxcBlob* pixelShaderBlob3D_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState3D_;
-
+	//2Dパイプライン
+	Microsoft::WRL::ComPtr<ID3DBlob>signatureBlob2D_;
+	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob2D_;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature2D_;
+	IDxcBlob* vertexShaderBlob2D_;
+	IDxcBlob* pixelShaderBlob2D_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState2D_;
+D3D12_RASTERIZER_DESC rasterizerDesc_{};
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[3];
@@ -83,6 +87,9 @@ private:
 	void SettingScissor();
 	void SettingDepth();
 
+	void CreateRootSignature2D();
+	void SettingRasterizerState2D();
+	void InitializePSO2D();
 
 };
 
