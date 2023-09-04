@@ -24,7 +24,7 @@ public:
 	DirectXCommon* GetDirectXCommon() { return direct_; }
 
 
-
+	void ModelPreDraw();
 
 
 private:
@@ -46,14 +46,14 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3DBlob>errorBlob_;
 
-	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature_;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature3D_;
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_{};
 	D3D12_BLEND_DESC blendDesc_{};
 	IDxcBlob* vertexShaderBlob_;
 	IDxcBlob* pixelShaderBlob_;
 	D3D12_RASTERIZER_DESC rasterizerDesc_{};
 
-	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState_;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState3D_;
 
 	D3D12_VIEWPORT viewport_{};
 	D3D12_RECT scissorRect_{};
@@ -74,11 +74,11 @@ private:
 		IDxcIncludeHandler* includeHandler
 	);
 	void InitializeDxcCompiler();
-	void CreateRootSignature();
+	void CreateRootSignature3D();
 	void CreateInputlayOut();
 	void SettingBlendState();
-	void SettingRasterizerState();
-	void InitializePSO();
+	void SettingRasterizerState3D();
+	void InitializePSO3D();
 	void SettingViePort();
 	void SettingScissor();
 	void SettingDepth();

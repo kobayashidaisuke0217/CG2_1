@@ -147,6 +147,7 @@ void GameScene::Update()
 
 void GameScene::Draw3D()
 {
+	engine_->ModelPreDraw();
 	if (triangleIsAlive_ == true) {
 		for (int i = 0; i < 2; i++) {
 			triangle_->Draw(worldTransformtriangle_[i], viewProjection_, material[i]);
@@ -169,10 +170,10 @@ void GameScene::Draw()
 	Draw2D();
 }
 void GameScene::Draw2D() {
-	if (spriteIsAlive_ == true) {
-		//sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
-		sprite_->Draw(worldTransformtriangle_[0], SpriteuvTransform, spriteMaterial, uvResourceNum);
-	}
+	//if (spriteIsAlive_ == true) {
+	//	//sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 3);
+	//	sprite_->Draw(worldTransformtriangle_[0], SpriteuvTransform, spriteMaterial, uvResourceNum);
+	//}
 
 }
 void GameScene::Finalize()

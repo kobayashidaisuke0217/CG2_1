@@ -12,8 +12,8 @@ public:
 	static const int maxtex = 256;
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(uint32_t textureHandle);
 
-	
-	uint32_t Load(const std::string& filePath );
+	uint32_t Load(const std::string& filePath );	
+
 private:
 	DirectXCommon* dirctXCommon_;
 	Microsoft::WRL::ComPtr<ID3D12Resource>intermediateResource[maxtex];

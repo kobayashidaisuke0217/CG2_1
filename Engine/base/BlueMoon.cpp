@@ -71,7 +71,7 @@ void BlueMoon::InitializeDxcCompiler()
 	assert(SUCCEEDED(hr));
 
 }
-void BlueMoon::CreateRootSignature() {
+void BlueMoon::CreateRootSignature3D() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags =
@@ -132,9 +132,9 @@ rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 		assert(false);
 	}
 	//バイナリを元に生成
-	rootSignature_ = nullptr;
+	
 	hr = direct_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
-		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
+		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature3D_));
 	assert(SUCCEEDED(hr));
 }
 void BlueMoon::CreateInputlayOut() {
@@ -163,7 +163,7 @@ void BlueMoon::SettingBlendState() {
 	blendDesc_.RenderTarget[0].RenderTargetWriteMask =
 		D3D12_COLOR_WRITE_ENABLE_ALL;
 }
-void BlueMoon::SettingRasterizerState() {
+void BlueMoon::SettingRasterizerState3D() {
 
 	//裏面（時計回り）を表示しない
 	rasterizerDesc_.CullMode = D3D12_CULL_MODE_BACK;
@@ -180,10 +180,10 @@ void BlueMoon::SettingRasterizerState() {
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
 }
-void BlueMoon::InitializePSO() {
+void BlueMoon::InitializePSO3D() {
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();//RootSignature
+	graphicsPipelineStateDesc.pRootSignature = rootSignature3D_.Get();//RootSignature
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc_;//Inputlayout
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),
 		vertexShaderBlob_->GetBufferSize() };//vertexShader
@@ -203,9 +203,9 @@ void BlueMoon::InitializePSO() {
 	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	//実際に生成
-	graphicsPipelineState_ = nullptr;
+	
 	HRESULT hr = direct_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState_));
+		IID_PPV_ARGS(&graphicsPipelineState3D_));
 	assert(SUCCEEDED(hr));
 }
 
@@ -252,16 +252,16 @@ void BlueMoon::Initialize( int32_t width, int32_t height) {
 	InitializeDxcCompiler();
 
 
-	CreateRootSignature();
+	CreateRootSignature3D();
 	CreateInputlayOut();
 
 
 	SettingBlendState();
 
-	SettingRasterizerState();
+	SettingRasterizerState3D();
 
 	SettingDepth();
-	InitializePSO();
+	InitializePSO3D();
 
 	SettingViePort();
 
@@ -278,11 +278,10 @@ void BlueMoon::BeginFrame() {
 	direct_->GetCommandList()->RSSetScissorRects(1, &scissorRect_);//scirssorを設定
 	//RootSignatureを設定。PS0に設定しているけど別途設定が必要
 	
-	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());//PS0を設定
 	
 	direct_->PreDraw();
-
+	//direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	//direct_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());//PS0を設定
 
 }
 void BlueMoon::EndFrame() {
@@ -318,5 +317,12 @@ BlueMoon::~BlueMoon()
 	direct_->Finalize();
 	
 
+}
+
+void BlueMoon::ModelPreDraw()
+{
+	direct_->GetCommandList()->SetGraphicsRootSignature(rootSignature3D_.Get());
+	direct_->GetCommandList()->SetPipelineState(graphicsPipelineState3D_.Get());//PS0を設定
+	
 }
 
