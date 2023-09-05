@@ -46,6 +46,7 @@ private:
 	WorldTransform worldTransformtriangle_[2];
 	ViewProjection viewProjection_;
 	int monsterBallResourceNum;
+	int BlackResourceNum;
 	bool triangleIsAlive_;
 	bool spriteIsAlive_;
 	bool sphereIsAlive_;

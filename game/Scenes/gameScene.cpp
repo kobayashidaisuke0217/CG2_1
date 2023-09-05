@@ -18,21 +18,13 @@ void GameScene::Initialize()
 	viewProjection_.translation_ = { 0.0f,0.0f,-5.0f };
 	uvResourceNum = textureManager_->Load("Resource/uvChecker.png");
 	monsterBallResourceNum = textureManager_->Load("Resource/monsterBall.png");
-
-
-
-
+	BlackResourceNum = textureManager_->Load("Resource/Black.png");
 	material[0] = { 1.0f,1.0f,1.0f,1.0f };
 	material[1] = { 1.0f,1.0f,1.0f,1.0f };
-
-
-	spritedataLeftTop_ = { 0.0f,-1.0f,0.0f,1.0f };
-	spritedataRightDown_ = { 1.0f,1.0f,0.0f,1.0f };
+	spritedataLeftTop_ = { 0.0f,0.0f,0.0f,1.0f };
+	spritedataRightDown_ = { 320.0f,180.0f,0.0f,1.0f };
 	spriteTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
-
 	spriteMaterial = { 1.0f,1.0f,1.0f,1.0f };
-
 	sphereMaterial_ = { 1.0f,1.0f,1.0f,1.0f };
 	SpriteuvTransform =
 	{
@@ -43,8 +35,7 @@ void GameScene::Initialize()
 	directionalLight_ = { {1.0f,1.0f,1.0f,1.0f},{0.0f,-1.0f,0.0f},1.0f };
 	sphere_ = new Sphere();
 	sphere_->Initialize();
-	/*model_[0] = new Model();
-	model_[0]->Initialize("Resource", "axis.obj");*/
+
 	model_[0] = Model::CreateModelFromObj("Resource", "axis.obj");
 	model_[1] = new Model();
 	model_[1]->Initialize("Resource", "plane.obj");
@@ -60,7 +51,7 @@ void GameScene::Initialize()
 	sprite_->Initialize(  spritedataLeftTop_, spritedataRightDown_, directionalLight_);
 	triangleIsAlive_ = false;
 	spriteIsAlive_ = true;
-	sphereIsAlive_ = false;
+	sphereIsAlive_ = true;
 	modelIsAlive_ = false;
 }
 
@@ -68,16 +59,14 @@ void GameScene::Update()
 {
 
 	directionalLight_.direction = Normalise(directionalLight_.direction);
-
-	if(ImGui::BeginTabBar("")) {
+	/*ImGui::Begin("tab");
+	ImGui::BeginTabBar(" f");
 		if (ImGui::BeginTabItem("triangle1")) {
 			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
 			ImGui::ColorEdit3("triangleColor1", &material[0].x);
 			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_[0].translation_.x, 0.1f);
 			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_[0].rotation_.x, 0.1f);
 			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_[0].scale_.x, 0.1f);
-
-
 
 			ImGui::EndTabItem();
 		}
@@ -104,9 +93,8 @@ void GameScene::Update()
 			ImGui::EndTabItem();
 		}
 		
-		
-	}
 	ImGui::EndTabBar();
+	ImGui::End();*/
 	ImGui::Begin("Texture");
 			ImGui::Checkbox("IsAlive", &spriteIsAlive_);
 			ImGui::DragFloat3("spritetranslate", &spriteTransform_.translate.x, 0.1f);
@@ -115,7 +103,7 @@ void GameScene::Update()
 			ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
 			ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
 			ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
-			ImGui::EndTabItem();
+			//ImGui::EndTabItem();
 			ImGui::End();
 	worldTransformtriangle_[0].UpdateMatrix();
 	worldTransformtriangle_[1].UpdateMatrix();
@@ -147,31 +135,31 @@ void GameScene::Draw3D()
 {
 	
 	
-	if (triangleIsAlive_ == true) {
+	if (triangleIsAlive_ ) {
 		for (int i = 0; i < 2; i++) {
 			triangle_->Draw(worldTransformtriangle_[i], viewProjection_, material[i]);
 		}
 	}
-	if (modelIsAlive_ == true) {
+	if (modelIsAlive_ ) {
 		for (int i = 0; i < 2; i++) {
 			model_[0]->Draw(worldTransformtriangle_[i], viewProjection_, directionalLight_);
 		}
 
 	}
-	if (sphereIsAlive_ == true) {
+	if (sphereIsAlive_) {
 		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[1], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
 	engine_->ModelPreDrawWireFrame();
-	if (sphereIsAlive_ == true) {
+	if (sphereIsAlive_) {
 		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
-
+	
 }
 
 void GameScene::Draw2D() {
 
-	if (spriteIsAlive_ == true) {
-		sprite_->Draw(/*spriteTransform_,*/ SpriteuvTransform, spriteMaterial, uvResourceNum);
+	if (spriteIsAlive_ ) {
+		sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, BlackResourceNum);
 	
 	}
 

@@ -62,6 +62,8 @@ private:
 	IDxcBlob* pixelShaderBlob2D_;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState2D_;
 D3D12_RASTERIZER_DESC rasterizerDesc2D_{};
+D3D12_INPUT_ELEMENT_DESC inputElementDescs2D_[2];
+D3D12_INPUT_LAYOUT_DESC inputLayoutDesc2D_{};
 D3D12_RASTERIZER_DESC rasterizerDesc3D_{};
 D3D12_RASTERIZER_DESC rasterizerDesc3DWireFrame_{};
 	D3D12_VIEWPORT viewport_{};
@@ -96,7 +98,7 @@ D3D12_RASTERIZER_DESC rasterizerDesc3DWireFrame_{};
 	void CreateRootSignature2D();
 	void SettingRasterizerState2D();
 	void InitializePSO2D();
-
+	void CreateInputlayOut2D();
 };
 
 

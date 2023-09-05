@@ -224,11 +224,17 @@
   <ItemGroup>
     <FxCompile Include="hlsl\Object3d.PS.hlsl" />
     <FxCompile Include="hlsl\Object3d.VS.hlsl" />
-    <FxCompile Include="Object2d.PS.hlsl" />
-    <FxCompile Include="Object2d.VS.hlsl" />
+    <FxCompile Include="hlsl\Object2d.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="hlsl\Object2d.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="hlsl\Object3D.hlsli" />
-    <None Include="Object2D.hlsli" />
+    <None Include="hlsl\Object2D.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>
