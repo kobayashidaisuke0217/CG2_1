@@ -159,7 +159,7 @@ void GameScene::Draw3D()
 void GameScene::Draw2D() {
 
 	if (spriteIsAlive_ ) {
-		sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, BlackResourceNum);
+		sprite_->Draw(spriteTransform_, SpriteuvTransform, spriteMaterial, 0);
 	
 	}
 
