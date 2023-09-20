@@ -166,10 +166,7 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
-	/*for (int i = 0; i < 2; i++) {
-		worldTransformtriangle_[i].constBuff_.ReleaseAndGetAddressOf();
-	}*/
-	//viewProjection_.constBuff_.ReleaseAndGetAddressOf();
+	
 	delete sphere_;
 	delete  sprite_;
 	delete triangle_;
