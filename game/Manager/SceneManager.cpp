@@ -20,7 +20,7 @@ void SceneManager::Run() {
 		}
 
 		
-		Engine->BeginFrame();
+		blueMoon_->BeginFrame();
 		input->Update();
 		preSceneNum_ = sceneNum_;
 		sceneNum_ = sceneArr_[sceneNum_]->GetSceneNum();
@@ -36,11 +36,11 @@ void SceneManager::Run() {
 		sceneArr_[sceneNum_]->Draw();
 		
 
-		Engine->Draw();
-		Engine->EndFrame();
+		blueMoon_->Draw();
+		blueMoon_->EndFrame();
 	}
 	CoUninitialize();
-	Engine->Finalize();
+	blueMoon_->Finalize();
 	sceneArr_[sceneNum_]->Finalize();
 	
 }
@@ -48,8 +48,8 @@ void SceneManager::Run() {
 void SceneManager::Init()
 {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
-	Engine = BlueMoon::GetInstance();
-	Engine->Initialize( 1280, 720);
+	blueMoon_ = BlueMoon::GetInstance();
+	blueMoon_->Initialize( 1280, 720);
 	winApp_ = WinApp::GetInstance();
 
 	sceneArr_[TITLE_SCENE] = std::make_unique <TitleScene>();

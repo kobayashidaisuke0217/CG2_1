@@ -2,7 +2,6 @@
 #include "Vector4.h"
 #include "triangle.h"
 #include "BlueMoon.h"
-//#include "ImGuiManger.h"
 #include "Iscene.h"
 #include "Sprite.h"
 #include "Sphere.h"
@@ -22,8 +21,8 @@ public:
 	void Finalize()override;
 private:
 
-	BlueMoon* engine_;
-	DirectXCommon* directX_;
+	BlueMoon* blueMoon_;
+	DirectXCommon* directXCommon_;
 	Sprite* sprite_;
 	Texturemanager* textureManager_;
 

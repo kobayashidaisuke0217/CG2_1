@@ -1,10 +1,14 @@
 #pragma once
-#include <game/Scenes/Iscene.h>
+#pragma region エンジン
 #include "BlueMoon.h"
-#include<game/Scenes/gameScene.h>
-#include <game/Scenes/TitleScene.h>
 #include "Input/Input.h"
 #include "Texturemanager.h"
+#pragma endregion
+#pragma region シーン
+#include <game/Scenes/Iscene.h>
+#include<game/Scenes/gameScene.h>
+#include <game/Scenes/TitleScene.h>
+#pragma endregion
 class SceneManager
 {
 public:
@@ -14,7 +18,7 @@ public:
 	void Run();
 	void Init();
 private:
-	BlueMoon* Engine;
+	BlueMoon* blueMoon_;
 	WinApp* winApp_ = nullptr;
 	Input* input ;
 	Texturemanager* textureManager_;

@@ -8,9 +8,9 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
-	engine_ = BlueMoon::GetInstance();
+	blueMoon_ = BlueMoon::GetInstance();
 
-	directX_ = DirectXCommon::GetInstance();
+	directXCommon_ = DirectXCommon::GetInstance();
 
 	textureManager_ = Texturemanager::GetInstance();
 
@@ -124,10 +124,10 @@ void GameScene::Draw()
 {
 	
 	//3D描画準備
-	engine_->ModelPreDraw();
+	blueMoon_->ModelPreDraw();
 	Draw3D();
 	//2D描画準備
-	engine_->SpritePreDraw();
+	blueMoon_->SpritePreDraw();
 	Draw2D();
 }
 
@@ -149,7 +149,7 @@ void GameScene::Draw3D()
 	if (sphereIsAlive_) {
 		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[1], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
-	engine_->ModelPreDrawWireFrame();
+	blueMoon_->ModelPreDrawWireFrame();
 	if (sphereIsAlive_) {
 		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
@@ -166,10 +166,10 @@ void GameScene::Draw2D() {
 }
 void GameScene::Finalize()
 {
-	for (int i = 0; i < 2; i++) {
+	/*for (int i = 0; i < 2; i++) {
 		worldTransformtriangle_[i].constBuff_.ReleaseAndGetAddressOf();
-	}
-	viewProjection_.constBuff_.ReleaseAndGetAddressOf();
+	}*/
+	//viewProjection_.constBuff_.ReleaseAndGetAddressOf();
 	delete sphere_;
 	delete  sprite_;
 	delete triangle_;
