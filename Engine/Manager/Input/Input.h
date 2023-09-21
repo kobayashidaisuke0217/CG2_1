@@ -20,6 +20,8 @@ public:
 	/// 離した時
 	bool IsReleseKey(uint8_t keyNumber)const;
 
+	
+
 private:
 	/*Input() = default;
 	~Input() = default;*/

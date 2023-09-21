@@ -1,7 +1,7 @@
 #pragma once
+#include "BlueMoon.h"
 #include "Vector4.h"
 #include "triangle.h"
-#include "BlueMoon.h"
 #include "Iscene.h"
 #include "Sprite.h"
 #include "Sphere.h"

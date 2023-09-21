@@ -1,6 +1,6 @@
 #pragma once
 #include "Iscene.h"
-#include "Input/Input.h"
+#include "Input.h"
 class TitleScene:public Iscene
 {
 private:

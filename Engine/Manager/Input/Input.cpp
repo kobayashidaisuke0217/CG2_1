@@ -65,4 +65,5 @@ bool Input::IsReleseKey(uint8_t keyNumber)const
 		return false;
 	}
 }
+
 Input* Input::input_ = nullptr;
