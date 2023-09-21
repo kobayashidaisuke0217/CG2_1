@@ -8,10 +8,11 @@ SceneManager::SceneManager()
 }
 SceneManager::~SceneManager()
 {
-
+	audio_->xAudio2.Reset();
+	audio_->SoundUnload(&audio_->soundDatas[0]);
 }
 void SceneManager::Run() {
-	Init();
+	Initialize();
 
 	while (true) {
 		// メッセージ処理
@@ -31,7 +32,9 @@ void SceneManager::Run() {
 			
 		}
 		sceneArr_[sceneNum_]->Update();
-
+		if (input->PushKey(DIK_1)) {
+			audio_->SoundPlayWave(audio_->xAudio2.Get(), audio_->soundDatas[0]);
+		}
 		
 		sceneArr_[sceneNum_]->Draw();
 		
@@ -45,7 +48,7 @@ void SceneManager::Run() {
 	
 }
 
-void SceneManager::Init()
+void SceneManager::Initialize()
 {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 	blueMoon_ = BlueMoon::GetInstance();
@@ -60,6 +63,9 @@ void SceneManager::Init()
 	input->Initialize(winApp_);
 	textureManager_ = Texturemanager::GetInstance();
 	textureManager_->Initialize();
+	audio_ = Audio::GetInstance();
+	audio_->Initialize();
+	audio_->soundDatas[0] = audio_->SoundLoadWave("resource/Alarm01.wav");
 }
 
 
