@@ -44,10 +44,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(ProjectDir)/Engine/Manager/Input;$(ProjectDir)/Engine/Manager/Audio;$(ProjectDir)/Engine/Manager/Collision</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(ProjectDir)/Engine/Manager/Input;$(ProjectDir)/Engine/Manager/Audio;$(ProjectDir)/Engine/Manager/Collision</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -97,6 +97,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\2d\Triangle.cpp" />
     <ClCompile Include="Engine\3d\Model.cpp" />
+    <ClCompile Include="Engine\3d\Plane.cpp" />
     <ClCompile Include="Engine\3d\Sphere.cpp" />
     <ClCompile Include="Engine\3d\ViewProjection.cpp" />
     <ClCompile Include="Engine\3d\worldTransform.cpp" />
@@ -104,6 +105,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\ImGuiManger.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
+    <ClCompile Include="Engine\Manager\Audio\Audio.cpp" />
+    <ClCompile Include="Engine\Manager\Collision\CollisionManager.cpp" />
+    <ClCompile Include="Engine\Manager\Input\Input.cpp" />
     <ClCompile Include="Engine\Manager\Texture\Texturemanager.cpp" />
     <ClCompile Include="Engine\MyUtility\combert.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -117,7 +121,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="game\Scenes\gameScene.cpp" />
     <ClCompile Include="game\Scenes\Iscene.cpp" />
     <ClCompile Include="game\Scenes\TitleScene.cpp" />
-    <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mymath.cpp" />
   </ItemGroup>
@@ -125,6 +128,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\2d\Triangle.h" />
     <ClInclude Include="Engine\3d\Model.h" />
+    <ClInclude Include="Engine\3d\Plane.h" />
     <ClInclude Include="Engine\3d\Sphere.h" />
     <ClInclude Include="Engine\3d\ViewProjection.h" />
     <ClInclude Include="Engine\3d\worldTransform.h" />
@@ -132,6 +136,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\ImGuiManger.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
+    <ClInclude Include="Engine\Manager\Audio\Audio.h" />
+    <ClInclude Include="Engine\Manager\Collision\Collider.h" />
+    <ClInclude Include="Engine\Manager\Collision\CollisionConfig.h" />
+    <ClInclude Include="Engine\Manager\Collision\CollisionManager.h" />
+    <ClInclude Include="Engine\Manager\Input\Input.h" />
     <ClInclude Include="Engine\Manager\Texture\Texturemanager.h" />
     <ClInclude Include="Engine\MyUtility\combert.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -146,7 +155,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="game\Scenes\gameScene.h" />
     <ClInclude Include="game\Scenes\Iscene.h" />
     <ClInclude Include="game\Scenes\TitleScene.h" />
-    <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <ItemGroup>
