@@ -1,4 +1,4 @@
-#include"Vector4.h"
+#include"MyMath.h"
 #pragma once
 Matrix4x4 MakeRotateXMatrix(float theta) {
 	Matrix4x4 result;

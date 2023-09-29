@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector4.h"
+#include "MyMath.h"
 class Collider {
 private:
 	float radius_ = 1.0f;

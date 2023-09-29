@@ -1,6 +1,6 @@
 #pragma once
 #include "BlueMoon.h"
-#include "Vector4.h"
+#include "MyMath.h"
 #include "triangle.h"
 #include "Iscene.h"
 #include "Sprite.h"

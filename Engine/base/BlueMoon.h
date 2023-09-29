@@ -1,7 +1,7 @@
 #pragma once
 #include "DirectXCommon.h"
 #include <dxcapi.h>
-#include"Vector4.h"
+#include"MyMath.h"
 #pragma comment(lib,"dxcompiler.lib")
 #include "ImGuiManger.h"
 

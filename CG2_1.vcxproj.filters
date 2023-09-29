@@ -43,9 +43,6 @@
     <Filter Include="ソース ファイル\Scenes">
       <UniqueIdentifier>{808d7382-e1b7-403f-928b-03a3aa53b4d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Scenes">
-      <UniqueIdentifier>{fc2d7f0b-9f9e-4c1a-ae63-0c7391e4e232}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Manager">
       <UniqueIdentifier>{0bd32c51-c95c-42b0-82e7-f560dc21c67e}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="ソース ファイル\3d">
       <UniqueIdentifier>{d240ce5b-34da-4c87-9b1b-74dfb7b9f12c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Manager\Scenes">
+      <UniqueIdentifier>{fc2d7f0b-9f9e-4c1a-ae63-0c7391e4e232}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -146,7 +146,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector4.h">
+    <ClInclude Include="MyMath.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -174,13 +174,13 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="game\Scenes\gameScene.h">
-      <Filter>ヘッダー ファイル\Scenes</Filter>
+      <Filter>ヘッダー ファイル\Manager\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="game\Scenes\Iscene.h">
-      <Filter>ヘッダー ファイル\Scenes</Filter>
+      <Filter>ヘッダー ファイル\Manager\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="game\Scenes\TitleScene.h">
-      <Filter>ヘッダー ファイル\Scenes</Filter>
+      <Filter>ヘッダー ファイル\Manager\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="game\Manager\SceneManager.h">
       <Filter>ヘッダー ファイル\Manager</Filter>

@@ -59,42 +59,7 @@ void GameScene::Update()
 {
 
 	directionalLight_.direction = Normalise(directionalLight_.direction);
-	/*ImGui::Begin("tab");
-	ImGui::BeginTabBar(" f");
-		if (ImGui::BeginTabItem("triangle1")) {
-			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
-			ImGui::ColorEdit3("triangleColor1", &material[0].x);
-			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_[0].translation_.x, 0.1f);
-			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_[0].rotation_.x, 0.1f);
-			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_[0].scale_.x, 0.1f);
-
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("triangle2")) {
-			ImGui::Checkbox("IsAlive", &triangleIsAlive_);
-			ImGui::ColorEdit3("triangleColor", &material[1].x);
-			ImGui::DragFloat3("triangletranslate", &worldTransformtriangle_[1].translation_.x, 0.1f);
-			ImGui::DragFloat3("trianglerotate", &worldTransformtriangle_[1].rotation_.x, 0.1f);
-			ImGui::DragFloat3("trianglescale", &worldTransformtriangle_[1].scale_.x, 0.1f);
-
-
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Sphere")) {
-			ImGui::Checkbox("IsAlive", &sphereIsAlive_);
-
-			ImGui::InputInt("SphereResource", &monsterBallResourceNum);
-			ImGui::EndTabItem();
-		}
-		
-		if (ImGui::BeginTabItem("Camera")) {
-			ImGui::DragFloat3("CameraTranslate", &viewProjection_.translation_.x, 0.01f);
-			ImGui::DragFloat3("CameraRotate", &viewProjection_.rotation_.x, 0.01f);
-			ImGui::EndTabItem();
-		}
-		
-	ImGui::EndTabBar();
-	ImGui::End();*/
+	
 	ImGui::Begin("Texture");
 			ImGui::Checkbox("IsAlive", &spriteIsAlive_);
 			ImGui::DragFloat3("spritetranslate", &spriteTransform_.translate.x, 0.1f);
