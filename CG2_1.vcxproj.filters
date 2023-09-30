@@ -144,6 +144,9 @@
     <ClCompile Include="Engine\Manager\Collision\CollisionManager.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Manager\GlobalVariables\GlobalVariables.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyMath.h">
@@ -191,9 +194,6 @@
     <ClInclude Include="Engine\2d\Triangle.h">
       <Filter>ヘッダー ファイル\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Model.h">
-      <Filter>ヘッダー ファイル\3d</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Sphere.h">
       <Filter>ヘッダー ファイル\3d</Filter>
     </ClInclude>
@@ -239,6 +239,12 @@
     <ClInclude Include="Engine\Manager\Collision\Collider.h">
       <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3d\Model.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Manager\GlobalVariables\GlobalVariables.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -246,18 +252,24 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="hlsl\Object3d.PS.hlsl" />
-    <FxCompile Include="hlsl\Object3d.VS.hlsl" />
     <FxCompile Include="hlsl\Object2d.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
     <FxCompile Include="hlsl\Object2d.VS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="hlsl\Object3d.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="hlsl\Object3d.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="hlsl\Object3D.hlsli" />
     <None Include="hlsl\Object2D.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="hlsl\Object3D.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>

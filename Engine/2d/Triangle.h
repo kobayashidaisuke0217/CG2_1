@@ -4,6 +4,7 @@
 #include "Worldtransform.h"
 #include "ViewProjection.h"
 #include "Texturemanager.h"
+
 class BlueMoon;
 
 class Triangle

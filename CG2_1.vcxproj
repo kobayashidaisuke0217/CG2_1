@@ -44,10 +44,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(ProjectDir)/Engine/Manager/Input;$(ProjectDir)/Engine/Manager/Audio;$(ProjectDir)/Engine/Manager/Collision</IncludePath>
+    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(ProjectDir)/Engine/Manager/Input;$(ProjectDir)/Engine/Manager/Audio;$(ProjectDir)/Engine/Manager/Collision;$(ProjectDir)/externals/nlohmann;$(ProjectDir)/Engine/Manager/GlobalVariables</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(ProjectDir)/Engine/Manager/Input;$(ProjectDir)/Engine/Manager/Audio;$(ProjectDir)/Engine/Manager/Collision</IncludePath>
+    <IncludePath>$(SolutionDir)/;$(ProjectDir)/Engine/3d;$(ProjectDir)/Engine/base;$(ProjectDir)/Engine/2d;$(ProjectDir)/Engine/MyUtility;$(ProjectDir)/Engine/Manager/Texture;$(ProjectDir)/Engine/Manager/Input;$(ProjectDir)/Engine/Manager/Audio;$(ProjectDir)/Engine/Manager/Collision;$(ProjectDir)/externals/nlohmann;$(ProjectDir)/Engine/Manager/GlobalVariables</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\Manager\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Manager\Collision\CollisionManager.cpp" />
+    <ClCompile Include="Engine\Manager\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Engine\Manager\Input\Input.cpp" />
     <ClCompile Include="Engine\Manager\Texture\Texturemanager.cpp" />
     <ClCompile Include="Engine\MyUtility\combert.cpp" />
@@ -140,6 +141,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\Manager\Collision\Collider.h" />
     <ClInclude Include="Engine\Manager\Collision\CollisionConfig.h" />
     <ClInclude Include="Engine\Manager\Collision\CollisionManager.h" />
+    <ClInclude Include="Engine\Manager\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Engine\Manager\Input\Input.h" />
     <ClInclude Include="Engine\Manager\Texture\Texturemanager.h" />
     <ClInclude Include="Engine\MyUtility\combert.h" />

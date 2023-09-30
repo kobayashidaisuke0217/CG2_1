@@ -19,10 +19,10 @@ void SceneManager::Run() {
 		if (winApp_->Procesmessage()) {
 			break;
 		}
-
-		
+        input->Update();
+		glovalVariables_->Update();
 		blueMoon_->BeginFrame();
-		input->Update();
+		
 		preSceneNum_ = sceneNum_;
 		sceneNum_ = sceneArr_[sceneNum_]->GetSceneNum();
 
@@ -54,15 +54,17 @@ void SceneManager::Initialize()
 	blueMoon_ = BlueMoon::GetInstance();
 	blueMoon_->Initialize( 1280, 720);
 	winApp_ = WinApp::GetInstance();
-
+    input=Input::GetInstance();
+	input->Initialize(winApp_);
+	textureManager_ = Texturemanager::GetInstance();
+	textureManager_->Initialize();
+	glovalVariables_ = GlovalVariables::GetInstance();
+	glovalVariables_->LoadFiles();
 	sceneArr_[TITLE_SCENE] = std::make_unique <TitleScene>();
 	sceneArr_[GAME_SCENE] = std::make_unique <GameScene>();
 	sceneNum_ = TITLE_SCENE;
 	sceneArr_[sceneNum_]->Initialize();
-	input=Input::GetInstance();
-	input->Initialize(winApp_);
-	textureManager_ = Texturemanager::GetInstance();
-	textureManager_->Initialize();
+	
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
 	audio_->soundDatas[0] = audio_->SoundLoadWave("resource/Alarm01.wav");

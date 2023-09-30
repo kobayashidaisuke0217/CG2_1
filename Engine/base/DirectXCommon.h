@@ -1,13 +1,16 @@
 #pragma once
+#pragma region standardInclude
 #include <chrono>
 #include <cstdlib>
 #include <dxgi1_6.h>
-#include "WinApp.h"
-#include "combert.h"
-#include"externals/DirectXTex/DirectXTex.h"
+
+
 #include <wrl.h>
 #include <dxgidebug.h>
 #include<memory>
+#pragma endregion
+#include "WinApp.h"
+#include "combert.h"
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")

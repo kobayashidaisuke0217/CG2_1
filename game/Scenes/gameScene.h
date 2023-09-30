@@ -9,7 +9,7 @@
 #include "worldTransform.h"
 #include "ViewProjection.h"
 #include "Texturemanager.h"
-
+#include "GlobalVariables.h"
 class GameScene:public Iscene
 {
 public:
@@ -53,6 +53,6 @@ private:
 
 	void Draw2D();
 	void Draw3D();
- 
+	void ApplyGlobalVariables();
 };
 

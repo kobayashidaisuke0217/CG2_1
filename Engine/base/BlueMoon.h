@@ -4,10 +4,11 @@
 #include "DirectXCommon.h"
 #include "ImGuiManger.h"
 #include"MyMath.h"
+#pragma region standardInclude
 #include <dxcapi.h>
 #include<vector>
 #pragma comment(lib,"dxcompiler.lib")
-
+#pragma endregion
 class BlueMoon
 {
 public:
