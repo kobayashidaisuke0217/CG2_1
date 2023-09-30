@@ -2,7 +2,7 @@
 
 
 #include "DirectXCommon.h"
-#include "ImGuiManger.h"
+
 #include"MyMath.h"
 #pragma region standardInclude
 #include <dxcapi.h>
@@ -20,8 +20,8 @@ public:
 	void BeginFrame();
 	void EndFrame();
 	void Finalize();
-	void Update();
-	void Draw();
+	/*void Update();
+	void Draw();*/
 	~BlueMoon();
 
 	DirectXCommon* GetDirectXCommon() { return direct_; }
@@ -38,7 +38,7 @@ private:
 	DirectXCommon* direct_;
 
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
-	ImGuiManger* imguiManager_;
+	
 
 
 

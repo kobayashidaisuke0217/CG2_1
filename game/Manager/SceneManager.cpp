@@ -8,6 +8,7 @@ SceneManager::SceneManager()
 }
 SceneManager::~SceneManager()
 {
+	imguiManager_->Finalize();
 	audio_->xAudio2.Reset();
 	audio_->SoundUnload(&audio_->soundDatas[0]);
 }
@@ -19,8 +20,10 @@ void SceneManager::Run() {
 		if (winApp_->Procesmessage()) {
 			break;
 		}
+		imguiManager_->Begin();
         input->Update();
-		glovalVariables_->Update();
+		//glovalVariables_->Update();
+		
 		blueMoon_->BeginFrame();
 		
 		preSceneNum_ = sceneNum_;
@@ -39,7 +42,10 @@ void SceneManager::Run() {
 		sceneArr_[sceneNum_]->Draw();
 		
 
-		blueMoon_->Draw();
+		
+		imguiManager_->End();
+	
+		imguiManager_->Draw();
 		blueMoon_->EndFrame();
 	}
 	CoUninitialize();
@@ -58,6 +64,8 @@ void SceneManager::Initialize()
 	input->Initialize(winApp_);
 	textureManager_ = Texturemanager::GetInstance();
 	textureManager_->Initialize();
+	imguiManager_ = ImGuiManger::GetInstance();
+	imguiManager_->Initialize(winApp_, blueMoon_->GetDirectXCommon());
 	glovalVariables_ = GlovalVariables::GetInstance();
 	glovalVariables_->LoadFiles();
 	sceneArr_[TITLE_SCENE] = std::make_unique <TitleScene>();

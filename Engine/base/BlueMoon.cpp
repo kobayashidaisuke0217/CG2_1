@@ -5,8 +5,7 @@ void BlueMoon::Initialize(int32_t width, int32_t height) {
 	win_ = WinApp::GetInstance();
 	direct_ = DirectXCommon::GetInstance();
 	direct_->Initialize(win_, win_->kClientWidth, win_->kClientHeight);
-	imguiManager_ = new ImGuiManger();
-	imguiManager_->Initialize(win_, direct_);
+	
 
 
 	InitializeDxcCompiler();
@@ -310,7 +309,7 @@ void BlueMoon::variableInitialize()
 
 
 void BlueMoon::BeginFrame() {
-	imguiManager_->Begin();
+	//imguiManager_->Begin();
 	
 	
 	direct_->GetCommandList()->RSSetViewports(1, &viewport_);//viewportを設定
@@ -325,9 +324,9 @@ void BlueMoon::BeginFrame() {
 }
 void BlueMoon::EndFrame() {
 	
-	imguiManager_->End();
+	//imguiManager_->End();
 	
-	imguiManager_->Draw();
+	//imguiManager_->Draw();
 	direct_->PostDraw();
 }
 
@@ -336,19 +335,19 @@ void BlueMoon::Finalize()
 	
 	
 }
-void BlueMoon::Update()
-{
-
-}
-void BlueMoon::Draw()
-{
-	//ImGui::ShowDemoWindow();
-
-}
+//void BlueMoon::Update()
+//{
+//
+//}
+//void BlueMoon::Draw()
+//{
+//	//ImGui::ShowDemoWindow();
+//
+//}
 
 BlueMoon::~BlueMoon()
 {
-	imguiManager_->Finalize();
+	//imguiManager_->Finalize();
 	
 
 	pixelShaderBlob3D_->Release();
