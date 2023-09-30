@@ -61,11 +61,12 @@ void GameScene::Initialize()
 	globalVariables->AddItem(groupName, "Test", 90.0f);
 	globalVariables->AddItem(groupName, "Translation", worldTransformtriangle_[0].translation_);
 	ApplyGlobalVariables();
+	
 }
 
 void GameScene::Update()
 {
-
+	
 	directionalLight_.direction = Normalise(directionalLight_.direction);
 	
 	
@@ -76,6 +77,7 @@ void GameScene::Update()
 	viewProjection_.TransferMatrix();
 
 	ImGui::Begin("Scene");
+	ImGui::DragFloat3("translate", &worldTransformtriangle_[0].translation_.x, 0.1f);
 	ImGui::InputInt("SceneNum", &sceneNum);
 	if (sceneNum > 1) {
 		sceneNum = 1;
@@ -111,7 +113,7 @@ void GameScene::Draw3D()
 
 	}
 	if (sphereIsAlive_) {
-		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[1], monsterBallResourceNum, viewProjection_, directionalLight_);
+		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
 	blueMoon_->ModelPreDrawWireFrame();
 	if (sphereIsAlive_) {
