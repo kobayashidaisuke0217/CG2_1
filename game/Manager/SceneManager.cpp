@@ -22,7 +22,7 @@ void SceneManager::Run() {
 		}
 		imguiManager_->Begin();
         input->Update();
-		//glovalVariables_->Update();
+		glovalVariables_->Update();
 		
 		blueMoon_->BeginFrame();
 		
