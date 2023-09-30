@@ -1,5 +1,11 @@
 #include "ImGuiManger.h"
 
+ImGuiManger* ImGuiManger::GetInstance()
+{
+	static ImGuiManger instance;
+	return &instance;
+}
+
 void ImGuiManger::Initialize(WinApp* winApp, DirectXCommon* dxCommon)
 {
 	dxCommon_ = dxCommon;

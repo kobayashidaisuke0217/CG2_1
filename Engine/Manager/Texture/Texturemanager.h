@@ -1,7 +1,8 @@
 #pragma once
+#pragma region standardInclude
 #include <wrl.h>
 #include <array>
-
+#pragma endregion
 #include "DirectXCommon.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include"externals/DirectXTex/d3dx12.h"

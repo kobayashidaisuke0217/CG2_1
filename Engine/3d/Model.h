@@ -1,8 +1,10 @@
 #pragma once
+#pragma region standardInclude
+#include <string>
+#pragma endregion
 #include "DirectXCommon.h"
 #include"MyMath.h"
 #include "BlueMoon.h"
-#include <string>
 #include "worldTransform.h"
 #include "ViewProjection.h"
 #include "Texturemanager.h"

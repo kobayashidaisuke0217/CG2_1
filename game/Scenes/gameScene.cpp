@@ -53,6 +53,14 @@ void GameScene::Initialize()
 	spriteIsAlive_ = true;
 	sphereIsAlive_ = true;
 	modelIsAlive_ = false;
+	GlovalVariables* globalVariables{};
+	globalVariables = GlovalVariables::GetInstance();
+
+	const char* groupName = "Player";
+	GlovalVariables::GetInstance()->CreateGroup(groupName);
+	globalVariables->AddItem(groupName, "Test", 90.0f);
+	globalVariables->AddItem(groupName, "Translation", worldTransformtriangle_[0].translation_);
+	ApplyGlobalVariables();
 }
 
 void GameScene::Update()
@@ -60,16 +68,7 @@ void GameScene::Update()
 
 	directionalLight_.direction = Normalise(directionalLight_.direction);
 	
-	ImGui::Begin("Texture");
-			ImGui::Checkbox("IsAlive", &spriteIsAlive_);
-			ImGui::DragFloat3("spritetranslate", &spriteTransform_.translate.x, 0.1f);
-			ImGui::DragFloat3("spriterotate", &spriteTransform_.rotate.x, 0.1f);
-			ImGui::DragFloat3("spritescale", &spriteTransform_.scale.x, 0.1f);
-			ImGui::DragFloat2("uvScale", &SpriteuvTransform.scale.x, 0.1f);
-			ImGui::DragFloat3("uvTranslate", &SpriteuvTransform.translate.x, 0.1f);
-			ImGui::DragFloat("uvRotate", &SpriteuvTransform.rotate.z, 0.1f);
-			//ImGui::EndTabItem();
-			ImGui::End();
+	
 	worldTransformtriangle_[0].UpdateMatrix();
 	worldTransformtriangle_[1].UpdateMatrix();
 
@@ -119,6 +118,14 @@ void GameScene::Draw3D()
 		sphere_->Draw(sphereMaterial_, worldTransformtriangle_[0], monsterBallResourceNum, viewProjection_, directionalLight_);
 	}
 	
+}
+
+void GameScene::ApplyGlobalVariables()
+{
+	GlovalVariables* globalVariables = GlovalVariables::GetInstance();
+
+	const char* groupName = "Player";
+	worldTransformtriangle_[0].translation_ = globalVariables->GetVector3Value(groupName, "Translation");
 }
 
 void GameScene::Draw2D() {
