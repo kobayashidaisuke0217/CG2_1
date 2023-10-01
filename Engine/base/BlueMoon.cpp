@@ -207,12 +207,12 @@ void BlueMoon::SettingRasterizerState3D() {
 	rasterizerDesc3DWireFrame_.FillMode = D3D12_FILL_MODE_WIREFRAME;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob3D_ = CompileShader(L"hlsl/Object3d.VS.hlsl",
+	vertexShaderBlob3D_ = CompileShader(L"Resource/hlsl/Object3d.VS.hlsl",
 		L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(vertexShaderBlob3D_ != nullptr);
 
 
-	pixelShaderBlob3D_ = CompileShader(L"hlsl/Object3d.PS.hlsl",
+	pixelShaderBlob3D_ = CompileShader(L"Resource/hlsl/Object3d.PS.hlsl",
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob3D_ != nullptr);
 }
@@ -414,12 +414,12 @@ void BlueMoon::SettingRasterizerState2D() {
 	rasterizerDesc2D_.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//Shaderをコンパイルする
-	vertexShaderBlob2D_ = CompileShader(L"hlsl/Object2d.VS.hlsl",
+	vertexShaderBlob2D_ = CompileShader(L"Resource/hlsl/Object2d.VS.hlsl",
 		L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(vertexShaderBlob2D_ != nullptr);
 
 
-	pixelShaderBlob2D_ = CompileShader(L"hlsl/Object2d.PS.hlsl",
+	pixelShaderBlob2D_ = CompileShader(L"Resource/hlsl/Object2d.PS.hlsl",
 		L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob2D_ != nullptr);
 }
