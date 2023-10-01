@@ -92,6 +92,6 @@ void Triangle::SettingVertex() {
 	vertexData_[1].texcoord = { 0.5f,0.0f };
 
 	//右下
-	vertexData_[2].position = { 0.5f,0.0f,0.0f,1.0f };
+	vertexData_[2].position = { -0.5f,0.0f,0.0f,1.0f };
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 }
