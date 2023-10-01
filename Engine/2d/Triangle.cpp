@@ -9,7 +9,6 @@ void Triangle::Initialize( const DirectionalLight& light)
 	textureManager_ = Texturemanager::GetInstance();
 	SettingVertex( );
 	SetColor();
-	//TransformMatrix();
 	CreateDictionalLight(light);
 }
 void Triangle::TransformMatrix()
@@ -62,10 +61,7 @@ void Triangle::Draw(const WorldTransform& transform, const ViewProjection& viewP
 }
 void Triangle::Finalize()
 {
-	//vertexResource_->Release();
-	//materialResource_->Release();
-	//wvpResource_->Release();
-	//directionalLightResource_->Release();
+	
 }
 void Triangle::CreateDictionalLight(const DirectionalLight& light)
 {
@@ -92,6 +88,6 @@ void Triangle::SettingVertex() {
 	vertexData_[1].texcoord = { 0.5f,0.0f };
 
 	//右下
-	vertexData_[2].position = { 0.5f,0.0f,0.0f,1.0f };
+	vertexData_[2].position = { -0.5f,0.0f,0.0f,1.0f };
 	vertexData_[2].texcoord = { 1.0f,1.0f };
 }

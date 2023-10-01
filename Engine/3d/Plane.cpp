@@ -9,7 +9,6 @@ void Plane::Initialize()
 	textureManager_ = Texturemanager::GetInstance();
 	SettingVertex();
 	SetColor();
-	//TransformMatrix();
 	CreateDictionalLight();
 }
 void Plane::TransformMatrix()

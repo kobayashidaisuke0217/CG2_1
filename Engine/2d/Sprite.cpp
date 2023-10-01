@@ -8,7 +8,7 @@ void Sprite::Initialize( const Vector4& a, const Vector4& b, const DirectionalLi
 	CreateVartexData(a,b);
 	SetColor();
 	CreateTransform();
-	/*CreateDictionalLight(light);*/
+	
 }
 void Sprite::SetColor() {
 	materialResource_ = DirectXCommon::CreateBufferResource(dxCommon_->GetDevice().Get(), sizeof(Material));
@@ -49,11 +49,7 @@ void Sprite::Draw(const Transform&transform, const Transform& uvTransform, const
 
 void Sprite::Finalize()
 {
-	/*vertexResource->Release();
-	materialResource_->Release();
-	wvpResource_->Release();
-	directionalLightResource_->Release();
-	indexResource_->Release();*/
+	
 }
 
 void Sprite::CreateVartexData(const Vector4& a, const Vector4& b)
@@ -83,12 +79,7 @@ void Sprite::CreateVartexData(const Vector4& a, const Vector4& b)
 	vertexData_[3].position = { a.x,a.y,0.0f,1.0f };
 	vertexData_[4].position = { b.x,a.y,0.0f,1.0f };
 	vertexData_[5].position = { b.x,b.y,0.0f,1.0f };
-	/*vertexData_[0].position = { 0.0f,360.0f,0.0f,1.0f };
-	vertexData_[1].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexData_[2].position = { 640.0f,360.0f,0.0f,1.0f };
-	vertexData_[3].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexData_[4].position = { 640.0f,0.0f,0.0f,1.0f };
-	vertexData_[5].position = { 640.0f,360.0f,0.0f,1.0f };*/
+	
 	//texcoord
 	vertexData_[0].texcoord = { 0.0f,1.0f };
 	vertexData_[1].texcoord = { 0.0f,0.0f };
