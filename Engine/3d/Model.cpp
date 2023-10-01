@@ -46,10 +46,7 @@ void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProj
 }
 void Model::Finalize()
 {
-    /*vertexResource->Release();
-    materialResource_->Release();
-    wvpResource_->Release();
-    directionalLightResource_->Release();*/
+   
 }
 
 Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)
